@@ -12,17 +12,12 @@ namespace VisionMelbourneV3.Controllers
 {
     public class UserPlansController : Controller
     {
-        private Plan db = new Plan();        
+        private List<UserPlan> detailedLocations = new List<UserPlan>();
+        private Plan db = new Plan();
         // GET: UserPlans
         public ViewResult Index(string radius, string date)
-        {
-            List<UserPlan> detailedLocations = new List<UserPlan>();
+        {            
             DateTime time = DateTime.Now;
-            var day = Convert.ToString(time.DayOfWeek);
-            var hr = Convert.ToString(time.Hour);
-            detailedLocations.AddRange(db.UserPlans.ToList());
-            db.UserPlans.RemoveRange(detailedLocations);
-            db.SaveChanges();
             detailedLocations.Clear();
             if (String.IsNullOrEmpty(radius))
             {
@@ -30,12 +25,12 @@ namespace VisionMelbourneV3.Controllers
             }
             if (!String.IsNullOrEmpty(date))
             {
-                DateTime d = Convert.ToDateTime(date);
-                day = Convert.ToString(d.DayOfWeek);
-                hr = Convert.ToString(d.Hour);                
+                time = Convert.ToDateTime(date);             
             }
-           
-            var locations = db.Locations.ToList();            
+            var day = Convert.ToString(time.DayOfWeek);
+            var hr = Convert.ToString(time.Hour);
+            var locations = db.Locations.ToList();
+            int locCount = 1;
             foreach(var item in locations)
             {
                 var latitude = item.Latitude;
@@ -61,17 +56,17 @@ namespace VisionMelbourneV3.Controllers
                 }
                 string avgCount = Convert.ToString(peopleCount / i);
                 UserPlan userPlan = new UserPlan();
+                userPlan.Id = locCount++;
                 userPlan.Location = item.Name;
                 userPlan.Latitude = Convert.ToDouble(item.Latitude);
                 userPlan.Longitude = Convert.ToDouble(item.Longitude);
                 userPlan.PeopleCount = avgCount;
                 userPlan.Date = time;
-                db.UserPlans.Add(userPlan);
-                db.SaveChanges();
+                detailedLocations.Add(userPlan);
             }
-            System.Diagnostics.Debug.WriteLine(detailedLocations.Count);
-            return View(db.UserPlans.ToList());
+            return View(detailedLocations.AsEnumerable());
         }
+
 
         public double distance(String lat1, String lon1, String lat2, String lon2)
         {  // generally used geo measurement function
@@ -94,7 +89,8 @@ namespace VisionMelbourneV3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserPlan userPlan = db.UserPlans.Find(id);
+            UserPlan userPlan = this.detailedLocations.Find(g => g.Id == id);
+            System.Diagnostics.Debug.WriteLine(this.detailedLocations.Count);
             if (userPlan == null)
             {
                 return HttpNotFound();
@@ -104,10 +100,7 @@ namespace VisionMelbourneV3.Controllers
 
         public ActionResult CategoryIndex(string category, string radius, string date)
         {
-            List<UserPlan> detailedLocations = new List<UserPlan>();
-            DateTime time = DateTime.Now;
-            var day = Convert.ToString(time.DayOfWeek);
-            var hr = Convert.ToString(time.Hour);
+            DateTime time = DateTime.Now;            
             detailedLocations.AddRange(db.UserPlans.ToList());
             db.UserPlans.RemoveRange(detailedLocations);
             db.SaveChanges();
@@ -118,11 +111,10 @@ namespace VisionMelbourneV3.Controllers
             }
             if (!String.IsNullOrEmpty(date))
             {
-                DateTime d = Convert.ToDateTime(date);
-                day = Convert.ToString(d.DayOfWeek);
-                hr = Convert.ToString(d.Hour);
+                time = Convert.ToDateTime(date);
             }
-
+            var day = Convert.ToString(time.DayOfWeek);
+            var hr = Convert.ToString(time.Hour);
             var locations = db.Locations.Where(g => g.Theme == category).ToList();
             foreach (var item in locations)
             {
