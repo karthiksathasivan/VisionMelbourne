@@ -1,0 +1,126 @@
+﻿@model IEnumerable<VisionMelbourneV3.Models.UserPlan>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 100%;
+        height: 20%;
+        word-wrap: break-word;
+    }
+
+        .card:hover {
+            box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+        }
+
+    .cardContainer {
+        padding: 2px 16px;
+    }
+
+
+    #myBtn {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: deepskyblue;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 50%;
+    }
+
+        #myBtn:hover {
+            background-color: #555;
+        }
+</style>
+@using (Html.BeginForm())
+{
+    <br />
+    <div class="card">
+        <div class="cardContainer">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <p><b>@Html.Label("Check for People Counts:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
+                    <div class="col-md-8">
+                        <input id="Radius" type="text" name="Radius" placeholder="Enter radius in meters(default 150m)" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p><b>@Html.Label("Pick a Plan Date:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
+                    <div class="col-md-8">
+                        <input id="Date" type="datetime" name="Date" placeholder="Pick a Date" class="form-control" />
+                    </div>
+                </div>
+
+            </div>
+            <div style="text-align:center;">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+            <br />
+        </div>
+    </div>
+}
+
+
+<h2>List of Places</h2>
+<br />
+
+<div class=" row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <div class="card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/256px-Map_marker.svg.png"
+                     alt=@Html.DisplayFor(modelItem => item.Location) style="width:10%; height:10%">
+                <div class="cardContainer">
+                    <p><b>@Html.DisplayFor(modelItem => item.Location)</b></p>
+                    <p>Average People Count is : @Html.DisplayFor(modelItem => item.PeopleCount)</p>
+                    <p>@Html.ActionLink("Get Directions", "Details", new { id = item.Id })</p>
+                </div>
+            </div>
+            <br />
+        </div>
+
+    }
+
+</div>
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("myBtn").style.display = "block";
+            } else {
+                document.getElementById("myBtn").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#Date').datetimepicker({
+                sideBySide: true
+            });
+        });
+    </script>
+}

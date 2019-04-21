@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace VisionMelbourneV3.Controllers
 {
+    [Authorize(Users = "ab@gmail.com")]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -15,7 +16,7 @@ namespace VisionMelbourneV3.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Learn Braille";
 
             return View();
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace VisionMelbourneV3.Models
@@ -65,6 +66,10 @@ namespace VisionMelbourneV3.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "User name")] 
+        public string UserName { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -79,6 +84,9 @@ namespace VisionMelbourneV3.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Text Size")]
+        public string TextSize { get; set; }
     }
 
     public class ResetPasswordViewModel
