@@ -104,7 +104,6 @@ function doTTS() {
         default:
             text = "Braille code not found";
     }
-    console.log(text);
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.pitch = 1.5;
     utterance.volume = 1.5;

@@ -12,65 +12,74 @@ namespace VisionMelbourneV3.Controllers
 {
     public class UserPlansController : Controller
     {
-        private List<UserPlan> detailedLocations = new List<UserPlan>();
+
         private Plan db = new Plan();
         // GET: UserPlans
-        public ViewResult Index(string radius, string date)
-        {            
-            DateTime time = DateTime.Now;
-            detailedLocations.Clear();
-            if (String.IsNullOrEmpty(radius))
-            {
-                radius = "150";
-            }
-            if (!String.IsNullOrEmpty(date))
-            {
-                time = Convert.ToDateTime(date);             
-            }
-            var day = Convert.ToString(time.DayOfWeek);
-            var hr = Convert.ToString(time.Hour);
-            var locations = db.Locations.ToList();
-            int locCount = 1;
-            foreach(var item in locations)
-            {
-                var latitude = item.Latitude;
-                var longitude = item.Longitude;
-                int i = 1;
-                int peopleCount = 0;
-                
-                var sensorLocations = db.SensorLocations.ToList();
-                foreach (var count in sensorLocations)
-                {
-                    double dist = distance(latitude, longitude, count.latitude, count.longitude);               
-                    if(dist <= Convert.ToDouble(radius)) {                                                                    
-                        var pedcount = from a in db.Pedcounts
-                                       where a.SensorID.Contains(count.sensor_id) 
-                                       && a.Day.Contains(day) && a.Time.Contains(hr)
-                                       select a;
-                        foreach (var c in pedcount.ToList())
-                        {                            
-                            peopleCount = peopleCount + (int)c.PedCount1;
-                            i++;
-                        }                       
-                    }                   
-                }
-                string avgCount = Convert.ToString(peopleCount / i);
-                UserPlan userPlan = new UserPlan();
-                userPlan.Id = locCount++;
-                userPlan.Location = item.Name;
-                userPlan.Latitude = Convert.ToDouble(item.Latitude);
-                userPlan.Longitude = Convert.ToDouble(item.Longitude);
-                userPlan.PeopleCount = avgCount;
-                userPlan.Date = time;
-                detailedLocations.Add(userPlan);
-            }
-            return View(detailedLocations.AsEnumerable());
-        }
+        //public ActionResult Index(string date)
+        //{
+        //    List<DetailedLocation> detailedLocations = new List<DetailedLocation>();
+        //    detailedLocations.AddRange(db.DetailedLocations.ToList());
+        //    db.DetailedLocations.RemoveRange(detailedLocations);
+        //    db.SaveChanges();
+        //    detailedLocations.Clear();
+        //    DateTime time = DateTime.Now;
+        //    if (!String.IsNullOrEmpty(fromLocation))
+        //    {               
+        //        if (!String.IsNullOrEmpty(date))
+        //        {
+        //            time = Convert.ToDateTime(date);
+        //        }
+        //        var day = Convert.ToString(time.DayOfWeek);
+        //        var hr = Convert.ToString(time.Hour);
+        //        var locations = db.Locations.ToList();
+        //        foreach (var item in locations)
+        //        {
+        //            var latitude = item.Latitude;
+        //            var longitude = item.Longitude;
+        //            int i = 1;
+        //            int peopleCount = 0;
+
+        //            var sensorLocations = db.SensorLocations.ToList();
+        //            foreach (var count in sensorLocations)
+        //            {
+        //                double dist = distance(latitude, longitude, count.latitude, count.longitude);
+        //                if (dist <= 150)
+        //                {
+        //                    var pedcount = from a in db.Pedcounts
+        //                                   where a.SensorID.Contains(count.sensor_id)
+        //                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+        //                                   select a;
+        //                    foreach (var c in pedcount.ToList())
+        //                    {
+        //                        peopleCount = peopleCount + (int)c.PedCount1;
+        //                        i++;
+        //                    }
+        //                }
+        //            }
+        //            string avgCount = Convert.ToString(peopleCount / i);
+        //            DetailedLocation detailedLocation = new DetailedLocation();
+        //            detailedLocation.Location = item.Name;
+        //            detailedLocation.Latitude = Convert.ToDouble(item.Latitude);
+        //            detailedLocation.Longitude = Convert.ToDouble(item.Longitude);
+        //            detailedLocation.PeopleCount = avgCount;
+        //            detailedLocation.Date = time;
+        //            detailedLocation.Theme = item.Theme;
+        //            db.DetailedLocations.Add(detailedLocation);
+        //            db.SaveChanges();
+        //        }
+        //        return View(db.DetailedLocations.ToList());
+        //    }
+        //    if (!String.IsNullOrEmpty(date))
+        //    {
+        //        time = Convert.ToDateTime(date);
+        //    }
+        //    return RedirectToAction("PlanCreator", new { startdate = time });
+        //}
 
 
         public double distance(String lat1, String lon1, String lat2, String lon2)
         {  // generally used geo measurement function
-            
+
             var R = 6378.137; // Radius of earth in KM
             var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
             var dLon = Convert.ToDouble(lon2) * Math.PI / 180 - Convert.ToDouble(lon1) * Math.PI / 180;
@@ -81,7 +90,7 @@ namespace VisionMelbourneV3.Controllers
             var d = R * c;
             return d * 1000; // meters
         }
-       
+
         // GET: UserPlans/Details/5
         public ActionResult Details(int? id)
         {
@@ -89,8 +98,7 @@ namespace VisionMelbourneV3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserPlan userPlan = this.detailedLocations.Find(g => g.Id == id);
-            System.Diagnostics.Debug.WriteLine(this.detailedLocations.Count);
+            DetailedLocation userPlan = db.DetailedLocations.Find(id);
             if (userPlan == null)
             {
                 return HttpNotFound();
@@ -98,11 +106,73 @@ namespace VisionMelbourneV3.Controllers
             return View(userPlan);
         }
 
+
+
+        public ActionResult PlanCreator(DateTime date)
+        {
+            UserPlan userPlan = new UserPlan();
+            var plans = from a in db.UserPlans where a.Date == date select a;
+            plans = plans.OrderBy(p => p.Time);
+            List<UserPlan> planList = new List<UserPlan>();
+            foreach (var id in plans)
+            {
+                planList.Add(userPlan = db.UserPlans.Find(id.Id));               
+            }
+            if (planList.Count == 0)
+            {
+                userPlan.Date = date;
+                planList.Add(userPlan);
+            }            
+            return View("PlanCreator", planList);
+        }
+
+
+        public ActionResult NewPlan(string location, Double lat, Double lon, DateTime plandate, TimeSpan time)
+        {
+            var day = Convert.ToString(plandate.DayOfWeek);
+            var hr = Convert.ToString(time.Hours);
+            int i = 1;
+            int peopleCount = 0;
+
+            var sensorLocations = db.SensorLocations.ToList();
+            foreach (var count in sensorLocations)
+            {
+                double dist = distance(Convert.ToString(lat), Convert.ToString(lon), count.latitude, count.longitude);
+                if (dist <= 150)
+                {
+                    var pedcount = from a in db.Pedcounts
+                                   where a.SensorID.Contains(count.sensor_id)
+                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+                                   select a;
+                    foreach (var c in pedcount.ToList())
+                    {
+                        peopleCount = peopleCount + (int)c.PedCount1;
+                        i++;
+                    }
+                }
+            }
+            string avgCount = Convert.ToString(peopleCount / i);
+
+            UserPlan newPlan = new UserPlan();
+            newPlan.Date = plandate;
+            newPlan.Location = location;
+            newPlan.Latitude = lat;
+            newPlan.Longitude = lon;
+            newPlan.Time = time;
+            newPlan.PeopleCount = avgCount;
+            db.UserPlans.Add(newPlan);
+            db.SaveChanges();
+
+            return RedirectToAction("PlanCreator", new { date = plandate });
+        }
+
+
         public ActionResult CategoryIndex(string category, string radius, string date)
         {
-            DateTime time = DateTime.Now;            
-            detailedLocations.AddRange(db.UserPlans.ToList());
-            db.UserPlans.RemoveRange(detailedLocations);
+            List<DetailedLocation> detailedLocations = new List<DetailedLocation>();
+            DateTime time = DateTime.Now;
+            detailedLocations.AddRange(db.DetailedLocations.ToList());
+            db.DetailedLocations.RemoveRange(detailedLocations);
             db.SaveChanges();
             detailedLocations.Clear();
             if (String.IsNullOrEmpty(radius))
@@ -152,60 +222,8 @@ namespace VisionMelbourneV3.Controllers
             }
             return View(db.UserPlans.ToList());
         }
-        // GET: UserPlans/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: UserPlans/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Location,Latitude,Longitude,PeopleCount,Tactile,Weather,UserID")] UserPlan userPlan)
-        {
-            if (ModelState.IsValid)
-            {
-                db.UserPlans.Add(userPlan);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(userPlan);
-        }
-
-        // GET: UserPlans/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UserPlan userPlan = db.UserPlans.Find(id);
-            if (userPlan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(userPlan);
-        }
-
-        // POST: UserPlans/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Location,Latitude,Longitude,PeopleCount,Tactile,Weather,UserID")] UserPlan userPlan)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(userPlan).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(userPlan);
-        }
-
+        
         // GET: UserPlans/Delete/5
         public ActionResult Delete(int? id)
         {

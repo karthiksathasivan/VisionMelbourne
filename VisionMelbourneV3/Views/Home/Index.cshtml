@@ -2,11 +2,25 @@
     ViewBag.Title = "Home Page";
 }
 
-<div>
-    <p>Vision Melbourne</p>
-    <p>ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    @Html.ActionLink("Start Planning", "Index", "UserPlans", null, new { @class = "btn btn-warning" })
-</div>
+@using (Html.BeginForm("PlanCreator", "UserPlans"))
+{
+    <div class="jumbotron">
+        <p>Vision Melbourne</p>
+        <p>We help plan your journey to the city. Pick a Date and Start Planning your trips!</p>
+        <div class="form-group">
+            <div class="col-md-4">
+                <input id="Date" type="datetime" name="Date" placeholder="Pick a Date" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
 
 <div class="row">
     <div class="col-md-4">
@@ -16,7 +30,7 @@
             enables a clean separation of concerns and gives you full control over markup
             for enjoyable, agile development.
         </p>
-        @Html.ActionLink("Vision Churches", "CategoryIndex", "UserPlans", new {category="Church"}, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Vision Churches", "CategoryIndex", "UserPlans", new { category = "Church" }, new { @class = "btn btn-warning" })
     </div>
     <div class="col-md-4">
         <h2>Get more libraries</h2>
@@ -30,3 +44,21 @@
     </div>
 </div>
 
+
+<script type="text/javascript">
+    $(function () {
+        $('#Date').datetimepicker({
+            minDate: new Date(),
+            format: "L"
+        });
+    });   
+</script>
+
+<script>
+    var options = {
+        componentRestrictions: { country: "au" }
+    };
+    var input = document.getElementById('autocomplete');
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+</script>

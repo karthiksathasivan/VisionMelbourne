@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VisionMelbourneV3.Models.UserPlan>
+﻿@model IEnumerable<VisionMelbourneV3.Models.DetailedLocation>
 
 @{
     ViewBag.Title = "Index";
@@ -19,7 +19,7 @@
     .cardContainer {
         padding: 2px 16px;
     }
-    
+
 
     #myBtn {
         display: none;
@@ -40,60 +40,100 @@
             background-color: #555;
         }
 </style>
-@using (Html.BeginForm())
-{
-    <br />
-    <div class="card">
-        <div class="cardContainer">
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <p><b>@Html.Label("Check for People Counts:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
-                    <div class="col-md-8">
-                        <input id="Radius" type="text" name="Radius" placeholder="Enter radius in meters(default 150m)" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <p><b>@Html.Label("Pick a Plan Date:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
-                    <div class="col-md-8">
-                        <input id="Date" type="datetime" name="Date" placeholder="Pick a Date" class="form-control" />
-                    </div>
-                </div>
 
-            </div>
-            <div style="text-align:center;">
-                <input type="submit" value="Search" class="btn btn-default" />
-            </div>
-            <br/>
-        </div>
-    </div>
-}
-
-
-<h2>List of Places</h2>
-<br />
-
-<div class=" row">
-    @foreach (var item in Model)
+<div class="container body-content">
+    @using (Html.BeginForm())
     {
-        <div class="col-md-6">
-            <div class="card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/256px-Map_marker.svg.png"
-                     alt=@Html.DisplayFor(modelItem => item.Location) style="width:10%; height:10%">
-                <div class="cardContainer">
-                    <p><b>@Html.DisplayFor(modelItem => item.Location)</b></p>
-                    <p><b>@Html.DisplayFor(modelItem => item.Id)</b></p>
-                    <p>Average People Count is : @Html.DisplayFor(modelItem => item.PeopleCount)</p>
-                    <p>@Html.ActionLink("Get Directions", "Details", new { id = item.Id })</p>
-                </div>
-            </div>
-            <br />
-        </div>
+        <div class="card">
+            <div class="cardContainer">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <p><b>@Html.Label("Check for People Counts:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
+                        <div class="col-md-8">
+                            <input id="Radius" type="text" name="Radius" placeholder="Enter radius in meters(default 150m)" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p><b>@Html.Label("Pick a Plan Date:", htmlAttributes: new { @class = "control-label col-md-4", @style = "font-size:20px;color:red;" })</b></p>
+                        <div class="col-md-8">
+                            <input id="Date" type="datetime" name="Date" placeholder="Pick a Date" class="form-control" />
+                        </div>
+                    </div>
 
+                </div>
+                <div style="text-align:center;">
+                    <input type="submit" value="Search" class="btn btn-default" />
+                </div>
+                <br />
+            </div>
+        </div>
     }
 
-</div>
 
-<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+    <h2>List of Places</h2>
+    <br />
+
+    <div class=" row">
+        @foreach (var item in Model)
+        {
+            int pedcount = Convert.ToInt32(item.PeopleCount);
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/256px-Map_marker.svg.png"
+                         alt=@Html.DisplayFor(modelItem => item.Location) style="width:10%; height:10%">
+                    <div class="cardContainer">
+                        <p><b>@Html.DisplayFor(modelItem => item.Location)</b></p>
+                        <div class=" row">
+                            <div class="col-md-4">
+                                <p><b>Pedestrian Traffic</b></p>
+                                @if (pedcount == 0)
+                                {
+                                <div class="row cardContainer">
+                                    <i class="fa fa-frown-o fa-2x fa-lg"></i>
+                                    <p>Sorry no info found!</p>
+                                </div>
+
+                                }
+                                @if (pedcount <= 1000 && pedcount > 0)
+                                {
+                                    <div class="row cardContainer">
+                                        <i class="fa fa-male fa-2x fa-lg"></i> <i class="fa fa-female fa-2x fa-lg"></i>
+                                        <p>Free Street!</p>
+                                    </div>
+
+                                }
+
+                                @if (pedcount <= 2000 && pedcount > 1000)
+                                {
+                                    <div class="row cardContainer">
+                                        <i class="fa fa-male fa-2x fa-lg"></i><i class="fa fa-female fa-2x fa-lg"></i>
+                                        <i class="fa fa-male fa-2x fa-lg"></i><i class="fa fa-female fa-2x fa-lg"></i>
+                                        <p>Busy street!</p>
+                                    </div>
+                                }
+                                @if (pedcount > 2000)
+                                {
+                                    <div class="row cardContainer">
+                                        <i class="fa fa-male fa-2x fa-lg"></i><i class="fa fa-female fa-2x fa-lg"></i>
+                                        <i class="fa fa-male fa-2x fa-lg"></i><i class="fa fa-female fa-2x fa-lg"></i>
+                                        <i class="fa fa-male fa-2x fa-lg"></i><i class="fa fa-female fa-2x fa-lg"></i>
+                                        <p>Crowder Than Usual!</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+        }
+
+    </div>
+
+    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>

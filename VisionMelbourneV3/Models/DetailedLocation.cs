@@ -6,16 +6,17 @@ namespace VisionMelbourneV3.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("UserPlan")]
-    public partial class UserPlan
+    [Table("DetailedLocation")]
+    public partial class DetailedLocation
     {
         public int Id { get; set; }
 
+        [Required]
         public string Location { get; set; }
 
-        public double? Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public double? Longitude { get; set; }
+        public double Longitude { get; set; }
 
         [StringLength(50)]
         public string PeopleCount { get; set; }
@@ -26,16 +27,14 @@ namespace VisionMelbourneV3.Models
         [StringLength(10)]
         public string Weather { get; set; }
 
-        public string UserID { get; set; }
+        public DateTime? Date { get; set; }
 
-        [Column(TypeName = "date")]
-        public DateTime Date { get; set; }
-
-        public string StartLocation { get; set; }
-
+        [Required]
         [StringLength(50)]
-        public string StartWeather { get; set; }
+        public string Theme { get; set; }
 
-        public TimeSpan? Time { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Radius { get; set; }
     }
 }

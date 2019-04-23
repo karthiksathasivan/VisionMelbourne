@@ -196,12 +196,13 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DetailedLocation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Pedcount.cs" />
     <Compile Include="Models\Plan.cs" />
-    <Compile Include="Models\SensorLocations.cs" />
+    <Compile Include="Models\SensorLocation.cs" />
     <Compile Include="Models\SupportService.cs" />
     <Compile Include="Models\TactileGround.cs" />
     <Compile Include="Models\UserPlan.cs" />
@@ -223,11 +224,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Chart.css" />
+    <Content Include="Content\Chart.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\materialize.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -311,8 +316,17 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\Braille.js" />
+    <Content Include="Scripts\Chart.bundle.js" />
+    <Content Include="Scripts\Chart.bundle.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -364,12 +378,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\UserPlans\Create.cshtml" />
     <Content Include="Views\UserPlans\Delete.cshtml" />
-    <Content Include="Views\UserPlans\Details.cshtml" />
-    <Content Include="Views\UserPlans\Edit.cshtml" />
     <Content Include="Views\UserPlans\Index.cshtml" />
     <Content Include="Views\UserPlans\CategoryIndex.cshtml" />
+    <Content Include="Views\UserPlans\PlanCreator.cshtml" />
+    <Content Include="Views\UserPlans\_PlanItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904110952585_InitialCreate.resx">
@@ -383,10 +396,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />

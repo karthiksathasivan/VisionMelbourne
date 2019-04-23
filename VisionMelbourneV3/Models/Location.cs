@@ -18,9 +18,16 @@ namespace VisionMelbourneV3.Models
         public string Name { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string Latitude { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string Longitude { get; set; }
+
+        public string AccessibilityLevel { get; set; }
+
+        [StringLength(10)]
+        public string AccessibilityRating { get; set; }
     }
 }

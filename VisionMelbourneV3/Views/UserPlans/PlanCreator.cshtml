@@ -1,0 +1,96 @@
+﻿@model IEnumerable<VisionMelbourneV3.Models.UserPlan>
+@{
+    var planDate = "";
+    var displayDate = "";
+}
+
+@foreach (var item in Model)
+{
+    planDate = item.Date.ToString();
+    var month = item.Date.ToString("MMMM");
+    displayDate = item.Date.DayOfWeek + "," + item.Date.Day + " " + month;
+}
+
+<div class="jumbotron">@Html.Label(displayDate) </div>
+<hr />
+
+@foreach (var userPlan in Model)
+{
+    @Html.Partial("_PlanItem", userPlan)
+}
+
+@using (Html.BeginForm("NewPlan", "UserPlans"))
+{
+    <body>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input id="autocomplete" type="text" name="location" placeholder="Add a Location" required class="form-control" />
+                    <input hidden id="lat" type="text" name="lat" />
+                    <input hidden id="lon" type="text" name="lon" />
+                    <input hidden type="text" name="plandate" value=@planDate />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                        <input id="Date" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
+                    </div>              
+            </div>
+
+            <div class="form-group">
+                <div style="text-align:center;">
+                    <input type="submit" value="Add Place" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </body>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('#Date').datetimepicker({
+            format: 'HH:mm'
+        });
+    });
+</script>
+
+<script>
+    var options = {
+        componentRestrictions: { country: "au" }
+    };
+    var input = document.getElementById('autocomplete');
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('lat').value = place.geometry.location.lat();
+        document.getElementById('lon').value = place.geometry.location.lng();
+        console.log(place.geometry.location.lat() + ',' + place.geometry.location.lng());
+    });
+
+    function codeAddress() {
+        //var address = document.getElementById('autocomplete').value;
+        //geocoder.geocode({ 'address': address }, function (results, status) {
+        //    if (status == 'OK') {
+        //        document.getElementById('lat').value = results[0].geometry.location.lat();
+        //        document.getElementById('lon').value = results[0].geometry.location.lng();
+        //        console.log(
+        //            results[0].geometry.location.lng());
+        //        //map.setCenter(results[0].geometry.location);
+        //        //var marker = new google.maps.Marker({
+        //        //    map: map,
+        //        //    position: results[0].geometry.location
+        //        //});
+        //    } else {
+        //        alert('Geocode was not successful for the following reason: ' + status);
+        //    }
+        //});
+        var place = autocomplete.getPlace();
+        document.getElementById('lat').value = place.geometry.location.lat();
+        document.getElementById('lon').value = place.geometry.location.lng();
+        console.log(place.geometry.location.lat() + ',' + place.geometry.location.lng());
+    }
+</script>
+
+
+
+

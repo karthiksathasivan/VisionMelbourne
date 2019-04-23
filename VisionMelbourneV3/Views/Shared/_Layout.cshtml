@@ -11,11 +11,12 @@
 
 
     }
-
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeWVnvpK2hWLTBmmt1yLn2BG0TNVnsMMQ&libraries=places"></script>
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
     <style>
         #myBtni {
             display: block;
@@ -59,7 +60,6 @@
                 background-color: #555;
             }
     </style>
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -77,7 +77,6 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Plan", "Index", "UserPlans")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -88,15 +87,10 @@
             @RenderBody()
             <hr />
             <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                <p>&copy; @DateTime.Now.Year - Vision Melbourne</p>
             </footer>
             </div>
         </div>
-
-
-        <div><input id="myBtni" type="button" value="increase" class="increaseFont" /></div>
-        <div><input id="myBtnd" type="button" value="decrease" class="decreaseFont" /></div>
-
 
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
