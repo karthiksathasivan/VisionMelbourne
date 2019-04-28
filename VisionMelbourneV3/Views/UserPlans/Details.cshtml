@@ -1,0 +1,262 @@
+﻿@model VisionMelbourneV3.Models.DetailedLocation
+@{
+    ViewBag.Title = Model.Location;
+    string tolocation = Model.Location;
+    DateTime fulldate = (DateTime)Model.Date;
+    TimeSpan fulltime = (TimeSpan)fulldate.TimeOfDay;
+    string date = fulldate.Date.ToString("dd/MM/yyyy");
+    string time = fulldate.TimeOfDay.ToString(@"hh\:mm");
+}
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 100%;
+        height: 20%;
+        word-wrap: break-word;
+    }
+
+        .card:hover {
+            box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+    .cardContainer {
+        padding: 10px 16px;
+    }
+
+
+    #myBtn {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: deepskyblue;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 50%;
+    }
+
+        #myBtn:hover {
+            background-color: #555;
+        }
+</style>
+
+<body onload="initMap()">
+
+    <div>
+        <h2><b>@Model.Location</b></h2>
+        <hr />
+    </div>
+
+    <br />
+    @using (Html.BeginForm("NewPlan", "UserPlans"))
+    {
+        @Html.HiddenFor(model => model.Id)
+        <div class="row">
+            <div class="col-md-3">
+                @Html.Label("Date ")
+            </div>
+            <div class="col-md-9">
+                <input id="Date" type="datetime" name="Date" placeholder=@Model.Date required class="form-control" />
+            </div>
+        </div>
+        if (!String.IsNullOrEmpty(Model.StartLocation))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <b>@Html.DisplayName("Starting from ")</b>
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.StartLocation)
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <b>@Html.DisplayName("Starting from ")</b>
+                </div>
+                <div class="col-md-9">
+                    <input id="autocomplete" type="text" required name="fromlocation" class="form-control" />
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-md-3">
+                <b>Pedestrian Traffic</b>
+            </div>
+            <div class="col-md-9">
+                @if (Convert.ToInt32(Model.PeopleCount) == 0)
+                {
+                    <div class="row cardContainer">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <p>Sorry no info found!</p>
+                    </div>
+                }
+                @if (Convert.ToInt32(Model.PeopleCount) <= 200 && Convert.ToInt32(Model.PeopleCount) > 0)
+                {
+                    <div class="row cardContainer">
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <p>Free Street!</p>
+                    </div>
+
+                }
+
+                @if (Convert.ToInt32(Model.PeopleCount) <= 400 && Convert.ToInt32(Model.PeopleCount) > 200)
+                {
+                    <div class="row cardContainer">
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <p>Busy street!</p>
+                    </div>
+                }
+                @if (Convert.ToInt32(Model.PeopleCount) > 400)
+                {
+                    <div class="row cardContainer">
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                        <p>Crowder Than Usual!</p>
+                    </div>
+                }
+
+            </div>
+        </div>
+        if (Model.AccessibilityLevel != null)
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <b>Pedestrian Traffic :</b>
+                </div>
+                <div class="col-md-9">
+                    <i class="fa fa-frown-o fa-2x fa-lg"></i>
+                    <p>@Html.Label(Model.AccessibilityLevel)</p>
+                </div>
+            </div>
+        }
+        @Html.Hidden("location", tolocation)
+        <input hidden type="text" name="lat" value=@Model.Latitude />
+        <input hidden type="text" name="lon" value=@Model.Longitude />
+        <input hidden type="text" name="plandate" value=@fulldate />
+        <input hidden type="text" name="time" value=@fulltime />
+        <div class="row">
+            <div class="col-md-2">
+                @Html.ActionLink("Back to List", "CategoryIndex", new { category = Model.Theme, date = Model.Date }, new { @class = "btn btn-primary" })
+            </div>
+
+            @Html.Hidden("fromlocation", Model.StartLocation)
+            <div class="col-md-offset-9">
+                <input type="submit" value="Add to Plan" class="btn btn-success" />
+            </div>
+            
+        </div>
+    }
+    <br />
+    <div class="card">
+        <h4 style="text-align:center;"><b>View on Map</b></h4>
+        <div id='map' style='width: 100%; height: 400px;'></div>
+    </div>
+
+</body>
+
+
+<script>
+    var scenter = "";
+    var address = "@Model.Location";
+    var latit = @Model.Latitude;
+    var lon = @Model.Longitude;
+    function initMap() {
+        var geocoder = new google.maps.Geocoder();
+        var infowindow = new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: { lat: latit, lng: lon },
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.BOTTOM_CENTER
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER
+            },
+            scaleControl: true,
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: google.maps.ControlPosition.LEFT_BOTTOM
+            },
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
+            }
+        });
+
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: { lat: latit, lng: lon }
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent("@tolocation");
+            infowindow.open(map, this);
+        });
+
+    }
+</script>
+<script>
+    var options = {
+        componentRestrictions: { country: "au" }
+    };
+    var input = document.getElementById('autocomplete');
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+    });
+
+    function getCurrentLocation() {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        function success(pos) {
+            var currentLocation = pos.coords;
+            var latlng = { lat: parseFloat(currentLocation.latitude), lng: parseFloat(currentLocation.longitude) };
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({ 'location': latlng }, function (results, status) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        document.getElementById('autocomplete').value = results[0].formatted_address;
+                        console.log(results[0].formatted_address);
+                    } else {
+                        window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+        }
+
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#Date').datetimepicker({
+        });
+    });
+</script>

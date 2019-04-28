@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace VisionMelbourneV3.Controllers
 {
-    [Authorize(Users = "ab@gmail.com")]
+   
     public class HomeController : Controller
     {
         public ActionResult Index()

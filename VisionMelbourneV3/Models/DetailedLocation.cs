@@ -36,5 +36,13 @@ namespace VisionMelbourneV3.Models
         [Required]
         [StringLength(50)]
         public string Radius { get; set; }
+
+        public string AccessibilityLevel { get; set; }
+
+        public string AccessibilityRating { get; set; }
+
+
+        public string StartLocation { get; set; }
     }
+
 }

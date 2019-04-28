@@ -24,7 +24,8 @@ namespace VisionMelbourneV3
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/bootstrap-datetimepicker.js"));
+                      "~/Scripts/bootstrap-datetimepicker.js",
+                      "~/Scripts/bootstrap-datepicker.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/materialize").Include(
                      "~/Scripts/materialize.min.js"));
@@ -38,6 +39,7 @@ namespace VisionMelbourneV3
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
+                      "~/Content/bootstrap-datepicker.min.css",
                       "~/Content/bootstrap-datetimepicker.css"));
         }
     }

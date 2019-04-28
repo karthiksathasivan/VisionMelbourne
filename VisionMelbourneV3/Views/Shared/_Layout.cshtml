@@ -3,16 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Vision Melbourne</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @if (User.Identity.IsAuthenticated)
-    {
+    @Scripts.Render("~/bundles/jquery")
 
-
-    }
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeWVnvpK2hWLTBmmt1yLn2BG0TNVnsMMQ&libraries=places"></script>
-    <link rel="stylesheet" href="~/Content/font-awesome.min.css">
+    <link href="~/Content/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -61,38 +58,98 @@
             }
     </style>
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        <div class="data">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - Vision Melbourne</p>
-            </footer>
-            </div>
+    <body style="padding-top:0px">
+        <div class="main-content">
+            <header class="header fixed">
+                <div class="left">
+                    <div class="logo"><a href="/Home/Index/"><img src="~/images/logo.png" alt="ExploreCity" class="img-responsive"></a></div> <!-- end .logo -->
+                </div> <!-- end .left -->
+                <div class="navigation clearfix">
+                    <nav class="main-nav">
+                        <ul class="list-unstyled">
+                            <li class="menu-item-has-children">
+                                @Html.ActionLink("Home", "Index", "Home")
+                            </li>
+
+                            <li class="menu-item-has-children">
+                                @Html.ActionLink("About", "About", "Home")
+                            </li>
+
+                            <li class="menu-item-has-children">
+                                @Html.ActionLink("Planner", "Planner", "Home")
+                                <ul>
+                                    <li>@Html.ActionLink("List", "List", "Home")</li>
+                                </ul>
+                            </li>
+
+                            <li class="menu-item-has-children">
+                                @Html.ActionLink("Help", "About", "Home")
+                            </li>
+
+                        </ul>
+                    </nav> <!-- end .main-nav -->
+                    <a href="" class="responsive-menu-open"><i class="fa fa-bars"></i></a>
+                </div> <!-- end .navigation -->
+                <div class="right">
+                    <a href="" class="button border">My Plan</a>
+                    @* <a href="" class="button login-open">Log In</a>*@
+                </div> <!-- end .left -->
+            </header> <!-- end .header -->
+            <div class="responsive-menu">
+                <a href="" class="responsive-menu-close"><i class="fa fa-times"></i></a>
+                <nav class="responsive-nav"></nav> <!-- end .responsive-nav -->
+            </div><!-- end .responsive-menu -->
         </div>
 
-        @Scripts.Render("~/bundles/jquery")
+        @RenderBody()
+        <hr />
+
+        <footer class="section inner">
+            <div class="footer_1its py-5">
+                <div class="container py-md-4">
+                    <div class="row footer-top mb-md-5 mb-4">
+                        <div class="col-lg-5 col-md-5 footer-grid_section_1its" data-aos="fade-right">
+                            <div class="footer-title-w3pvt">
+                                <h3>Our Mission</h3>
+                            </div>
+                            <div class="footer-text" style="text-align:left">
+                                <p>To help people aged between 20 - 65 years with low vision capabilities to navigate around the city of Melbourne independently.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 footer-grid_section_1its" data-aos="fade-right">
+                            <div class="footer-title-w3pvt">
+                                <h3>Contact Us</h3>
+                            </div>
+                            <div class="footer-text">
+                                <p>Address : Vision Melbourne, Melbourne VIC</p>
+                                <p>Phone : +61 412345678</p>
+                                <p>Email : VisionMelbourne@gmail.com </p>
+                                <p>Fax : +61 487654321</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 mt-md-0 mt-4 footer-grid_section_1its">
+                            <div class="footer-title-w3pvt">
+                                <h3>Quick Links</h3>
+                            </div>
+                            <div class="row no-gutters">
+                                <ul class="links">
+                                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                                    <li>@Html.ActionLink("Planner", "Planner", "Home")</li>
+                                    <li>@Html.ActionLink("Help", "About", "Home")</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <p style="text-align:center">&copy; @DateTime.Now.Year - Vision Melbourne</p>
+        </footer>
+
+
+
+        <script src="~/Scripts/moment.js"></script>
         @Scripts.Render("~/bundles/bootstrap")
         <script type="text/javascript">
             $(document).ready(function () {
@@ -106,10 +163,10 @@
                         $('.data').css('font-size', parseInt(curFontSize) - 1);
                     }
                 });
-
-
             });
         </script>
         @RenderSection("scripts", required: false)
-</body>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="~/Scripts/script.js"></script>
+    </body>
 </html>

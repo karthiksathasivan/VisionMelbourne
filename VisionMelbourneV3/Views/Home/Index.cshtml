@@ -2,56 +2,160 @@
     ViewBag.Title = "Home Page";
 }
 
+<link href="~/Content/Site.css" rel="stylesheet" />
+
 @using (Html.BeginForm("PlanCreator", "UserPlans"))
 {
-    <div class="jumbotron">
-        <p>Vision Melbourne</p>
-        <p>We help plan your journey to the city. Pick a Date and Start Planning your trips!</p>
-        <div class="form-group">
-            <div class="col-md-4">
-                <input id="Date" type="datetime" name="Date" placeholder="Pick a Date" class="form-control" />
+    <div style="text-align: center; vertical-align: middle; font-family: Verdana;
+color: Blue; position: absolute; top: 50%; left: 50%; margin-left: -88px;
+font-size: small;" id="dvProgress" runat="server">
+        Please Wait ...
+    </div>
+    <div class="section large transparent dark text-center" style="background-image: url('../../images/background.jpg');">
+        <div class="inner">
+            <div class="container">
+                <h1>Discover The Melbourne CBD</h1>
+                <p class="lead">Find great places to visit, eat, or shop from us</p>
+                <div class="row">
+                    <form>
+                        <div class="col-sm-6">
+                            <div class="searchform" style="text-align:left">
+                                <label for="CLocation">Start Location</label>
+                                <input id="autocomplete" type="text" name="startlocation" required placeholder="Please search your start location" onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" />
+                                <button type="button" onclick="getCurrentLocation()"><i class="fa fa-location-arrow"></i></button>
+                                <input hidden id="lat" type="text" name="lat" />
+                                <input hidden id="lon" type="text" name="lon" />
+                            </div> <!-- end .form-group -->
+                        </div> <!-- end .col-sm-4 -->
+                        <div class="col-sm-6">
+                            <div class="searchform" style="text-align:left">
+                                <label for="FLocation">Departure Date</label>
+                                <input id="Date" type="datetime" name="Date" class="date-container" placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" />
+                                <button><i class="fa fa-calendar"></i></button>
+                            </div> <!-- end .form-group -->
+                        </div> <!-- end .col-sm-4 -->
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <button type="submit" class="button">Search Places</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-4">
-                <input type="submit" value="Search" class="btn btn-default" />
-            </div>
-        </div>
-
     </div>
 }
 
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Churches</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        @Html.ActionLink("Vision Churches", "CategoryIndex", "UserPlans", new { category = "Church" }, new { @class = "btn btn-warning" })
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<div class="section light">
+    <div class="inner">
+        <div class="container">
+            <h2 class="text-center">What are you interested in?<small>Explore some of the best tips from around the city from our partners and friends.</small></h2>
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Church", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category1.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon01.png" alt="icon">
+                            <span class="title">Church</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Cafe", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category2.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon02.png" alt="icon">
+                            <span class="title">Cafe</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Sport", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category3.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon03.png" alt="icon">
+                            <span class="title">Sport</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Museum", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category4.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon04.png" alt="icon">
+                            <span class="title">Museum</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+                <div class="col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Transport", date = DateTime.Now }); class = "category-box" style = "background-image: url('../../images/category5.jpg');">
+                    <div class="inner">
+                        <img src="~/images/icon05.png" alt="icon">
+                        <span class="title">Transport</span>
+                    </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-sm-6 -->
+                <div class="col-md-3 col-sm-6">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Zoo", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category6.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon06.png" alt="icon">
+                            <span class="title">Leisure</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Shopping", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category7.jpg');">
+    <div class="inner">
+        <img src="~/images/icon07.png" alt="icon">
+        <span class="title">Shopping</span>
+    </div> <!-- end .inner -->
+</a> <!-- end .category-box -->
+                </div> <!-- end .col-md-3 -->
+            </div> <!-- end .row -->
+        </div> <!-- end .container -->
+    </div> <!-- end .inner -->
+</div> <!-- end .section -->
+
+<div class="section light transparent" style="background-image: url('../../images/background02.jpg');">
+    <div class="inner">
+        <div class="container">
+            <h2 class="text-center">How it Works<small>Discover the Accessible Places in Melbourne CBD</small></h2>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="services">
+                        <img src="~/images/services-icon01.png" alt="icon" class="img-responsive center-block">
+                        <h3>Choose<br>What To Do</h3>
+                        <p>Looking for the tram to take, a restaurant to eat, a church to visit or a mall to do some shopping?</p>
+                    </div> <!-- end .services -->
+                </div> <!-- end .col-sm-4 -->
+                <div class="col-sm-4">
+                    <div class="services">
+                        <img src="~/images/services-icon02.png" alt="icon" class="img-responsive center-block">
+                        <h3>Find<br>What You Want</h3>
+                        <p>Search and filter hundreds of listings, read information and find the perfect spot.</p>
+                    </div> <!-- end .services -->
+                </div> <!-- end .col-sm-4 -->
+                <div class="col-sm-4">
+                    <div class="services">
+                        <img src="~/images/services-icon03.png" alt="icon" class="img-responsive center-block">
+                        <h3>Explore<br>Amazing Places</h3>
+                        <p>Go and have a good time or even make your own plans from the listing page. All of those, thanks to Vision Melbourne!</p>
+                    </div> <!-- end .services -->
+                </div> <!-- end .col-sm-4 -->
+            </div> <!-- end .row -->
+        </div> <!-- end .container -->
+    </div> <!-- end .inner -->
+</div> <!-- end .section -->
 
 
 <script type="text/javascript">
     $(function () {
-        $('#Date').datetimepicker({
-            minDate: new Date(),
-            format: "L"
+        $('.date-container').datepicker({
+            todayHighlight: true,
+            orientation: "bottom",
+            startDate: '-3d'
         });
-    });   
+    });
+    $(document).ready(function () {
+        $("div[id$=dvProgress]").fadeOut("fast");
+    });
 </script>
 
 <script>
@@ -60,5 +164,53 @@
     };
     var input = document.getElementById('autocomplete');
     var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        document.getElementById('lat').value = place.geometry.location.lat();
+        document.getElementById('lon').value = place.geometry.location.lng();
+    });
+
+    //function codeAddress() {
+    //    var place = autocomplete.getPlace();
+    //    document.getElementById('lat').value = place.geometry.location.lat();
+    //    document.getElementById('lon').value = place.geometry.location.lng();
+
+    //}
+
+    function getCurrentLocation() {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        function success(pos) {
+            var currentLocation = pos.coords;
+            document.getElementById('lat').value = currentLocation.latitude;
+            document.getElementById('lon').value = currentLocation.longitude;
+            var latlng = { lat: parseFloat(currentLocation.latitude), lng: parseFloat(currentLocation.longitude) };
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({ 'location': latlng }, function (results, status) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        document.getElementById('autocomplete').value = results[0].formatted_address;
+                        console.log(results[0].formatted_address);
+                    } else {
+                        window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+        }
+
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+
 
 </script>
+

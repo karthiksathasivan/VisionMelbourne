@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "NearbyPlaces";
+    string startLocation = ViewBag.planstartLocation;
+    string nearlocation = ViewBag.findnearLocation;
+    string latitude = ViewBag.latitude;
+    string longitude = ViewBag.longitude;
+    string Date = ViewBag.planDate;
+    string Time = ViewBag.Time;
+}
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        var types = ['art_gallery', 'cafe', 'church', 'department_store', 'museum', 'restaurant', 'shopping_mall', 'zoo'];
+        var html = '';
+
+        $.each(types, function (index, value) {
+            var name = value.replace(/_/g, " ");
+            html += '<br/><div><button type="button" onclick="renderMap(this);" class="btn btn-default" value="' + value + '">' + capitalizeFirstLetter(name) + '</button></div>';
+        });
+
+        $('#type_holder').html(html);
+    });
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    var destination = [];
+    var latitude = [];
+    var longitude = [];
+    var map;
+    var infowindow;
+    var autocomplete;
+    var countryRestrict = { 'country': 'au' };
+    var selectedTypes = [];
+
+    function initialize() {
+
+        var pyrmont = new google.maps.LatLng(@latitude, @longitude);
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: pyrmont,
+            zoom: 12
+        });
+        var marker = new google.maps.Marker({
+            map: map,
+            position: pyrmont
+        });
+    }
+
+    function renderMap(element) {
+        // Get the user defined values
+        element.class = "btn btn-success";
+        var radius = parseInt(document.getElementById('radius').value) * 1000;
+
+        // get the selected type
+        //selectedTypes = [];
+        //$('.types').each(function () {
+        //    if ($(this).is(':checked')) {
+        //        selectedTypes.push($(this).val());
+        //    }
+        //});
+        selectedTypes.push(element.value)
+
+               var pyrmont = new google.maps.LatLng(@latitude, @longitude);
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: pyrmont,
+                    zoom: 15
+                });
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: pyrmont
+                });
+
+                //console.log(selectedTypes);
+
+                var request = {
+                    location: pyrmont,
+                    radius: radius,
+                    types: selectedTypes
+                };
+                selectedTypes = [];
+                infowindow = new google.maps.InfoWindow();
+
+                var service = new google.maps.places.PlacesService(map);
+                service.nearbySearch(request, callback);
+
+    }
+
+    function callback(results, status) {
+        table.clear();
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var location = document.getElementById('location');
+            var tripInstructions = [];
+            table.destroy();
+            for (var i = 0; i < results.length; i++) {
+                destination.push(results[i].name + ',' + results[i].vicinity);
+                latitude.push(results[i].geometry.location.lat());
+                longitude.push(results[i].geometry.location.lng());
+                createMarker(results[i], results[i].icon);
+                var placename = results[i].name;
+                var placeaddress = results[i].vicinity.replace(/,\s*$/, "");
+                tripInstructions.push('<tr><td id = "name' + i + '">' + placename + '</td><td>' + placeaddress +
+                    '</td><td><a id="location' + i +
+                    '" class="btn btn-warning" onclick="doTTS(this)">Speak<span class= "glyphicon glyphicon-volume-up"></span ></a><a id="' + i + '" class= "btn btn-primary" onclick="newPlan(this)"> Add To Plan</a ></td ></tr > ');
+                location.innerHTML = tripInstructions.join("");
+            }
+        }
+        table = $('.table').DataTable();
+    }
+
+    function newPlan(element) {
+        $("div[id$=dvProgress]").show();
+        var to = destination[element.id];
+        var from = "@startLocation";
+        var jdate = "@Date";
+        var jtime = "@Time";
+        var lat = latitude[element.id];
+        var lng = longitude[element.id];
+        $.ajax({
+            url: 'NewPlan',
+            data: { 'plandate': jdate, 'time': jtime, 'lat': lat, 'lon': lng, 'fromlocation': from, 'location': to },
+            type: "post",
+            cache: false,
+            success: function (data) {
+                $("div[id$=dvProgress]").fadeOut("fast");
+                alert("Added " + to + " to your plan successfully");
+                console.log(to);
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+    function createMarker(place, icon) {
+        var placeLoc = place.geometry.location;
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            icon: {
+                url: icon,
+                scaledSize: new google.maps.Size(30, 30) // pixels
+            },
+            animation: google.maps.Animation.DROP
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent(place.name + '<br>' + place.vicinity);
+            infowindow.open(map, this);
+        });
+    }
+    function doTTS(element) {
+        document.getElementById(element.id).onclick = function () {
+            //var plocation = "location" + element.id;
+            //var ptime = "time" + element.id;
+            //var ppcount = "pedcount" + element.id;
+            //var speaktime = document.getElementById(ptime).innerHTML;
+            //var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
+            //    + ", " + document.getElementById(ppcount).innerHTML;
+            //const utterance = new SpeechSynthesisUtterance(text);
+            //utterance.pitch = 1.5;
+            //utterance.volume = 1.5;
+            //utterance.rate = 1;
+            //speechSynthesis.speak(utterance);
+            console.log(element.id);
+        }
+    }
+    var table;
+    $(document).ready(function () {
+        table = $('.table').DataTable();
+        $("div[id$=dvProgress]").fadeOut("fast");
+    });
+</script>
+<h2>Explore near @nearlocation</h2>
+<body onload="initialize()">
+    <br />
+    <div style="text-align: center; vertical-align: middle; font-family: Verdana;
+color: Blue; position: absolute; top: 50%; left: 50%; margin-left: -88px;
+font-size: xx-large;" id="dvProgress" runat="server">
+        Please Wait ...
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <form name="frm_map" id="frm_map">
+                <table>
+                    <tr>
+                        <th>Distance in km:</th>
+                        <td>
+                            <input type="text" name="radius" id="radius" value="1" placeholder="In KM" class="form-control">
+                        </td>
+                    </tr>
+                    <tr><td><br /></td></tr>
+                    <tr>
+                        <th>Places</th>
+                        <td>
+                            <div id="type_holder" style="height: 450px;">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td><br /></td></tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" value="Show" id="submit" onclick="renderMap();" class="btn btn-success"></td>
+                        <td>
+                            <input type="reset" value="Reset" class="btn btn-danger">
+                        </td>
+                    </tr>
+                    <tr><td><br /></td></tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            @Html.ActionLink("Back to Plans", "PlanCreator", new { date = Date, startlocation = startLocation }, new { @class = "btn btn-primary" })
+                        </td>
+                    </tr>
+                    <tr><td><br /></td></tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <div id="map" style="width:100%; height:600px;"></div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.Label("Location Name")
+                        </th>
+                        <th>
+                            @Html.Label("Location Address")
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="location"></tbody>
+            </table>
+        </div>
+    </div>
+</body>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
+    @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")
+}
+
+
+

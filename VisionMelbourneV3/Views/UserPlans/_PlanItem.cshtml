@@ -48,7 +48,7 @@
 @if (@Model.Location != null)
 {
     
-    <div id="content" class="card">
+    <div id="content" class="card" onclick="doTTS()">
         <div class="cardContainer">
             <div class="row">
                 <div class="col-md-8"><p><i class="fa fa-map-marker fa-2x fa-lg"></i><b>@Html.DisplayFor(modelItem => modelItem.Location)</b></p></div>
@@ -106,6 +106,7 @@
                     }
                 </div>
             </div>
+            <div></div>
         </div>
     </div>
     <br />
@@ -113,7 +114,7 @@
 
 
 <script type="text/javascript">
-    window.onload = function () {
+    function doTTS() {
         document.getElementById('content').onclick = function () {
             var text = "You have planned to travel to @Model.Location at @travtime @traffic";
             const utterance = new SpeechSynthesisUtterance(text);
