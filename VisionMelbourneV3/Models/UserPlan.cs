@@ -37,5 +37,11 @@ namespace VisionMelbourneV3.Models
         public string StartWeather { get; set; }
 
         public TimeSpan? Time { get; set; }
+
+        [StringLength(50)]
+        public string AccessibilityLevel { get; set; }
+
+        [StringLength(50)]
+        public string AccessibilityRating { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿
+﻿@model IEnumerable<VisionMelbourneV3.Models.Location>
 @{
-    ViewBag.Title = "NearbyPlaces";
+    ViewBag.Title = "Nearby Places";
     string startLocation = ViewBag.planstartLocation;
     string nearlocation = ViewBag.findnearLocation;
     string latitude = ViewBag.latitude;
@@ -9,24 +9,40 @@
     string Time = ViewBag.Time;
 }
 
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     $(document).ready(function () {
-        
-        var types = ['art_gallery', 'cafe', 'church', 'department_store', 'museum', 'restaurant', 'shopping_mall', 'zoo'];
+
+        var types = ['art_gallery', 'cafe', 'church', 'museum', 'shopping_mall', 'zoo'];
         var html = '';
 
         $.each(types, function (index, value) {
             var name = value.replace(/_/g, " ");
-            html += '<br/><div><button type="button" onclick="renderMap(this);" class="btn btn-default" value="' + value + '">' + capitalizeFirstLetter(name) + '</button></div>';
+            html += '<option value="' + value + '">' + capitalizeFirstLetter(name) + '</option>';
         });
 
-        $('#type_holder').html(html);
+        $('#typeholder').html(html);
     });
+
+    function changeFunc() {
+        var selectBox = document.getElementById("typeholder");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        renderMap(selectedValue);
+    }
+
+    function radius() {
+        var selectBox = document.getElementById("radius");
+        radius = selectBox.options[selectBox.selectedIndex].value;
+    }
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    var radius;
     var destination = [];
     var latitude = [];
     var longitude = [];
@@ -50,19 +66,12 @@
         });
     }
 
-    function renderMap(element) {
+    function renderMap(value) {
         // Get the user defined values
-        element.class = "btn btn-success";
-        var radius = parseInt(document.getElementById('radius').value) * 1000;
+        radius = parseInt(document.getElementById('radius').value) * 1000;
 
-        // get the selected type
-        //selectedTypes = [];
-        //$('.types').each(function () {
-        //    if ($(this).is(':checked')) {
-        //        selectedTypes.push($(this).val());
-        //    }
-        //});
-        selectedTypes.push(element.value)
+        
+        selectedTypes.push(value)
 
                var pyrmont = new google.maps.LatLng(@latitude, @longitude);
 
@@ -74,15 +83,16 @@
                     map: map,
                     position: pyrmont
                 });
-
-                //console.log(selectedTypes);
+        
 
                 var request = {
                     location: pyrmont,
                     radius: radius,
                     types: selectedTypes
                 };
-                selectedTypes = [];
+        selectedTypes = [];
+
+        console.log(selectedTypes.length)
                 infowindow = new google.maps.InfoWindow();
 
                 var service = new google.maps.places.PlacesService(map);
@@ -104,8 +114,7 @@
                 var placename = results[i].name;
                 var placeaddress = results[i].vicinity.replace(/,\s*$/, "");
                 tripInstructions.push('<tr><td id = "name' + i + '">' + placename + '</td><td>' + placeaddress +
-                    '</td><td><a id="location' + i +
-                    '" class="btn btn-warning" onclick="doTTS(this)">Speak<span class= "glyphicon glyphicon-volume-up"></span ></a><a id="' + i + '" class= "btn btn-primary" onclick="newPlan(this)"> Add To Plan</a ></td ></tr > ');
+                    '</td><td><a id="' + i + '" class= "btn btn-primary" onclick="newPlan(this)"> Add To Plan</a ></td ></tr > ');
                 location.innerHTML = tripInstructions.join("");
             }
         }
@@ -156,10 +165,7 @@
     }
     function doTTS(element) {
         document.getElementById(element.id).onclick = function () {
-            //var plocation = "location" + element.id;
-            //var ptime = "time" + element.id;
-            //var ppcount = "pedcount" + element.id;
-            //var speaktime = document.getElementById(ptime).innerHTML;
+            var plocation = "location" + element.id;            
             //var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
             //    + ", " + document.getElementById(ppcount).innerHTML;
             //const utterance = new SpeechSynthesisUtterance(text);
@@ -176,70 +182,73 @@
         $("div[id$=dvProgress]").fadeOut("fast");
     });
 </script>
-<h2>Explore near @nearlocation</h2>
-<body onload="initialize()">
-    <br />
-    <div style="text-align: center; vertical-align: middle; font-family: Verdana;
-color: Blue; position: absolute; top: 50%; left: 50%; margin-left: -88px;
-font-size: xx-large;" id="dvProgress" runat="server">
-        Please Wait ...
+<body onload="initialize()" style="font-size:24px;">
+    <div class="page-header">
+        <div class="container">
+            <div class="breadcrumbs">
+
+                <ul class="list-unstyled">
+                    <li><a href="/">Home</a></li>
+                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date, startlocation = startLocation })>My Plans</a></li>
+                    <li>Nearby</li>
+                </ul>
+            </div> <!-- end .breadcrumbs -->
+        </div> <!-- end .container -->
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <form name="frm_map" id="frm_map">
-                <table>
-                    <tr>
-                        <th>Distance in km:</th>
-                        <td>
-                            <input type="text" name="radius" id="radius" value="1" placeholder="In KM" class="form-control">
-                        </td>
-                    </tr>
-                    <tr><td><br /></td></tr>
-                    <tr>
-                        <th>Places</th>
-                        <td>
-                            <div id="type_holder" style="height: 450px;">
-                                <!-- Dynamic Content -->
-                            </div>
-                        </td>
-                    </tr>
-                    <tr><td><br /></td></tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="button" value="Show" id="submit" onclick="renderMap();" class="btn btn-success"></td>
-                        <td>
-                            <input type="reset" value="Reset" class="btn btn-danger">
-                        </td>
-                    </tr>
-                    <tr><td><br /></td></tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            @Html.ActionLink("Back to Plans", "PlanCreator", new { date = Date, startlocation = startLocation }, new { @class = "btn btn-primary" })
-                        </td>
-                    </tr>
-                    <tr><td><br /></td></tr>
-                </table>
-            </form>
-        </div>
-        <div class="col-md-9">
-            <div id="map" style="width:100%; height:600px;"></div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.Label("Location Name")
-                        </th>
-                        <th>
-                            @Html.Label("Location Address")
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="location"></tbody>
-            </table>
-        </div>
+    <h2>Explore near @nearlocation</h2>
+    <div class="fullscreen-section">
+        <div class="left">
+            <div id="map" style="width:100%; height:614px;"></div>
+        </div> <!-- end .left -->
+        <div class="right">
+            <div class="inner" style="overflow-y:scroll">
+                <div class="directory-filters">
+                    <form name="frm_map" id="frm_map">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <select id="typeholder" onchange="changeFunc();"></select>
+                                </div> <!-- end .form-group -->
+                            </div> <!-- end .col-sm-4 -->
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <select id="radius" onchange="radius();">
+                                        <option value="1">Distance</option>
+                                        <option value="1">1km</option>
+                                        <option value="2">2km</option>
+                                        <option value="3">3km</option>
+                                    </select>
+                                </div> <!-- end .form-group -->
+                            </div> <!-- end .col-sm-4 -->
+                        </div> <!-- end .row -->
+                    </form>
+                </div> <!-- end .directory-filters -->
+
+                <div class="directory-list row">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.Label("Location Name")
+                                </th>
+                                <th>
+                                    @Html.Label("Location Address")
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="location"></tbody>
+                    </table>
+
+                </div> <!-- end .directory-list -->
+            </div> <!-- end .inner -->
+        </div> <!-- end .right -->
+    </div> <!-- end .section -->
+    <br/>
+    <div style="text-align:center">
+        @Html.ActionLink("Back to Plans", "PlanCreator", new { date = Date, startlocation = startLocation }, new { @class = "button" })
     </div>
+    
 </body>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

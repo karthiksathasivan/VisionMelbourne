@@ -1,42 +1,38 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
 <link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
 
 @using (Html.BeginForm("PlanCreator", "UserPlans"))
-{
-    <div style="text-align: center; vertical-align: middle; font-family: Verdana;
-color: Blue; position: absolute; top: 50%; left: 50%; margin-left: -88px;
-font-size: small;" id="dvProgress" runat="server">
-        Please Wait ...
-    </div>
-    <div class="section large transparent dark text-center" style="background-image: url('../../images/background.jpg');">
+{   
+    <div class="section small transparent dark text-center" style="background-image: url('../../images/background.jpg');">
         <div class="inner">
             <div class="container">
-                <h1>Discover The Melbourne CBD</h1>
-                <p class="lead">Find great places to visit, eat, or shop from us</p>
+                <h1>Plan your Trips around Melbourne</h1>
+                <p class="lead">Get adviced about the pedestrian traffic at your planned destinations</p>
                 <div class="row">
                     <form>
                         <div class="col-sm-6">
                             <div class="searchform" style="text-align:left">
                                 <label for="CLocation">Start Location</label>
                                 <input id="autocomplete" type="text" name="startlocation" required placeholder="Please search your start location" onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" />
-                                <button type="button" onclick="getCurrentLocation()"><i class="fa fa-location-arrow"></i></button>
+                                <button type="button" onclick="getCurrentLocation()"><i class="fa fa-map-marker"></i></button>
                                 <input hidden id="lat" type="text" name="lat" />
                                 <input hidden id="lon" type="text" name="lon" />
                             </div> <!-- end .form-group -->
                         </div> <!-- end .col-sm-4 -->
                         <div class="col-sm-6">
                             <div class="searchform" style="text-align:left">
-                                <label for="FLocation">Departure Date</label>
-                                <input id="Date" type="datetime" name="Date" class="date-container" placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" />
-                                <button><i class="fa fa-calendar"></i></button>
+                                <label for="FLocation">Plan Date</label>
+                                <input id="Date" type="datetime" name="Date" class="date-container" required placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" />
+                                <button type="button"><i class="fa fa-calendar"></i></button>
                             </div> <!-- end .form-group -->
                         </div> <!-- end .col-sm-4 -->
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <button type="submit" class="button">Search Places</button>
+                                <button type="submit" class="button">Plan Trips</button>
                             </div>
                         </div>
                     </form>
@@ -50,7 +46,7 @@ font-size: small;" id="dvProgress" runat="server">
 <div class="section light">
     <div class="inner">
         <div class="container">
-            <h2 class="text-center">What are you interested in?<small>Explore some of the best tips from around the city from our partners and friends.</small></h2>
+            <h2 class="text-center">What are you interested in?<small>Explore some of the best picks from around the city </small></h2>
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Church", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category1.jpg');">
@@ -69,7 +65,7 @@ font-size: small;" id="dvProgress" runat="server">
                     </a> <!-- end .category-box -->
                 </div> <!-- end .col-md-3 -->
                 <div class="col-md-3 col-sm-6">
-                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Sport", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category3.jpg');">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Recreation", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category3.jpg');">
                         <div class="inner">
                             <img src="~/images/icon03.png" alt="icon">
                             <span class="title">Sport</span>
@@ -93,7 +89,7 @@ font-size: small;" id="dvProgress" runat="server">
                     </a> <!-- end .category-box -->
                 </div> <!-- end .col-sm-6 -->
                 <div class="col-md-3 col-sm-6">
-                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Zoo", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category6.jpg');">
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Leisure", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category6.jpg');">
                         <div class="inner">
                             <img src="~/images/icon06.png" alt="icon">
                             <span class="title">Leisure</span>
@@ -150,7 +146,7 @@ font-size: small;" id="dvProgress" runat="server">
         $('.date-container').datepicker({
             todayHighlight: true,
             orientation: "bottom",
-            startDate: '-3d'
+            startDate: '-1d'
         });
     });
     $(document).ready(function () {
@@ -159,7 +155,12 @@ font-size: small;" id="dvProgress" runat="server">
 </script>
 
 <script>
+    var cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-38.067807865, 144.5148742199),
+        new google.maps.LatLng(-37.5687831234, 145.4157531261));
+
     var options = {
+        bounds: cityBounds,
         componentRestrictions: { country: "au" }
     };
     var input = document.getElementById('autocomplete');

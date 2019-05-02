@@ -27,5 +27,12 @@ namespace VisionMelbourneV3.Controllers
 
             return View();
         }
+
+        public ActionResult Help()
+        {
+            ViewBag.Message = "Accessibility Tips";
+
+            return View();
+        }
     }
 }

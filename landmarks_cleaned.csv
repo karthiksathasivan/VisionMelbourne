@@ -1,184 +1,131 @@
 ID, Categories, Name,Latitude,Longitude,Accessibility_Level,Accessibility_rating 
-86,Zoo,Melbourne Aquarium,-37.82096278,144.9584257,,
-33,Art Gallery/Museum,Old Melbourne Gaol Crime & Justice Experience,-37.80776441,144.9654639,,
-39,Art Gallery/Museum,Polly Woodside,-37.82425743,144.9534781,,
-40,Art Gallery/Museum,Australian Centre for Contemporary Art,-37.82660454,144.9672529,,
-42,Art Gallery/Museum,Victorian Arts Centre,-37.82199473,144.9688373,,
-43,Art Gallery/Museum,The Ian Potter Centre: NGV Australia,-37.81748314,144.969899,,
-44,Art Gallery/Museum,Thoroughbred Racing Gallery,-37.81886627,144.9839701,,
-46,Art Gallery/Museum,Fox Classic Car Collection,-37.82137443,144.9484967,,
-52,Art Gallery/Museum,Melbourne Museum,-37.80355181,144.9716907,,
-60,Art Gallery/Museum,National Sports Museum,-37.81895449,144.9846698,,
-73,Art Gallery/Museum,Sinclair's Cottage,-37.81454075,144.980555,,
-74,Art Gallery/Museum,Victoria Police Museum,-37.82221828,144.95404,,
-75,Art Gallery/Museum,Immigration Museum,-37.81917988,144.9604268,,
-78,Art Gallery/Museum,Fire Services Museum Victoria,-37.80857613,144.9753737,,
-79,Art Gallery/Museum,The Ian Potter Museum Of Art,-37.79739396,144.9641567,,
-80,Art Gallery/Museum,Koorie Heritage Trust Inc,-37.81338543,144.9540279,,
-85,Art Gallery/Museum,Cooks' Cottage,-37.81446049,144.9794713,,
-88,Art Gallery/Museum,Royal Exhibition Building,-37.80460262,144.9715219,,
-90,Art Gallery/Museum,Australian Centre For The Moving Image (ACMI),-37.81761073,144.9690704,,
-91,Art Gallery/Museum,The Museum Of Australian Chinese History,-37.81076861,144.9692339,,
-92,Cafes and Restaurants,Donoghue's ,-37.8134766,144.9560169,High,3
-93,Cafes and Restaurants,The Attic Artisan Bread And Cafe,-37.81571393,144.9561073,High,3
-94,Cafes and Restaurants,Movida Aqui,-37.81494883,144.9587607,High,3
-95,Cafes and Restaurants,Tipo 00,-37.81358648,144.9619926,Low,1
-96,Cafes and Restaurants,Melbourne Dae Jang Geum Korean BBQ,-37.81296443,144.9658365,High,3
-97,Cafes and Restaurants,Famish'd,-37.81636534,144.9578132,Moderate,2
-98,Cafes and Restaurants,Society Cafe,-37.81181007,144.9723947,High,3
-99,Cafes and Restaurants,Punch Lane Wine Bar/Restaurant,-37.81092017,144.971363,Low,1
-100,Cafes and Restaurants,Crossways Food For Life,-37.81482941,144.9658852,High,3
-101,Cafes and Restaurants,Grill'd ,-37.81760781,144.9656264,Moderate,2
-102,Cafes and Restaurants,Cafe Sonex ,-37.81261513,144.9542745,High,3
-103,Cafes and Restaurants,Ba Noi,-37.8146364,144.9570408,High,3
-104,Cafes and Restaurants,Pho Nom,-37.81245199,144.9638386,High,3
-105,Cafes and Restaurants,Tsuta sushi,-37.81288006,144.9610121,High,3
-106,Cafes and Restaurants,Cafe Segovia,-37.81526825,144.9643901,Moderate,2
-107,Cafes and Restaurants,Chin Chin Restaurant,-37.81568875,144.9703998,Low,1
-108,Cafes and Restaurants,Delicious Asian Cuisines & Pho,-37.81329521,144.9555653,Low,1
-109,Cafes and Restaurants,Shimbashi Japanese Soba & Sake Bar,-37.81131159,144.9713242,High,3
-110,Cafes and Restaurants,Sushia,-37.81902044,144.9557275,High,3
-111,Cafes and Restaurants,King Jons,-37.81584127,144.9551492,High,3
-112,Cafes and Restaurants,Bistro Du Peuple,-37.81719967,144.9638971,Moderate,2
-113,Cafes and Restaurants,Curry Vault ,-37.81642893,144.9605225,Moderate,2
-114,Cafes and Restaurants,Shuji Sushi,-37.8134766,144.9560169,High,3
-115,Cafes and Restaurants,Fourteen On 10,-37.81084464,144.9620613,Low,1
-116,Cafes and Restaurants,The Brass Coq,-37.81299012,144.9555039,High,3
-117,Cafes and Restaurants,D Food Connection,-37.81073331,144.9630189,Moderate,2
-118,Cafes and Restaurants,Becasse Bakery,-37.81245199,144.9638386,High,3
-119,Cafes and Restaurants,Asian Beer Cafe,-37.81073331,144.9630189,Moderate,2
-120,Cafes and Restaurants,Felt Restaurant,-37.81528647,144.9735899,Moderate,2
-121,Cafes and Restaurants,The Crane,-37.81203484,144.9662792,High,3
-122,Cafes and Restaurants,Alice's Thai Restaurant,-37.81447237,144.9670943,Moderate,2
-123,Cafes and Restaurants,Kaefei,-37.81270785,144.9564474,High,3
-124,Cafes and Restaurants,Chocolate Buddha,-37.81784465,144.9699175,High,3
-125,Cafes and Restaurants,14 Bourke Street,-37.81288006,144.9610121,High,3
-126,Cafes and Restaurants,Jang Gun Restuarant,-37.8134766,144.9560169,High,3
-127,Cafes and Restaurants,Cafe Del Corso,-37.81786011,144.9627445,Low,1
-128,Cafes and Restaurants,Suda,-37.8134766,144.9560169,High,3
-129,Cafes and Restaurants,Sool Tong,-37.81386746,144.9599073,Moderate,2
-130,Cafes and Restaurants,La Stradda Cafe,-37.81146268,144.9566886,Low,1
-131,Cafes and Restaurants,Sarti Restaurant & Bar,-37.81390779,144.9675807,High,3
-132,Cafes and Restaurants,Cultured Salad,-37.81445406,144.9645323,Low,1
-133,Cafes and Restaurants,Grasshoppers Feast,-37.81445406,144.9645323,Low,1
-134,Cafes and Restaurants,Charlie & Co,-37.81245199,144.9638386,Moderate,2
-135,Cafes and Restaurants,Jones the Grocer,-37.81245199,144.9638386,Low,1
-136,Cafes and Restaurants,Movida,-37.81670922,144.9690862,Low,1
-137,Cafes and Restaurants,Shanghai Dumpling Restaurant,-37.8118662,144.9654386,High,3
-138,Cafes and Restaurants,Paperboy Kitchen,-37.81158232,144.9602803,Moderate,2
-139,Cafes and Restaurants,Lt Osteria,-37.81531863,144.9573923,Low,1
-140,Cafes and Restaurants,The Tea Salon,-37.81245199,144.9638386,Low,1
-141,Cafes and Restaurants,Grain Store,-37.81988484,144.9566017,Moderate,2
-142,Cafes and Restaurants,Tribel Cafe,-37.80745984,144.9572395,High,3
-143,Cafes and Restaurants,Melbourne Wok,-37.81247257,144.968386,Low,1
-144,Cafes and Restaurants,In a Rush  ,-37.81784465,144.9699175,High,3
-145,Cafes and Restaurants,Fat Oma,-37.81278915,144.9656117,Moderate,2
-146,Cafes and Restaurants,Brioche by Philip,-37.81636534,144.9578132,Moderate,2
-147,Cafes and Restaurants,Cafe Lavita On William ,-37.81492637,144.9582309,High,3
-148,Cafes and Restaurants,Lee's Chinese Gourmet,-37.81349786,144.9548222,Moderate,2
-149,Cafes and Restaurants,Naughty Nuri's Warung and Grill ,-37.81073331,144.9630189,High,3
-150,Cafes and Restaurants,McDonald's,-37.81342593,144.9727083,Moderate,2
-151,Cafes and Restaurants,Bergerac,-37.81439357,144.9562135,Low,1
-152,Cafes and Restaurants,Laksa Bar,-37.80913993,144.9684463,High,3
-153,Cafes and Restaurants,L'Incontro,-37.81430553,144.9662921,Low,1
-154,Cafes and Restaurants,Ta-Ta House,-37.81225906,144.9675307,Low,1
-155,Cafes and Restaurants,Pellegrinis Espresso Bar,-37.81165009,144.9711634,High,3
-156,Cafes and Restaurants,Shanghai Master Dumpling,-37.81608475,144.95526,Moderate,2
-157,Cafes and Restaurants,The Atrium on 35,-37.81430616,144.9726281,High,3
-158,Cafes and Restaurants,Da Rin,-37.81294598,144.9685632,Low,1
-159,Cafes and Restaurants,Ume Sushi House,-37.81377588,144.961463,Moderate,2
-160,Cafes and Restaurants,The Grand Trailer Park Taverna,-37.812234,144.9709029,High,3
-161,Cafes and Restaurants,Pallet Espresso,-37.81867544,144.9543505,Moderate,2
-162,Cafes and Restaurants,All 4 U Cafe & Bar,-37.81359291,144.9532342,High,3
-163,Cafes and Restaurants,Vapiano,-37.81722704,144.9627888,Low,1
-164,Cafes and Restaurants,Yoyogi Japanese Cafe,-37.81284647,144.9650158,Low,1
-165,Cafes and Restaurants,Seamstress,-37.81056538,144.9690111,High,3
-166,Cafes and Restaurants,Sakura Kaiten Sushi II,-37.81152964,144.9639969,High,3
-167,Cafes and Restaurants,Mr Kitchen,-37.8123356,144.9675678,Moderate,2
-168,Cafes and Restaurants,Stellini Bar,-37.81384227,144.9671568,Moderate,2
-2,Church,St Francis Church,-37.81188478,144.9624226,,
-3,Church,Wesley Church,-37.81015764,144.9681682,,
-4,Church,St Augustines Church,-37.81697414,144.954862,,
-5,Church,St James Church,-37.81012812,144.9524686,,
-6,Church,St Mary's Anglican Church,-37.80316637,144.9537615,,
-7,Church,Romanian Orthodox,-37.80523073,144.9669864,,
-8,Church,Welsh Presbyterian Church,-37.81044788,144.9598733,,
-9,Church,Church of Christ,-37.81045241,144.9638892,,
-10,Church,Scots Church,-37.81456878,144.9685511,,
-11,Church,St Michael's Uniting Church,-37.81438513,144.969174,,
-12,Church,Greek Orthodox Church,-37.80880647,144.9782591,,
-13,Church,St Peter's Eastern Hill,-37.80970867,144.9752592,,
-14,Church,Lutheran Trinity Church,-37.81097571,144.9757295,,
-15,Church,Holy Trinity,-37.81406671,144.9831973,,
-16,Church,St Johns Lutheran Church,-37.82093997,144.9671211,,
-17,Church,North Melbourne Uniting,-37.80355385,144.9476715,,
-18,Church,Melbourne Unitarian Church,-37.81144878,144.9846649,,
-19,Church,All Nations Uniting Church,-37.79591553,144.9689811,,
-20,Church,Our Lady of Lebanon Church,-37.80257665,144.9693347,,
-21,Church,St Michaels,-37.79405127,144.9453995,,
-22,Church,Ukranian Catholic Cathedral,-37.79630846,144.9443135,,
-23,Church,St Alban Anglican Church,-37.79421695,144.9416145,,
-24,Church,Christ Church Kensington,-37.79321095,144.9272957,,
-25,Church,Holy Rosary,-37.79480874,144.9283621,,
-26,Church,Collins Street Baptist Church,-37.81470119,144.9680725,,
-27,Church,St Thomas Aquinas Church,-37.83530769,144.9768091,,
-28,Church,South Yarra Presbyterian Church,-37.84074736,144.985627,,
-29,Church,The Parish of Christ Church South Yarra,-37.83862705,144.9860094,,
-41,Church,St Patricks Cathedral,-37.8101141,144.9759015,,
-76,Church,St Pauls Cathedral,-37.8169549,144.9676816,,
-30,Major Sports & Recreation Facility,State Netball Hockey Centre,-37.785786,144.947581,,
-31,Major Sports & Recreation Facility,Carlton Football Club,-37.78408644,144.9619678,,
-32,Major Sports & Recreation Facility,Visy Park,-37.78343039,144.9619826,,
-34,Major Sports & Recreation Facility,Flemington Racecourse,-37.79080826,144.912143,,
-37,Major Sports & Recreation Facility,Melbourne Cricket Ground (MCG),-37.81949216,144.9834029,,
-45,Major Sports & Recreation Facility,AAMI Park,-37.82472527,144.983803,,
-48,Major Sports & Recreation Facility,Rod Laver Arena,-37.82204561,144.9784872,,
-49,Major Sports & Recreation Facility,Melbourne Park,-37.8209086,144.9787358,,
-50,Major Sports & Recreation Facility,Margaret Court Arena,-37.82132521,144.9775911,,
-51,Major Sports & Recreation Facility,Hisense Arena,-37.82311,144.9818348,,
-82,Major Sports & Recreation Facility,North Melbourne Recreation Centre (Aquatic),-37.799947,144.9432908,,
-83,Major Sports & Recreation Facility,City Baths,-37.80715854,144.9631898,,
-87,Major Sports & Recreation Facility,Westpac Centre,-37.82424569,144.9797203,,
-89,Major Sports & Recreation Facility,Etihad Stadium,-37.81617605,144.9474963,,
-38,Outdoor Recreation Facility (Zoo/ Golf Course),Melbourne Zoo,-37.78444493,144.9513712,,
-47,Outdoor Recreation Facility (Zoo/ Golf Course),Wonderland Park,-37.81169454,144.9368337,,
-71,Outdoor Recreation Facility (Zoo/ Golf Course),Riverside Park,-37.79483753,144.9156071,,
-72,Outdoor Recreation Facility (Zoo/ Golf Course),Melbourne Showgrounds,-37.78230979,144.9108221,,
-1,Railway Station,Flemington Bridge Railway Station,-37.78816459,144.9392778,,
-35,Railway Station,Southern Cross Railway Station,-37.81816331,144.9529447,,
-36,Railway Station,Flagstaff Railway Station,-37.81223565,144.9563182,,
-53,Railway Station,Parliament Railway Station,-37.81160618,144.9730173,,
-54,Railway Station,Richmond Railway Station (Richmond) - Train stop,-37.82389927,144.9894008,,
-55,Railway Station,Jolimont-MCG Railway Station (East Melbourne) - Train stop,-37.81656518,144.983641,,
-56,Railway Station,Macaulay Railway Station (North Melbourne) - Train stop,-37.794964,144.9361908,,
-57,Railway Station,Kensington Railway Station,-37.79391401,144.9307102,,
-58,Railway Station,South Kensington Railway Station,-37.79972705,144.9258377,,
-59,Railway Station,Royal Park Railway Station,-37.78126843,144.9516678,,
-61,Railway Station,Parliament Railway Station,-37.81215728,144.973742,,
-62,Railway Station,Parliament Railway Station,-37.81276211,144.9734338,,
-63,Railway Station,Parliament Railway Station,-37.80957622,144.9723301,,
-64,Railway Station,Flagstaff Railway Station,-37.81163844,144.9561187,,
-65,Railway Station,Melbourne Central Railway Station,-37.80977593,144.9626701,,
-66,Railway Station,Melbourne Central Railway Station,-37.81059924,144.9616906,,
-67,Railway Station,Melbourne Central Railway Station,-37.810893,144.9631007,,
-68,Railway Station,Flemington Racecourse Railway Station,-37.78691058,144.9081907,,
-69,Railway Station,Showgrounds Railway Station (Flemington),-37.78346512,144.9149026,,
-70,Railway Station,Newmarket Railway Station,-37.78727262,144.92906,,
-77,Railway Station,Flinders Street Railway Station,-37.8179063,144.9670648,,
-81,Railway Station,Melbourne Central Railway Station,-37.8100167,144.9637893,,
-84,Railway Station,North Melbourne Railway Station,-37.80738236,144.9424298,,
-169,Shopping,Royal Arcade,-37.81458812,144.964049,High,3
-170,Shopping,Myer,-37.81344503,144.9638295,High,3
-171,Shopping,Queen Victoria Building,-37.80838541,144.958272,Moderate,2
-172,Shopping,Emporium Melbourne,-37.81245199,144.9638386,High ,3
-173,Shopping,Collins Two3Four,-37.81541957,144.9656577,High ,3
-174,Shopping,David Jones,-37.81330938,144.9643985,High ,3
-175,Shopping,Nicholas Building,-37.81674222,144.9667041,High ,3
-176,Shopping,London Stores,-37.8144328,144.9636622,High ,3
-177,Shopping,David Jones,-37.81436987,144.9648958,High ,3
-178,Shopping,Halladale House,-37.81507549,144.9652255,High ,3
-179,Shopping,GPO,-37.81360425,144.9632879,Moderate,2
-180,Shopping,Centrepoint,-37.8142367,144.9652357,High ,3
-181,Shopping,Paton Building,-37.8155949,144.9634815,Moderate ,2
-182,Shopping,City Square,-37.81592857,144.9671007,High ,3
-183,Shopping,City of Melbourne Chambers,-37.81528286,144.9639475,Low,1
+1,Cafes and Restaurants,Donoghue's ,-37.8134766,144.9560169,High,3
+2,Cafes and Restaurants,The Attic Artisan Bread And Cafe,-37.81571393,144.9561073,High,3
+3,Cafes and Restaurants,Movida Aqui,-37.81494883,144.9587607,High,3
+4,Cafes and Restaurants,Tipo 00,-37.81358648,144.9619926,Low,1
+5,Cafes and Restaurants,Melbourne Dae Jang Geum Korean BBQ,-37.81296443,144.9658365,High,3
+6,Cafes and Restaurants,Famish'd,-37.81636534,144.9578132,Moderate,2
+7,Cafes and Restaurants,Society Cafe,-37.81181007,144.9723947,High,3
+8,Cafes and Restaurants,Punch Lane Wine Bar/Restaurant,-37.81092017,144.971363,Low,1
+9,Cafes and Restaurants,Crossways Food For Life,-37.81482941,144.9658852,High,3
+10,Cafes and Restaurants,Grill'd ,-37.81760781,144.9656264,Moderate,2
+11,Cafes and Restaurants,Cafe Sonex ,-37.81261513,144.9542745,High,3
+12,Cafes and Restaurants,Ba Noi,-37.8146364,144.9570408,High,3
+13,Cafes and Restaurants,Pho Nom,-37.81245199,144.9638386,High,3
+14,Cafes and Restaurants,Tsuta sushi,-37.81288006,144.9610121,High,3
+15,Cafes and Restaurants,Cafe Segovia,-37.81526825,144.9643901,Moderate,2
+16,Cafes and Restaurants,Chin Chin Restaurant,-37.81568875,144.9703998,Low,1
+17,Cafes and Restaurants,Delicious Asian Cuisines & Pho,-37.81329521,144.9555653,Low,1
+18,Cafes and Restaurants,Shimbashi Japanese Soba & Sake Bar,-37.81131159,144.9713242,High,3
+19,Cafes and Restaurants,Sushia,-37.81902044,144.9557275,High,3
+20,Cafes and Restaurants,King Jons,-37.81584127,144.9551492,High,3
+21,Cafes and Restaurants,Bistro Du Peuple,-37.81719967,144.9638971,Moderate,2
+22,Cafes and Restaurants,Curry Vault ,-37.81642893,144.9605225,Moderate,2
+23,Cafes and Restaurants,Shuji Sushi,-37.8134766,144.9560169,High,3
+24,Cafes and Restaurants,Fourteen On 10,-37.81084464,144.9620613,Low,1
+25,Cafes and Restaurants,The Brass Coq,-37.81299012,144.9555039,High,3
+26,Cafes and Restaurants,D Food Connection,-37.81073331,144.9630189,Moderate,2
+27,Cafes and Restaurants,Becasse Bakery,-37.81245199,144.9638386,High,3
+28,Cafes and Restaurants,Asian Beer Cafe,-37.81073331,144.9630189,Moderate,2
+29,Cafes and Restaurants,Felt Restaurant,-37.81528647,144.9735899,Moderate,2
+30,Cafes and Restaurants,The Crane,-37.81203484,144.9662792,High,3
+31,Cafes and Restaurants,Alice's Thai Restaurant,-37.81447237,144.9670943,Moderate,2
+32,Cafes and Restaurants,Kaefei,-37.81270785,144.9564474,High,3
+33,Cafes and Restaurants,Chocolate Buddha,-37.81784465,144.9699175,High,3
+34,Cafes and Restaurants,14 Bourke Street,-37.81288006,144.9610121,High,3
+35,Cafes and Restaurants,Jang Gun Restuarant,-37.8134766,144.9560169,High,3
+36,Cafes and Restaurants,Cafe Del Corso,-37.81786011,144.9627445,Low,1
+37,Cafes and Restaurants,Suda,-37.8134766,144.9560169,High,3
+38,Cafes and Restaurants,Sool Tong,-37.81386746,144.9599073,Moderate,2
+39,Cafes and Restaurants,La Stradda Cafe,-37.81146268,144.9566886,Low,1
+40,Cafes and Restaurants,Sarti Restaurant & Bar,-37.81390779,144.9675807,High,3
+41,Cafes and Restaurants,Cultured Salad,-37.81445406,144.9645323,Low,1
+42,Cafes and Restaurants,Grasshoppers Feast,-37.81445406,144.9645323,Low,1
+43,Cafes and Restaurants,Charlie & Co,-37.81245199,144.9638386,Moderate,2
+44,Cafes and Restaurants,Jones the Grocer,-37.81245199,144.9638386,Low,1
+45,Cafes and Restaurants,Movida,-37.81670922,144.9690862,Low,1
+46,Cafes and Restaurants,Shanghai Dumpling Restaurant,-37.8118662,144.9654386,High,3
+47,Cafes and Restaurants,Paperboy Kitchen,-37.81158232,144.9602803,Moderate,2
+48,Cafes and Restaurants,Lt Osteria,-37.81531863,144.9573923,Low,1
+49,Cafes and Restaurants,The Tea Salon,-37.81245199,144.9638386,Low,1
+50,Cafes and Restaurants,Grain Store,-37.81988484,144.9566017,Moderate,2
+51,Cafes and Restaurants,Tribel Cafe,-37.80745984,144.9572395,High,3
+52,Cafes and Restaurants,Melbourne Wok,-37.81247257,144.968386,Low,1
+53,Cafes and Restaurants,In a Rush  ,-37.81784465,144.9699175,High,3
+54,Cafes and Restaurants,Fat Oma,-37.81278915,144.9656117,Moderate,2
+55,Cafes and Restaurants,Brioche by Philip,-37.81636534,144.9578132,Moderate,2
+56,Cafes and Restaurants,Cafe Lavita On William ,-37.81492637,144.9582309,High,3
+57,Cafes and Restaurants,Lee's Chinese Gourmet,-37.81349786,144.9548222,Moderate,2
+58,Cafes and Restaurants,Naughty Nuri's Warung and Grill ,-37.81073331,144.9630189,High,3
+59,Cafes and Restaurants,McDonald's,-37.81342593,144.9727083,Moderate,2
+60,Cafes and Restaurants,Bergerac,-37.81439357,144.9562135,Low,1
+61,Cafes and Restaurants,Laksa Bar,-37.80913993,144.9684463,High,3
+62,Cafes and Restaurants,L'Incontro,-37.81430553,144.9662921,Low,1
+63,Cafes and Restaurants,Ta-Ta House,-37.81225906,144.9675307,Low,1
+64,Cafes and Restaurants,Pellegrinis Espresso Bar,-37.81165009,144.9711634,High,3
+65,Cafes and Restaurants,Shanghai Master Dumpling,-37.81608475,144.95526,Moderate,2
+66,Cafes and Restaurants,The Atrium on 35,-37.81430616,144.9726281,High,3
+67,Cafes and Restaurants,Da Rin,-37.81294598,144.9685632,Low,1
+68,Cafes and Restaurants,Ume Sushi House,-37.81377588,144.961463,Moderate,2
+69,Cafes and Restaurants,The Grand Trailer Park Taverna,-37.812234,144.9709029,High,3
+70,Cafes and Restaurants,Pallet Espresso,-37.81867544,144.9543505,Moderate,2
+71,Cafes and Restaurants,All 4 U Cafe & Bar,-37.81359291,144.9532342,High,3
+72,Cafes and Restaurants,Vapiano,-37.81722704,144.9627888,Low,1
+73,Cafes and Restaurants,Yoyogi Japanese Cafe,-37.81284647,144.9650158,Low,1
+74,Cafes and Restaurants,Seamstress,-37.81056538,144.9690111,High,3
+75,Cafes and Restaurants,Sakura Kaiten Sushi II,-37.81152964,144.9639969,High,3
+76,Cafes and Restaurants,Mr Kitchen,-37.8123356,144.9675678,Moderate,2
+77,Cafes and Restaurants,Stellini Bar,-37.81384227,144.9671568,Moderate,2
+78,Shopping,Royal Arcade,-37.81458812,144.964049,High,3
+79,Shopping,Myer,-37.81344503,144.9638295,High,3
+80,Shopping,Queen Victoria Building,-37.80838541,144.958272,Moderate,2
+81,Shopping,Emporium Melbourne,-37.81245199,144.9638386,High ,3
+82,Shopping,Collins Two3Four,-37.81541957,144.9656577,High ,3
+83,Shopping,David Jones,-37.81330938,144.9643985,High ,3
+84,Shopping,Nicholas Building,-37.81674222,144.9667041,High ,3
+85,Shopping,London Stores,-37.8144328,144.9636622,High ,3
+86,Shopping,David Jones,-37.81436987,144.9648958,High ,3
+87,Shopping,Halladale House,-37.81507549,144.9652255,High ,3
+88,Shopping,GPO,-37.81360425,144.9632879,Moderate,2
+89,Shopping,Centrepoint,-37.8142367,144.9652357,High ,3
+90,Shopping,Paton Building,-37.8155949,144.9634815,Moderate ,2
+91,Shopping,City Square,-37.81592857,144.9671007,High ,3
+92,Shopping,City of Melbourne Chambers,-37.81528286,144.9639475,Low,1
+93,Church,St Francis Church,-37.81157761,144.9626044,Moderate,2
+94,Church,Scots Church,-37.81451942,144.9684885,Moderate,2
+95,Church,Former Church of England ,-37.8090402,144.9714146,High level ,3
+96,Church,Chinese Mission Church,-37.8119567,144.9667372,Low level ,1
+97,Church,St Augustines Roman Catholic Church,-37.81719644,144.9549232,Low level ,1
+98,Church,Wesley Church,-37.8099428,144.9681718,High level ,3
+99,Church,Welsh Church & Presbytery,-37.81035038,144.9598552,Low level ,1
+100,Church,Collins Street Baptist Church,-37.81474661,144.9677144,Moderate ,2
+101,Church,Church of Christ,-37.81056672,144.9638432,Moderate ,2
+102,Church,St Michaels ,-37.81435848,144.9692387,Low,1
+103,Art Gallery/Museum,Old Melbourne Gaol,-37.80782752,144.9652518,High ,3
+104,Art Gallery/Museum,The Ian Potter Centre: NGV Australia,-37.81784465,144.9699175,High ,3
+105,Art Gallery/Museum,Museum of Chinese Australian History,-37.81073698,144.9692165,High ,3
+106,Art Gallery/Museum,Immigration Museum,-37.81904221,144.9603593,Moderate ,2
+107,Transport,Parliament Station,-37.81277577,144.9734149,Moderate,2
+108,Transport,Flinders Street,-37.818321,144.966997,High,3
+109,Transport,Southern Cross,-37.818354,144.952193,High,3
+110,Transport,Melbourne Central,-37.8097,144.963757,High,3
+111,Transport,Flagstaff,-37.811827,144.956447,High,3
+112,Major Sports & Recreation Facility,State Netball Hockey Centre,-37.785786,144.947581,Not determined,0
+113,Major Sports & Recreation Facility,Carlton Football Club,-37.78408644,144.9619678,Not determined,0
+114,Major Sports & Recreation Facility,Visy Park,-37.78343039,144.9619826,Not determined,0
+115,Major Sports & Recreation Facility,Flemington Racecourse,-37.79080826,144.912143,Not determined,0
+116,Major Sports & Recreation Facility,Melbourne Cricket Ground (MCG),-37.81949216,144.9834029,Not determined,0
+117,Leisure,Melbourne Zoo,-37.78444493,144.9513712,Not determined,0
+118,Major Sports & Recreation Facility,AAMI Park,-37.82472527,144.983803,Not determined,0
+119,Leisure,Wonderland Park,-37.81169454,144.9368337,Not determined,0
+120,Major Sports & Recreation Facility,Rod Laver Arena,-37.82204561,144.9784872,Not determined,0
+121,Major Sports & Recreation Facility,Melbourne Park,-37.8209086,144.9787358,Not determined,0
+122,Major Sports & Recreation Facility,Margaret Court Arena,-37.82132521,144.9775911,Not determined,0
+123,Major Sports & Recreation Facility,Hisense Arena,-37.82311,144.9818348,Not determined,0
+124,Leisure,Riverside Park,-37.79483753,144.9156071,Not determined,0
+125,Leisure,Melbourne Showgrounds,-37.78230979,144.9108221,Not determined,0
+126,Major Sports & Recreation Facility,North Melbourne Recreation Centre (Aquatic),-37.799947,144.9432908,Not determined,0
+127,Major Sports & Recreation Facility,City Baths,-37.80715854,144.9631898,Not determined,0
+128,Leisure,Melbourne Aquarium,-37.82096278,144.9584257,Not determined,0
+129,Major Sports & Recreation Facility,Westpac Centre,-37.82424569,144.9797203,Not determined,0
+130,Major Sports & Recreation Facility,Etihad Stadium,-37.81617605,144.9474963,Not determined,0

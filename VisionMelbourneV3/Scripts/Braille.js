@@ -104,6 +104,8 @@ function doTTS() {
         default:
             text = "Braille code not found";
     }
+    var displaytext = document.getElementById('Text');
+    displaytext.innerHTML = text;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.pitch = 1.5;
     utterance.volume = 1.5;

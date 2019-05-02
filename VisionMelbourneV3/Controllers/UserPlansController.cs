@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VisionMelbourneV3.Models;
+using Microsoft.AspNet.Identity;
 
 namespace VisionMelbourneV3.Controllers
 {
@@ -99,9 +100,10 @@ namespace VisionMelbourneV3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var time = date;            
+            var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
+            string dayPeopleCount = "";
 
             Location location = db.Locations.Find(id);
             var latitude = location.Latitude;
@@ -119,6 +121,7 @@ namespace VisionMelbourneV3.Controllers
                                    where a.SensorID.Contains(count.sensor_id)
                                    && a.Day.Contains(day) && a.Time.Contains(hr)
                                    select a;
+                    
                     foreach (var c in pedcount.ToList())
                     {
                         peopleCount = peopleCount + (int)c.PedCount1;
@@ -136,190 +139,191 @@ namespace VisionMelbourneV3.Controllers
             detailedLocation.PeopleCount = avgCount;
             detailedLocation.Date = date;
             detailedLocation.Radius = "150";
-            if (location.Theme.Contains("Cafe"))
-            {
-                detailedLocation.AccessibilityLevel = location.AccessibilityLevel;
-                detailedLocation.AccessibilityRating = location.AccessibilityRating;
-            }
+            detailedLocation.AccessibilityLevel = location.AccessibilityLevel;
+            detailedLocation.AccessibilityRating = location.AccessibilityRating;
             db.DetailedLocations.Add(detailedLocation);
             db.SaveChanges();
             return View(detailedLocation);
-    }
+        }
 
 
 
-    public ActionResult PlanCreator(string date, string startlocation)
-    {
+        public ActionResult PlanCreator(string date, string startlocation)
+        {
+            var currentUserId = User.Identity.GetUserId();
             DateTime plandate = Convert.ToDateTime(date);
-        UserPlan userPlan = new UserPlan();
-        var plans = from a in db.UserPlans where a.Date == plandate && a.StartLocation.Equals(startlocation) select a;
-        plans = plans.OrderBy(p => p.Time);
-        List<UserPlan> planList = new List<UserPlan>();
-        foreach (var id in plans)
-        {
-            planList.Add(userPlan = db.UserPlans.Find(id.Id));
+            UserPlan userPlan = new UserPlan();
+            var plans = from a in db.UserPlans where a.Date == plandate && a.StartLocation == startlocation select a;
+            plans = plans.OrderBy(p => p.Time);
+            List<UserPlan> planList = new List<UserPlan>();
+            foreach (var id in plans)
+            {
+                planList.Add(userPlan = db.UserPlans.Find(id.Id));
+            }
+            if (planList.Count == 0)
+            {
+                userPlan.Date = plandate;
+                userPlan.StartLocation = startlocation;
+                planList.Add(userPlan);
+            }
+            return View("PlanCreator", planList);
         }
-        if (planList.Count == 0)
-        {
-            userPlan.Date = plandate;
-            userPlan.StartLocation = startlocation;
-            planList.Add(userPlan);
-        }
-        return View("PlanCreator", planList);
-    }
 
 
-    public ActionResult NewPlan(string fromlocation, string location, string lat, string lon, string plandate, string time)
-    {
+        public ActionResult NewPlan(string fromlocation, string location, string lat, string lon, string plandate, string time)
+        {
             DateTime newTime = Convert.ToDateTime(time);
             TimeSpan ntime = newTime.TimeOfDay;
-        DateTime nplandate = Convert.ToDateTime(plandate);
-        var day = Convert.ToString(nplandate.DayOfWeek);
-        var hr = Convert.ToString(ntime.Hours);
-        int i = 1;
-        int peopleCount = 0;
+            DateTime nplandate = Convert.ToDateTime(plandate);
+            var day = Convert.ToString(nplandate.DayOfWeek);
+            var hr = Convert.ToString(ntime.Hours);
+            int i = 1;
+            int peopleCount = 0;
 
-        var sensorLocations = db.SensorLocations.ToList();
-        foreach (var count in sensorLocations)
-        {
-            double dist = distance(lat, lon, count.latitude, count.longitude);
-            if (dist <= 150)
+            var sensorLocations = db.SensorLocations.ToList();
+            foreach (var count in sensorLocations)
             {
-                var pedcount = from a in db.Pedcounts
-                               where a.SensorID.Contains(count.sensor_id)
-                               && a.Day.Contains(day) && a.Time.Contains(hr)
-                               select a;
-                foreach (var c in pedcount.ToList())
+                double dist = distance(lat, lon, count.latitude, count.longitude);
+                if (dist <= 150)
                 {
-                    peopleCount = peopleCount + (int)c.PedCount1;
-                    i++;
+                    var pedcount = from a in db.Pedcounts
+                                   where a.SensorID.Contains(count.sensor_id)
+                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+                                   select a;
+                    foreach (var c in pedcount.ToList())
+                    {
+                        peopleCount = peopleCount + (int)c.PedCount1;
+                        i++;
+                    }
                 }
             }
+            string avgCount = Convert.ToString(peopleCount / i);          
+            UserPlan newPlan = new UserPlan();
+            var currentUserId = User.Identity.GetUserId();
+            newPlan.UserID = currentUserId;
+            newPlan.StartLocation = fromlocation;
+            newPlan.Date = nplandate;
+            newPlan.Location = location;
+            newPlan.Latitude = Convert.ToDouble(lat);
+            newPlan.Longitude = Convert.ToDouble(lon);
+            newPlan.Time = ntime;
+            newPlan.PeopleCount = avgCount;
+            db.UserPlans.Add(newPlan);
+            db.SaveChanges();
+
+            return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromlocation });
         }
-        string avgCount = Convert.ToString(peopleCount / i);
-
-        UserPlan newPlan = new UserPlan();
-        newPlan.StartLocation = fromlocation;
-        newPlan.Date = nplandate;
-        newPlan.Location = location;
-        newPlan.Latitude = Convert.ToDouble(lat);
-        newPlan.Longitude = Convert.ToDouble(lon);
-        newPlan.Time = ntime;
-        newPlan.PeopleCount = avgCount;
-        db.UserPlans.Add(newPlan);
-        db.SaveChanges();
-
-        return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromlocation });
-    }
 
         public ViewResult NearbyPlaces(string planstart, string nearlocation, string date, string locLat, string locLng, string planTime)
         {
+            
             ViewBag.planstartLocation = planstart;
             ViewBag.findnearLocation = nearlocation;
             ViewBag.planDate = date;
             ViewBag.latitude = locLat;
             ViewBag.longitude = locLng;
             ViewBag.Time = planTime;
-            return View();
+            return View(db.Locations.ToList());
         }
-    //[HttpPost]
-    //public ActionResult EditedPlan(UserPlan userPlan)
-    //{
-    //    var day = Convert.ToString(userPlan.Date.DayOfWeek);
-    //    TimeSpan time = (TimeSpan)userPlan.Time;
-    //    var hr = Convert.ToString(time.Hours);
-    //    int i = 1;
-    //    int peopleCount = 0;
 
-    //    var sensorLocations = db.SensorLocations.ToList();
-    //    foreach (var count in sensorLocations)
-    //    {
-    //        double dist = distance(Convert.ToString(userPlan.Latitude), Convert.ToString(userPlan.Longitude), count.latitude, count.longitude);
-    //        if (dist <= 150)
-    //        {
-    //            var pedcount = from a in db.Pedcounts
-    //                           where a.SensorID.Contains(count.sensor_id)
-    //                           && a.Day.Contains(day) && a.Time.Contains(hr)
-    //                           select a;
-    //            foreach (var c in pedcount.ToList())
-    //            {
-    //                peopleCount = peopleCount + (int)c.PedCount1;
-    //                i++;
-    //            }
-    //        }
-    //    }
-    //    string avgCount = Convert.ToString(peopleCount / i);
+        //[HttpPost]
+        //public ActionResult EditedPlan(UserPlan userPlan)
+        //{
+        //    var day = Convert.ToString(userPlan.Date.DayOfWeek);
+        //    TimeSpan time = (TimeSpan)userPlan.Time;
+        //    var hr = Convert.ToString(time.Hours);
+        //    int i = 1;
+        //    int peopleCount = 0;
 
-    //    UserPlan newPlan = db.UserPlans.SingleOrDefault(x => x.Id == userPlan.Id);
-    //    newPlan.Date = userPlan.Date;
-    //    newPlan.Location = userPlan.Location;
-    //    newPlan.Latitude = userPlan.Latitude;
-    //    newPlan.Longitude = userPlan.Longitude;
-    //    newPlan.Time = userPlan.Time;
-    //    newPlan.PeopleCount = avgCount;
-    //    db.SaveChanges();
-    //    return RedirectToAction("PlanCreator", new { date = userPlan.Date });
-    //}
+        //    var sensorLocations = db.SensorLocations.ToList();
+        //    foreach (var count in sensorLocations)
+        //    {
+        //        double dist = distance(Convert.ToString(userPlan.Latitude), Convert.ToString(userPlan.Longitude), count.latitude, count.longitude);
+        //        if (dist <= 150)
+        //        {
+        //            var pedcount = from a in db.Pedcounts
+        //                           where a.SensorID.Contains(count.sensor_id)
+        //                           && a.Day.Contains(day) && a.Time.Contains(hr)
+        //                           select a;
+        //            foreach (var c in pedcount.ToList())
+        //            {
+        //                peopleCount = peopleCount + (int)c.PedCount1;
+        //                i++;
+        //            }
+        //        }
+        //    }
+        //    string avgCount = Convert.ToString(peopleCount / i);
 
-
-    //public ActionResult EditPlan(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-    //    }
-    //    UserPlan userPlan = db.UserPlans.Find(id);
-    //    if (userPlan == null)
-    //    {
-    //        return HttpNotFound();
-    //    }
-
-    //    return PartialView("EditPlan", userPlan);
-    //}
-
-    public ActionResult CategoryIndex(string category)
-    {
-        var locations = db.Locations.Where(g => g.Theme.Contains(category)).ToList();
-        return View(locations);
-    }
+        //    UserPlan newPlan = db.UserPlans.SingleOrDefault(x => x.Id == userPlan.Id);
+        //    newPlan.Date = userPlan.Date;
+        //    newPlan.Location = userPlan.Location;
+        //    newPlan.Latitude = userPlan.Latitude;
+        //    newPlan.Longitude = userPlan.Longitude;
+        //    newPlan.Time = userPlan.Time;
+        //    newPlan.PeopleCount = avgCount;
+        //    db.SaveChanges();
+        //    return RedirectToAction("PlanCreator", new { date = userPlan.Date });
+        //}
 
 
-    // GET: UserPlans/Delete/5
-    public ActionResult Delete(int? id)
-    {
-        if (id == null)
+        //public ActionResult EditPlan(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    UserPlan userPlan = db.UserPlans.Find(id);
+        //    if (userPlan == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+
+        //    return PartialView("EditPlan", userPlan);
+        //}
+
+        public ActionResult CategoryIndex(string category)
         {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var locations = db.Locations.Where(g => g.Theme.Contains(category)).ToList();
+            return View(locations);
         }
-        UserPlan userPlan = db.UserPlans.Find(id);
-        if (userPlan == null)
+
+
+        // GET: UserPlans/Delete/5
+        public ActionResult Delete(int? id)
         {
-            return HttpNotFound();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserPlan userPlan = db.UserPlans.Find(id);
+            if (userPlan == null)
+            {
+                return HttpNotFound();
+            }
+            return View(userPlan);
         }
-        return View(userPlan);
-    }
 
 
-    // POST: UserPlans/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public ActionResult DeleteConfirmed(int id)
-    {
-        UserPlan userPlan = db.UserPlans.Find(id);
-        String fromLocation = userPlan.StartLocation;
-        DateTime plandate = userPlan.Date;
-        db.UserPlans.Remove(userPlan);
-        db.SaveChanges();
-        return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromLocation });
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
+        // POST: UserPlans/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            db.Dispose();
+            UserPlan userPlan = db.UserPlans.Find(id);
+            String fromLocation = userPlan.StartLocation;
+            DateTime plandate = userPlan.Date;
+            db.UserPlans.Remove(userPlan);
+            db.SaveChanges();
+            return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromLocation });
         }
-        base.Dispose(disposing);
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
-}
 }

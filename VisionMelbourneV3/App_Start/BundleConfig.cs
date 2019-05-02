@@ -27,9 +27,6 @@ namespace VisionMelbourneV3
                       "~/Scripts/bootstrap-datetimepicker.js",
                       "~/Scripts/bootstrap-datepicker.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/materialize").Include(
-                     "~/Scripts/materialize.min.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/map").Include(
                    "~/Scripts/MapSearch.js"));
 
