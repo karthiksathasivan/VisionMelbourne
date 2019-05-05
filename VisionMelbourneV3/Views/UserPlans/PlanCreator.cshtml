@@ -70,13 +70,14 @@
                 <div class="container">
                     <div class="box">
                         <div style="text-align:center;">
-                            <a id=@plansCount class="btn btn-warning" onclick="dofullTTS()">
-                                Speak
+                            <a id=@plansCount class="btn btn-warning" onclick="dofullTTS(this.id)">
+                                Listen to All plans
                                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
                             </a>
                             <h2>Your plans for @displayDate</h2>
                             <div><button class="Down button" title="Go to top"><i class="glyphicon glyphicon-plus"></i> Add to plan</button></div>
                         </div>
+                        <br /><br />
                         <div class="table-responsive">
                             <table class="table cart-items light-inputs">
                                 <thead>
@@ -102,8 +103,8 @@
                                             var btnID = "btn" + plansCount;
                                             <tr>
                                                 <td>
-                                                    <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
-                                                        Speak
+                                                    <a id=@plansCount class="btn btn-warning" onclick="doTTS(this.id)">
+                                                        Listen to Plan
                                                         <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
                                                     </a>
 
@@ -112,12 +113,12 @@
                                                 <td>
                                                     @if (time.Hours >= 12)
                                                     {
-                                                        <div id=@timeID hidden>@Html.DisplayFor(modelItem => userPlan.Time)</div>
-                                                        <div class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))pm</p></div>
+                                                        <div hidden>@Html.DisplayFor(modelItem => userPlan.Time)</div>
+                                                        <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))pm</p></div>
                                                     }
                                                     else
                                                     {
-                                                        <div class="col-md-4"><p id=@timeID>@Html.DisplayName(time.ToString(@"hh\:mm"))am</p></div>
+                                                        <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))am</p></div>
                                                     }
                                                 </td>
                                                 <td>
@@ -200,7 +201,7 @@
                             <form>
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
-                                        <label for="CLocation">Enter your planned destination</label>
+                                        <label for="CLocation">Enter your plan location</label>
                                         <input id="autocomplete" type="text" name="location" placeholder="Add a Location" required onfocus="this.placeholder=''" onblur="this.placeholder ='Add a location'" />
                                         <button type="button"><i class="fa fa-location-arrow"></i></button>
                                         <input hidden id="lat" type="text" name="lat" />
@@ -266,10 +267,11 @@
     });
 
 
-    function doTTS(element) {
-        var plocation = "location" + element.id;
-        var ptime = "time" + element.id;
-        var ppcount = "pedcount" + element.id;
+    function speak(element) {
+        plans = @plans.Count;
+        var plocation = "location" + element;
+        var ptime = "time" + element;
+        var ppcount = "pedcount" + element;
         var speaktime = document.getElementById(ptime).innerHTML;
         var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
             + ", " + document.getElementById(ppcount).innerHTML;
@@ -278,6 +280,38 @@
         utterance.volume = 1.5;
         utterance.rate = 1;
         speechSynthesis.speak(utterance);
+        utterance.onstart = function (event) {
+            document.getElementById(ptime).style.backgroundColor = "#FDFF47";
+            document.getElementById(plocation).style.backgroundColor = "#FDFF47";
+        };
+        utterance.onend = function (event) {
+            document.getElementById(ptime).style.backgroundColor = "transparent";
+            document.getElementById(plocation).style.backgroundColor = "transparent";
+        };
+    }
+
+    function doTTS(element) {
+        plans = @plans.Count;
+        speechSynthesis.cancel();
+        var plocation = "location" + element;
+        var ptime = "time" + element;
+        var ppcount = "pedcount" + element;
+        var speaktime = document.getElementById(ptime).innerHTML;
+        var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
+            + ", " + document.getElementById(ppcount).innerHTML;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.pitch = 1.5;
+        utterance.volume = 1.5;
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
+        utterance.onstart = function (event) {
+            document.getElementById(ptime).style.backgroundColor = "#FDFF47";
+            document.getElementById(plocation).style.backgroundColor = "#FDFF47";
+        };
+        utterance.onend = function (event) {
+            document.getElementById(ptime).style.backgroundColor = "transparent";
+            document.getElementById(plocation).style.backgroundColor = "transparent";
+        };
     }
 
 
@@ -294,27 +328,12 @@
     var plans = "";
     function dofullTTS() {
         plans = @plans.Count;
-        var num = 1;
-        for (i = 0; i < plans; i++)
+        speechSynthesis.cancel();
+        for (i = 1; i <= plans; i++)
         {
-            var plocation = "location" + num;
-            var ptime = "time" + num;
-            var ppcount = "pedcount" + num;
-            var speaktime = document.getElementById(ptime).innerHTML;
-            var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
-                + ", " + document.getElementById(ppcount).innerHTML;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.pitch = 1.5;
-            utterance.volume = 1.5;
-            utterance.rate = 1;
-            speechSynthesis.speak(utterance);
-            num++;
+            speak(i);
         }
-        
     }
-
-    
-
 </script>
 
 

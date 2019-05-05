@@ -3,23 +3,16 @@
 }
 <span></span>
 
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    
+
     <div class="data">
         @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
+        <h4>Create a new account</h4>
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div>
-            <p id="myContent" style="font-size:250%">
-                Set the font size you are comfortable with
-            </p>
-            <div class="form-group" style="margin-left:10%;">
-                <a onclick="resizeText(-10)" style="padding-right:10%;">Decrease Size</a>
-                <a onclick="resizeText(10)" style="padding-left:10%;">Increase Size</a>
-            </div>
-        </div>
         <div class="form-group">
             @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
@@ -44,13 +37,6 @@
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.TextSize, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.HiddenFor(m => m.TextSize, new { id = "TextID" })
-            </div>
-        </div>
-
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -63,20 +49,20 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(".increaseFont,.decreaseFont").click(function () {
-                var type = $(this).val();
-                var curFontSize = $('.data').css('font-size');
-                if (type == 'increase') {
-                    $('.data').css('font-size', parseInt(curFontSize) + 1);
-                }
-                else {
-                    $('.data').css('font-size', parseInt(curFontSize) - 1);
-                }
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $(".increaseFont,.decreaseFont").click(function () {
+                    var type = $(this).val();
+                    var curFontSize = $('.data').css('font-size');
+                    if (type == 'increase') {
+                        $('.data').css('font-size', parseInt(curFontSize) + 1);
+                    }
+                    else {
+                        $('.data').css('font-size', parseInt(curFontSize) - 1);
+                    }
+                });
+
+
             });
-
-
-        });
-    </script>
+        </script>*@
 }

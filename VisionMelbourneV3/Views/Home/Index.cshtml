@@ -154,29 +154,7 @@
 </script>
 
 <script>
-    //var cityBounds = new google.maps.LatLngBounds(
-    //    new google.maps.LatLng(-38.067807865, 144.5148742199),
-    //    new google.maps.LatLng(-37.5687831234, 145.4157531261));
-
-    //var options = {
-    //    bounds: cityBounds,
-    //    componentRestrictions: { country: "au" }
-    //};
-    //var input = document.getElementById('autocomplete');
-    //var autocomplete = new google.maps.places.Autocomplete(input, options);
-    //autocomplete.addListener('place_changed', function () {
-    //    var place = autocomplete.getPlace();
-    //    document.getElementById('lat').value = place.geometry.location.lat();
-    //    document.getElementById('lon').value = place.geometry.location.lng();
-    //});
-
-    //function codeAddress() {
-    //    var place = autocomplete.getPlace();
-    //    document.getElementById('lat').value = place.geometry.location.lat();
-    //    document.getElementById('lon').value = place.geometry.location.lng();
-
-    //}
-
+    speechSynthesis.cancel();
     function getCurrentLocation() {
         var options = {
             enableHighAccuracy: true,

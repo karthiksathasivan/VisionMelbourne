@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace VisionMelbourneV3.Controllers
 {
+    [Authorize]
     public class UserPlansController : Controller
     {
 
@@ -77,9 +78,9 @@ namespace VisionMelbourneV3.Controllers
         //    return RedirectToAction("PlanCreator", new { startdate = time });
         //}
 
-
+[AllowAnonymous]
         public double distance(String lat1, String lon1, String lat2, String lon2)
-        {  
+        {
             // generally used geo measurement function
             var R = 6378.137; // Radius of earth in KM
             var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
@@ -92,6 +93,7 @@ namespace VisionMelbourneV3.Controllers
             return d * 1000; // meters
         }
 
+        [AllowAnonymous]
         // GET: UserPlans/Details/id
         public ActionResult Details(int? id, DateTime date, string fromlocation)
         {
@@ -106,7 +108,7 @@ namespace VisionMelbourneV3.Controllers
             var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
-            string dayPeopleCount = "";           
+            string dayPeopleCount = "";
             Location location = db.Locations.Find(id);
 
             var latitude = location.Latitude;
@@ -202,8 +204,21 @@ namespace VisionMelbourneV3.Controllers
                     }
                 }
             }
-            string avgCount = Convert.ToString(peopleCount / i);          
+
+            string avgCount = Convert.ToString(peopleCount / i);
             UserPlan newPlan = new UserPlan();
+            Location foundLocation = new Location();
+            var findLocation = from a in db.Locations where a.Name == location && a.Latitude == lat
+                     && a.Longitude == lon select a;
+            foreach (var id in findLocation)
+            {
+               foundLocation = db.Locations.Find(id.Id);
+            }
+            if (foundLocation != null)
+            {                
+                newPlan.AccessibilityLevel = foundLocation.AccessibilityLevel;
+                newPlan.AccessibilityRating = foundLocation.AccessibilityRating;
+            }
             var currentUserId = User.Identity.GetUserId();
             newPlan.UserID = currentUserId;
             newPlan.StartLocation = fromlocation;
@@ -216,12 +231,12 @@ namespace VisionMelbourneV3.Controllers
             db.UserPlans.Add(newPlan);
             db.SaveChanges();
 
-            return RedirectToAction("PlanCreator", new { date = plandate});
+            return RedirectToAction("PlanCreator", new { date = plandate });
         }
 
         public ViewResult NearbyPlaces(string planstart, string nearlocation, string date, string locLat, string locLng, string planTime)
         {
-            
+
             ViewBag.planstartLocation = planstart;
             ViewBag.findnearLocation = nearlocation;
             ViewBag.planDate = date;
@@ -285,7 +300,7 @@ namespace VisionMelbourneV3.Controllers
 
         //    return PartialView("EditPlan", userPlan);
         //}
-
+        [AllowAnonymous]
         public ActionResult CategoryIndex(string category)
         {
             var locations = db.Locations.Where(g => g.Theme.Contains(category)).ToList();
@@ -319,7 +334,7 @@ namespace VisionMelbourneV3.Controllers
             DateTime plandate = userPlan.Date;
             db.UserPlans.Remove(userPlan);
             db.SaveChanges();
-            return RedirectToAction("PlanCreator", new { date = plandate});
+            return RedirectToAction("PlanCreator", new { date = plandate });
         }
 
         protected override void Dispose(bool disposing)
