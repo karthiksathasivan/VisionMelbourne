@@ -43,6 +43,10 @@ namespace VisionMelbourneV3.Models
 
 
         public string StartLocation { get; set; }
+
+        public int LocationID { get; set; }
+
+        public TimeSpan? Time { get; set; }
     }
 
 }

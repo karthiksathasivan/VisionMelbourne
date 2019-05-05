@@ -14,42 +14,28 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-    $(document).ready(function () {
 
-        var types = ['art_gallery', 'cafe', 'church', 'museum', 'shopping_mall', 'zoo'];
-        var html = '';
-
-        $.each(types, function (index, value) {
-            var name = value.replace(/_/g, " ");
-            html += '<option value="' + value + '">' + capitalizeFirstLetter(name) + '</option>';
-        });
-
-        $('#typeholder').html(html);
-    });
 
     function changeFunc() {
         var selectBox = document.getElementById("typeholder");
-        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        var radselectBox = document.getElementById("radius");
+        radius = radselectBox.options[radselectBox.selectedIndex].value;
         renderMap(selectedValue);
     }
 
-    function radius() {
-        var selectBox = document.getElementById("radius");
-        radius = selectBox.options[selectBox.selectedIndex].value;
-    }
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    var radius;
+    var selectedValue = "art_gallery";
+    var radius = 1;
     var destination = [];
     var latitude = [];
     var longitude = [];
     var map;
     var infowindow;
-    var autocomplete;
-    var countryRestrict = { 'country': 'au' };
     var selectedTypes = [];
 
     function initialize() {
@@ -68,9 +54,9 @@
 
     function renderMap(value) {
         // Get the user defined values
-        radius = parseInt(document.getElementById('radius').value) * 1000;
+        radius = radius * 1000;
 
-        
+
         selectedTypes.push(value)
 
                var pyrmont = new google.maps.LatLng(@latitude, @longitude);
@@ -83,7 +69,7 @@
                     map: map,
                     position: pyrmont
                 });
-        
+
 
                 var request = {
                     location: pyrmont,
@@ -92,7 +78,7 @@
                 };
         selectedTypes = [];
 
-        console.log(selectedTypes.length)
+
                 infowindow = new google.maps.InfoWindow();
 
                 var service = new google.maps.places.PlacesService(map);
@@ -165,7 +151,7 @@
     }
     function doTTS(element) {
         document.getElementById(element.id).onclick = function () {
-            var plocation = "location" + element.id;            
+            var plocation = "location" + element.id;
             //var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
             //    + ", " + document.getElementById(ppcount).innerHTML;
             //const utterance = new SpeechSynthesisUtterance(text);
@@ -182,14 +168,13 @@
         $("div[id$=dvProgress]").fadeOut("fast");
     });
 </script>
-<body onload="initialize()" style="font-size:24px;">
+<body onload="initialize()" style="font-size:22px;">
     <div class="page-header">
         <div class="container">
             <div class="breadcrumbs">
-
                 <ul class="list-unstyled">
                     <li><a href="/">Home</a></li>
-                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date, startlocation = startLocation })>My Plans</a></li>
+                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a></li>
                     <li>Nearby</li>
                 </ul>
             </div> <!-- end .breadcrumbs -->
@@ -207,13 +192,18 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <select id="typeholder" onchange="changeFunc();"></select>
+                                    <select id="typeholder" onchange="changeFunc();">
+                                        <option value="art_gallery">Art Gallery</option>
+                                        <option value="cafe">Cafe</option>
+                                        <option value="church">Church</option>
+                                        <option value="museum">Museum</option>
+                                        <option value="zoo">Zoo</option>
+                                    </select>
                                 </div> <!-- end .form-group -->
                             </div> <!-- end .col-sm-4 -->
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <select id="radius" onchange="radius();">
-                                        <option value="1">Distance</option>
+                                    <select id="radius" onchange="changeFunc();">
                                         <option value="1">1km</option>
                                         <option value="2">2km</option>
                                         <option value="3">3km</option>
@@ -244,11 +234,9 @@
             </div> <!-- end .inner -->
         </div> <!-- end .right -->
     </div> <!-- end .section -->
-    <br/>
-    <div style="text-align:center">
-        @Html.ActionLink("Back to Plans", "PlanCreator", new { date = Date, startlocation = startLocation }, new { @class = "button" })
-    </div>
-    
+    <br />
+
+
 </body>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

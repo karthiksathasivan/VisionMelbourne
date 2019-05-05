@@ -79,8 +79,8 @@ namespace VisionMelbourneV3.Controllers
 
 
         public double distance(String lat1, String lon1, String lat2, String lon2)
-        {  // generally used geo measurement function
-
+        {  
+            // generally used geo measurement function
             var R = 6378.137; // Radius of earth in KM
             var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
             var dLon = Convert.ToDouble(lon2) * Math.PI / 180 - Convert.ToDouble(lon1) * Math.PI / 180;
@@ -92,9 +92,12 @@ namespace VisionMelbourneV3.Controllers
             return d * 1000; // meters
         }
 
-        // GET: UserPlans/Details/5
+        // GET: UserPlans/Details/id
         public ActionResult Details(int? id, DateTime date, string fromlocation)
         {
+            DateTime newTime = Convert.ToDateTime(date);
+            TimeSpan ntime = newTime.TimeOfDay;
+            DateTime nplandate = Convert.ToDateTime(date);
             var start = fromlocation;
             if (id == null)
             {
@@ -103,9 +106,9 @@ namespace VisionMelbourneV3.Controllers
             var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
-            string dayPeopleCount = "";
-
+            string dayPeopleCount = "";           
             Location location = db.Locations.Find(id);
+
             var latitude = location.Latitude;
             var longitude = location.Longitude;
             int i = 1;
@@ -121,7 +124,6 @@ namespace VisionMelbourneV3.Controllers
                                    where a.SensorID.Contains(count.sensor_id)
                                    && a.Day.Contains(day) && a.Time.Contains(hr)
                                    select a;
-                    
                     foreach (var c in pedcount.ToList())
                     {
                         peopleCount = peopleCount + (int)c.PedCount1;
@@ -132,12 +134,14 @@ namespace VisionMelbourneV3.Controllers
             string avgCount = Convert.ToString(peopleCount / i);
             DetailedLocation detailedLocation = new DetailedLocation();
             detailedLocation.StartLocation = start;
+            detailedLocation.LocationID = location.Id;
             detailedLocation.Location = location.Name;
             detailedLocation.Theme = location.Theme;
             detailedLocation.Latitude = Convert.ToDouble(location.Latitude);
             detailedLocation.Longitude = Convert.ToDouble(location.Longitude);
             detailedLocation.PeopleCount = avgCount;
             detailedLocation.Date = date;
+            detailedLocation.Time = ntime;
             detailedLocation.Radius = "150";
             detailedLocation.AccessibilityLevel = location.AccessibilityLevel;
             detailedLocation.AccessibilityRating = location.AccessibilityRating;
@@ -148,12 +152,13 @@ namespace VisionMelbourneV3.Controllers
 
 
 
-        public ActionResult PlanCreator(string date, string startlocation)
+        public ActionResult PlanCreator(string date)
         {
             var currentUserId = User.Identity.GetUserId();
             DateTime plandate = Convert.ToDateTime(date);
             UserPlan userPlan = new UserPlan();
-            var plans = from a in db.UserPlans where a.Date == plandate && a.StartLocation == startlocation select a;
+            //var plans = from a in db.UserPlans where a.Date == plandate && a.StartLocation == startlocation select a;
+            var plans = from a in db.UserPlans where a.UserID == currentUserId && a.Date == plandate select a;
             plans = plans.OrderBy(p => p.Time);
             List<UserPlan> planList = new List<UserPlan>();
             foreach (var id in plans)
@@ -163,7 +168,7 @@ namespace VisionMelbourneV3.Controllers
             if (planList.Count == 0)
             {
                 userPlan.Date = plandate;
-                userPlan.StartLocation = startlocation;
+                //userPlan.StartLocation = startlocation;
                 planList.Add(userPlan);
             }
             return View("PlanCreator", planList);
@@ -211,7 +216,7 @@ namespace VisionMelbourneV3.Controllers
             db.UserPlans.Add(newPlan);
             db.SaveChanges();
 
-            return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromlocation });
+            return RedirectToAction("PlanCreator", new { date = plandate});
         }
 
         public ViewResult NearbyPlaces(string planstart, string nearlocation, string date, string locLat, string locLng, string planTime)
@@ -314,7 +319,7 @@ namespace VisionMelbourneV3.Controllers
             DateTime plandate = userPlan.Date;
             db.UserPlans.Remove(userPlan);
             db.SaveChanges();
-            return RedirectToAction("PlanCreator", new { date = plandate, startlocation = fromLocation });
+            return RedirectToAction("PlanCreator", new { date = plandate});
         }
 
         protected override void Dispose(bool disposing)

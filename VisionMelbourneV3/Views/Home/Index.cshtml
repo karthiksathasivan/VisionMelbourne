@@ -6,7 +6,7 @@
 <link href="~/Content/style.css" rel="stylesheet" />
 
 @using (Html.BeginForm("PlanCreator", "UserPlans"))
-{   
+{
     <div class="section small transparent dark text-center" style="background-image: url('../../images/background.jpg');">
         <div class="inner">
             <div class="container">
@@ -14,16 +14,16 @@
                 <p class="lead">Get adviced about the pedestrian traffic at your planned destinations</p>
                 <div class="row">
                     <form>
-                        <div class="col-sm-6">
+                        @*<div class="col-sm-6">
                             <div class="searchform" style="text-align:left">
                                 <label for="CLocation">Start Location</label>
-                                <input id="autocomplete" type="text" name="startlocation" required placeholder="Please search your start location" onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" />
+                                <input id="autocomplete" type="text" name="startlocation" placeholder="Please search your start location" onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" />
                                 <button type="button" onclick="getCurrentLocation()"><i class="fa fa-map-marker"></i></button>
                                 <input hidden id="lat" type="text" name="lat" />
                                 <input hidden id="lon" type="text" name="lon" />
                             </div> <!-- end .form-group -->
-                        </div> <!-- end .col-sm-4 -->
-                        <div class="col-sm-6">
+                        </div> <!-- end .col-sm-4 -->*@
+                        <div class="col-sm-6 col-sm-offset-3">
                             <div class="searchform" style="text-align:left">
                                 <label for="FLocation">Plan Date</label>
                                 <input id="Date" type="datetime" name="Date" class="date-container" required placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" />
@@ -81,11 +81,11 @@
                     </a> <!-- end .category-box -->
                 </div> <!-- end .col-md-3 -->
                 <div class="col-sm-6">
-                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Transport", date = DateTime.Now }); class = "category-box" style = "background-image: url('../../images/category5.jpg');">
-                    <div class="inner">
-                        <img src="~/images/icon05.png" alt="icon">
-                        <span class="title">Transport</span>
-                    </div> <!-- end .inner -->
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Transport", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category5.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon05.png" alt="icon">
+                            <span class="title">Transport</span>
+                        </div> <!-- end .inner -->
                     </a> <!-- end .category-box -->
                 </div> <!-- end .col-sm-6 -->
                 <div class="col-md-3 col-sm-6">
@@ -97,12 +97,12 @@
                     </a> <!-- end .category-box -->
                 </div> <!-- end .col-md-3 -->
                 <div class="col-md-3 col-sm-6">
-                <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Shopping", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category7.jpg');">
-    <div class="inner">
-        <img src="~/images/icon07.png" alt="icon">
-        <span class="title">Shopping</span>
-    </div> <!-- end .inner -->
-</a> <!-- end .category-box -->
+                    <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = "Shopping", date = DateTime.Now }) ; class="category-box" style="background-image: url('../../images/category7.jpg');">
+                        <div class="inner">
+                            <img src="~/images/icon07.png" alt="icon">
+                            <span class="title">Shopping</span>
+                        </div> <!-- end .inner -->
+                    </a> <!-- end .category-box -->
                 </div> <!-- end .col-md-3 -->
             </div> <!-- end .row -->
         </div> <!-- end .container -->
@@ -143,10 +143,9 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.date-container').datepicker({
-            todayHighlight: true,
-            orientation: "bottom",
-            startDate: '-1d'
+        $('.date-container').datetimepicker({
+            minDate: new Date(),
+            format: 'L'
         });
     });
     $(document).ready(function () {
@@ -155,21 +154,21 @@
 </script>
 
 <script>
-    var cityBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(-38.067807865, 144.5148742199),
-        new google.maps.LatLng(-37.5687831234, 145.4157531261));
+    //var cityBounds = new google.maps.LatLngBounds(
+    //    new google.maps.LatLng(-38.067807865, 144.5148742199),
+    //    new google.maps.LatLng(-37.5687831234, 145.4157531261));
 
-    var options = {
-        bounds: cityBounds,
-        componentRestrictions: { country: "au" }
-    };
-    var input = document.getElementById('autocomplete');
-    var autocomplete = new google.maps.places.Autocomplete(input, options);
-    autocomplete.addListener('place_changed', function () {
-        var place = autocomplete.getPlace();
-        document.getElementById('lat').value = place.geometry.location.lat();
-        document.getElementById('lon').value = place.geometry.location.lng();
-    });
+    //var options = {
+    //    bounds: cityBounds,
+    //    componentRestrictions: { country: "au" }
+    //};
+    //var input = document.getElementById('autocomplete');
+    //var autocomplete = new google.maps.places.Autocomplete(input, options);
+    //autocomplete.addListener('place_changed', function () {
+    //    var place = autocomplete.getPlace();
+    //    document.getElementById('lat').value = place.geometry.location.lat();
+    //    document.getElementById('lon').value = place.geometry.location.lng();
+    //});
 
     //function codeAddress() {
     //    var place = autocomplete.getPlace();

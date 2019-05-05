@@ -33,18 +33,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var userPlan in Model)
+            @foreach (var location in Model)
             {
                 <tr>
-                    @if (userPlan.Name != null)
+                    @if (location.Name != null)
                     {
                         var locationID = "location" + plansCount;
 
                         <td id=@locationID>
-                            @Html.DisplayFor(modelItem => userPlan.Name)
+                            @Html.DisplayFor(modelItem => location.Name)
                         </td>
                         <td>
-                            @Html.ActionLink("Details", "Details", new { id = userPlan.Id, date = DateTime.Now }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = DateTime.Now }, new { @class = "btn btn-primary" })
                             <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
                                 Speak
                                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
@@ -70,15 +70,13 @@
     ]
     <script>
         function doTTS(element) {
-            document.getElementById(element.id).onclick = function () {
-                var plocation = "location" + element.id;
-                var text = "Location, " + document.getElementById(plocation).innerHTML;
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.pitch = 1.5;
-                utterance.volume = 1.5;
-                utterance.rate = 1;
-                speechSynthesis.speak(utterance);
-            }
+            var plocation = "location" + element.id;
+            var text = "Location, " + document.getElementById(plocation).innerHTML;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.pitch = 1.5;
+            utterance.volume = 1.5;
+            utterance.rate = 1;
+            speechSynthesis.speak(utterance);
         }
 
     </script>

@@ -64,13 +64,18 @@
             </div> <!-- end .container -->
         </div> <!-- end .page-header -->
 
-        <br /><br /><br/>
+        <br /><br /><br />
         <div class="section boxed-section light">
             <div class="inner">
                 <div class="container">
                     <div class="box">
                         <div style="text-align:center;">
+                            <a id=@plansCount class="btn btn-warning" onclick="dofullTTS()">
+                                Speak
+                                <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                            </a>
                             <h2>Your plans for @displayDate</h2>
+                            <div><button class="Down button" title="Go to top"><i class="glyphicon glyphicon-plus"></i> Add to plan</button></div>
                         </div>
                         <div class="table-responsive">
                             <table class="table cart-items light-inputs">
@@ -178,7 +183,6 @@
                         </div>
 
                     </div> <!-- end .box -->
-                    <div><button onclick="topFunction()" id="myBtn" title="Go to top"><i class="glyphicon glyphicon-arrow-down"></i></button></div>
                 </div> <!-- end .container -->
             </div> <!-- end .inner -->
         </div> <!-- end .section -->
@@ -186,7 +190,7 @@
         <!-- jQuery -->
         @*<script src="js/jquery-3.1.0.min.js"></script>*@
         <!-- Bootstrap -->
-        <div class="section small transparent dark text-center" style="background-image: url('../images/background05.jpg');">
+        <div id="newPlan" class="section small transparent dark text-center" style="background-image: url('../images/background05.jpg');">
             <div class="inner">
                 @using (Html.BeginForm("NewPlan", "UserPlans"))
                 {
@@ -220,35 +224,6 @@
                             </form>
                         </div>
                     </div>
-
-                    @*<div class="row">
-                        <div class="form-group">
-                            <div class="col-md-3">
-                                @Html.Label("Enter a plan location: ")
-                            </div>
-                            <div class="col-md-9">
-                                <input id="autocomplete" type="text" name="location" placeholder="Add a Location" required onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" />
-                                <input hidden id="lat" type="text" name="lat" />
-                                <input hidden id="lon" type="text" name="lon" />
-                                <input hidden type="text" name="plandate" value=@planDate />
-                                @Html.Hidden("fromlocation", start)
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-3">
-                                @Html.Label("Pick a time: ")
-                            </div>
-                            <div class="col-md-9">
-                                <input id="Date" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div style="text-align:center;">
-                                <input type="submit" value="Add Place" class="btn btn-default" />
-                            </div>
-                        </div>
-                    </div>*@
                 }
             </div> <!-- end .inner -->
         </div> <!-- end .page-title -->
@@ -292,10 +267,39 @@
 
 
     function doTTS(element) {
-        document.getElementById(element.id).onclick = function () {
-            var plocation = "location" + element.id;
-            var ptime = "time" + element.id;
-            var ppcount = "pedcount" + element.id;
+        var plocation = "location" + element.id;
+        var ptime = "time" + element.id;
+        var ppcount = "pedcount" + element.id;
+        var speaktime = document.getElementById(ptime).innerHTML;
+        var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
+            + ", " + document.getElementById(ppcount).innerHTML;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.pitch = 1.5;
+        utterance.volume = 1.5;
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
+    }
+
+
+</script>
+<script>
+    $('.Down').click(function () {
+        $('html, body').animate({
+            scrollTop: $("#newPlan").offset().top
+        }, 'slow');
+        return false;
+    });
+</script>
+<script>
+    var plans = "";
+    function dofullTTS() {
+        plans = @plans.Count;
+        var num = 1;
+        for (i = 0; i < plans; i++)
+        {
+            var plocation = "location" + num;
+            var ptime = "time" + num;
+            var ppcount = "pedcount" + num;
             var speaktime = document.getElementById(ptime).innerHTML;
             var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
                 + ", " + document.getElementById(ppcount).innerHTML;
@@ -304,9 +308,15 @@
             utterance.volume = 1.5;
             utterance.rate = 1;
             speechSynthesis.speak(utterance);
+            num++;
         }
+        
     }
+
+    
+
 </script>
+
 
 
 

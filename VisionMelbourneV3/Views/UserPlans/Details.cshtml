@@ -15,7 +15,7 @@
 <body data-gr-c-s-loaded="true" rlt="1" style="" onload="initMap()">
 
     <div>
-        
+
         <div class="page-header">
             <div class="container">
                 <div class="breadcrumbs">
@@ -53,16 +53,11 @@
                                 </div> <!-- end col-md-6 -->
                                 <div class="col-md-6">
                                     <div class="searchform" style="text-align:center">
-                                        <h5><label for="CLocation">Add this place to your Planner</label></h5>
-                                    </div>
-                                    <div class="searchform" style="text-align:left">
-                                        <label for="CLocation">* Start Location</label>
-                                        <input id="autocomplete" type="text" required name="fromlocation" placeholder="Please search your start location" onfocus="this.placeholder=''" onblur="this.placeholder ='Please search your start location'" style="border:solid;" />
-                                        <button type="button" onclick="getCurrentLocation()"><i class="fa fa-location-arrow"></i></button>
+                                        <label for="CLocation">Add this place to your Planner</label>
                                     </div>
                                     <div class="searchform" style="text-align:left">
                                         <label for="FLocation">* Date and Time</label>
-                                        <input id="Date" type="datetime" name="Date" class="date-container" placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
+                                        <input id="Date" type="datetime" name="Date" class="date-container" value=@Model.Date placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
                                         <button><i class="fa fa-calendar"></i></button>
                                     </div>
                                     <div class="row">
@@ -146,8 +141,9 @@
                                     @Html.Hidden("location", tolocation)
                                     <input hidden type="text" name="lat" value=@Model.Latitude />
                                     <input hidden type="text" name="lon" value=@Model.Longitude />
-                                    <input hidden type="text" name="plandate" value=@fulldate />
-                                    <input hidden type="text" name="time" value=@fulltime />
+                                    <input id="plannedDate" hidden type="text" name="plandate" value=@Model.Date />
+                                    <input id="plannedTime" hidden type="text" name="time" value="@Model.Time" />
+
                                     <div class="row">
                                         <div style="text-align:center">
                                             <input type="submit" value="Add to Plan" class="button" />
@@ -161,7 +157,7 @@
 
                                         </div>
                                     </div>
-                                   
+
                                 </div> <!-- end col-md-6 -->
                             </div> <!-- end .row -->
                             <!-- end .related-products -->
@@ -169,6 +165,12 @@
                     </div> <!-- end .container -->
                 </div> <!-- end .inner -->
             </div> <!-- end .section -->
+        }
+        @using (Html.BeginForm("Details", "UserPlans"))
+        {
+            <input name="date" hidden id="detailsDate" type="text" value=@Model.Date />
+            <input name="id" hidden value=@Model.LocationID />
+            <input type="submit" value="Update Details" class="button" />
         }
         <hr>
     </div>
@@ -325,6 +327,12 @@
 <script type="text/javascript">
     $(function () {
         $('#Date').datetimepicker({
+            minDate: new Date(),
+        }).on('dp.change', function (e) {
+            document.getElementById("plannedDate").value = e.date.format("MM/DD/YYYY");
+            document.getElementById("plannedTime").value = e.date.format("HH:mm:ss");
+            document.getElementById("detailsDate").value = e.date.format("MM/DD/YYYY HH:mm:ss");
         });
     });
+
 </script>
