@@ -10,8 +10,13 @@ namespace VisionMelbourneV3
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/moment.js"));
+                        "~/Scripts/moment.js,"));
 
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendar").Include(
+                        "~/Scripts/lib/jquery.min.js",
+                        "~/Scripts/lib/moment.min.js",
+                        "~/Scripts/fullcalendar.js",
+                        "~/Scripts/calendar.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

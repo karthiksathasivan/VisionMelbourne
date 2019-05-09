@@ -105,7 +105,7 @@ function doTTS() {
             text = "Braille code not found";
     }
     var displaytext = document.getElementById('Text');
-    displaytext.innerHTML = text;
+    displaytext.innerHTML = "<h1>"+text+"<h1>";
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.pitch = 1.5;
     utterance.volume = 1.5;
@@ -122,3 +122,104 @@ function clickFunction(element) {
     pattern += code;
     i++;
 }
+
+var location = document.getElementById('brailleimage');
+var img = [];
+var brailleimageurl = "";
+
+function findBraille() {
+
+    var letter = "";
+    var input = document.getElementById("brailletext").value;
+    for (j = 0; j < input.length; j++)
+    {
+        letter = input.charAt(j); 
+        displayBraille(letter.toLowerCase());
+    }
+}
+
+//function displayBraille(pattern) {
+//    switch (true) {
+//        case pattern.includes("a"):
+//            text = '<img src="~/images/icon01.png" />';
+//            break;
+//        case pattern.includes("b"):
+//            text = '<img src="~/images/icon01.png" />';
+//            break;
+//        case pattern.includes("c"):
+//            text = '<img src="~/images/icon01.png" />';
+//            break;
+//        case pattern.includes("d") :
+//            text = "D";
+//            break;
+//        case pattern.includes("e") :
+//            text = "E";
+//            break;
+//        case pattern.includes("f"):
+//            text = "F";
+//            break;
+//        case pattern.includes("g"):
+//            text = "G";
+//            break;
+//        case pattern.includes("h"):
+//            text = "H";
+//            break;
+//        case pattern.includes("i"):
+//            text = "I";
+//            break;
+//        case pattern.includes("j"):
+//            text = "J";
+//            break;
+//        case pattern.includes("k"):
+//            text = "K";
+//            break;
+//        case pattern.includes("l"):
+//            text = "L";
+//            break;
+//        case pattern.includes("m"):
+//            text = "M";
+//            break;
+//        case pattern.includes("n"):
+//            text = "N";
+//            break;
+//        case pattern.includes("o"):
+//            text = "O";
+//            break;
+//        case pattern.includes("p"):
+//            text = "P";
+//            break;
+//        case pattern.includes("q"):
+//            text = "Q";
+//            break;
+//        case pattern.includes("r"):
+//            text = "R";
+//            break;
+//        case pattern.includes("s"):
+//            text = "S";
+//            break;
+//        case pattern.includes("t"):
+//            text = "T";
+//            break;
+//        case pattern.includes("u"):
+//            text = "U";
+//            break;
+//        case pattern.includes("v"):
+//            text = "V";
+//            break;
+//        case pattern.includes("w"):
+//            text = "W";
+//            break;
+//        case pattern.includes("x"):
+//            text = "X";
+//            break;
+//        case pattern.includes("y"):
+//            text = "Y";
+//            break;
+//        case pattern.includes("z"):
+//            text = "Z";
+//            break;
+//        default:
+//            text = "Braille code not found";
+//    }
+//    return text;
+//}

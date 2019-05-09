@@ -69,6 +69,7 @@
     </script>
     <script>
         function doTTS(element) {
+            speechSynthesis.cancel();
             var plocation = "location" + element.id;
             var text = "Location, " + document.getElementById(plocation).innerHTML;
             const utterance = new SpeechSynthesisUtterance(text);
@@ -76,6 +77,12 @@
             utterance.volume = 1.5;
             utterance.rate = 1;
             speechSynthesis.speak(utterance);
+            utterance.onstart = function (event) {
+                document.getElementById(plocation).style.backgroundColor = "#FDFF47";
+            };
+            utterance.onend = function (event) {
+                document.getElementById(plocation).style.backgroundColor = "transparent";
+            };
         }
 
     </script>

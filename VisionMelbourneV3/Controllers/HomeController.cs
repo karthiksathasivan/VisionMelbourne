@@ -14,7 +14,7 @@ namespace VisionMelbourneV3.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult LearnBraille()
         {
             ViewBag.Message = "Learn Braille";
 

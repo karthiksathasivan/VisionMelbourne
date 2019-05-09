@@ -28,7 +28,7 @@
             </div> <!-- end .container -->
             <div class="row">
                 <div style="text-align:center">
-                    @Html.ActionLink("Back to List", "CategoryIndex", new { category = Model.Theme, date = Model.Date }, new { @class = "button" })
+                    @Html.ActionLink("< Back to List", "CategoryIndex", new { category = Model.Theme, date = Model.Date }, new { @class = "button" })
 
                 </div>
             </div>
@@ -61,9 +61,6 @@
                             <div class="col-md-6">
                                 @using (Html.BeginForm("Details", "UserPlans"))
                                 {
-                                    <div class="searchform" style="text-align:center">
-                                        <label for="CLocation">Add this place to your Planner</label>
-                                    </div>
                                     <div class="searchform" style="text-align:left">
                                         <label for="FLocation">* Date and Time</label>
                                         <input id="Date" type="datetime" name="Date" class="date-container" value=@Model.Date placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
@@ -76,6 +73,17 @@
                                             <input type="submit" value="Update Details" class="button" />
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <b>Place</b>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div style="text-align:center">
+                                                @Model.Location
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
                                     <div class="row">
                                         <div class="col-md-3">
                                             <b>Date</b>
@@ -175,10 +183,13 @@
                                             }
                                         </div>
                                     </div>
-                                    <br /><br />
+                                    <br />
                                 }
                                 @using (Html.BeginForm("NewPlan", "UserPlans"))
                                 {
+                                    <div class="searchform" style="text-align:center">
+                                        <label for="CLocation">Like to checkout this Place? Add to your Planner.</label>
+                                    </div>
                                     @Html.Hidden("location", tolocation)
                                     <input hidden type="text" name="lat" value=@Model.Latitude />
                                     <input hidden type="text" name="lon" value=@Model.Longitude />
@@ -302,7 +313,7 @@
     }
     function redirectToMaps() {
         getCurrentLocation();
-        window.location = returnMapUrl(currentLocation.latitude, currentLocation.longitude);
+        window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
     }
 
 </script>

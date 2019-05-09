@@ -60,12 +60,12 @@
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li>My Plans</li>
                     </ul>
+                    @Html.ActionLink("< My Plans", "Index", "UserPlans", null, new { @class = "button" })
                 </div> <!-- end .breadcrumbs -->
             </div> <!-- end .container -->
         </div> <!-- end .page-header -->
-
-        <br /><br /><br />
-        <div class="section boxed-section light">
+        <br /><br /><br /><br/>
+        <div class="section small boxed-section light">
             <div class="inner">
                 <div class="container">
                     <div class="box">
@@ -74,8 +74,8 @@
                                 Listen to All plans
                                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
                             </a>
-                            <h2>Your plans for @displayDate</h2>
-                            <div><button class="Down button" title="Go to top"><i class="glyphicon glyphicon-plus"></i> Add to plan</button></div>
+                            <h3 style="font-size:30px">Your plans for @displayDate</h3>
+                            <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button>
                         </div>
                         <br /><br />
                         <div class="table-responsive">
@@ -100,8 +100,8 @@
                                             var locationID = "location" + plansCount;
                                             var timeID = "time" + plansCount;
                                             var peopleCountID = "pedcount" + plansCount;
-                                            var btnID = "btn" + plansCount;
-                                            <tr>
+                                            var rowID = "row" + plansCount;
+                                            <tr id=@rowID>
                                                 <td>
                                                     <a id=@plansCount class="btn btn-warning" onclick="doTTS(this.id)">
                                                         Listen to Plan
@@ -202,7 +202,15 @@
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
                                         <label for="CLocation">Enter your plan location</label>
-                                        <input id="autocomplete" type="text" name="location" placeholder="Add a Location" required onfocus="this.placeholder=''" onblur="this.placeholder ='Add a location'" />
+                                        <input
+                                               id="autocomplete"
+                                               onchange="codeAddress();"
+                                               autocomplete="off" 
+                                               type="text" name="location" 
+                                               placeholder="Add a Location" 
+                                               required 
+                                               onfocus="this.placeholder=''" 
+                                               onblur="this.placeholder ='Add a location'" />
                                         <button type="button"><i class="fa fa-location-arrow"></i></button>
                                         <input hidden id="lat" type="text" name="lat" />
                                         <input hidden id="lon" type="text" name="lon" />
@@ -213,7 +221,7 @@
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
                                         <label for="FLocation">Pick a time: </label>
-                                        <input id="Date" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
+                                        <input id="Date" autocomplete="off" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
                                         <button type="button"><i class="fa fa-calendar"></i></button>
                                     </div> <!-- end .form-group -->
                                 </div> <!-- end .col-sm-4 -->
@@ -248,6 +256,25 @@
 </script>
 
 <script>
+    var address = "";    
+    var input = document.getElementById('autocomplete');
+
+    function codeAddress() {
+        if (address === "") {
+            address = input.value + ',Melbourne VIC, Australia';
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('lon').value = results[0].geometry.location.lng();
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+            
+    }
+       
     var cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-38.067807865, 144.5148742199),
         new google.maps.LatLng(-37.5687831234, 145.4157531261));
@@ -257,21 +284,19 @@
         componentRestrictions: { country: "au" }
     };
 
-    var input = document.getElementById('autocomplete');
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener('place_changed', function () {
-        var place = autocomplete.getPlace();
-        document.getElementById('lat').value = place.geometry.location.lat();
-        console.log(place.geometry.location.lat());
-        document.getElementById('lon').value = place.geometry.location.lng();
+        address = autocomplete.getPlace();
+        document.getElementById('lat').value = address.geometry.location.lat();
+        document.getElementById('lon').value = address.geometry.location.lng();
     });
-
 
     function speak(element) {
         plans = @plans.Count;
         var plocation = "location" + element;
         var ptime = "time" + element;
         var ppcount = "pedcount" + element;
+        var row = "row" + element;
         var speaktime = document.getElementById(ptime).innerHTML;
         var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
             + ", " + document.getElementById(ppcount).innerHTML;
@@ -281,12 +306,12 @@
         utterance.rate = 1;
         speechSynthesis.speak(utterance);
         utterance.onstart = function (event) {
-            document.getElementById(ptime).style.backgroundColor = "#FDFF47";
-            document.getElementById(plocation).style.backgroundColor = "#FDFF47";
+            document.getElementById(row).style.backgroundColor = "#FDFF47";
+            //document.getElementById(plocation).style.backgroundColor = "#FDFF47";
         };
         utterance.onend = function (event) {
-            document.getElementById(ptime).style.backgroundColor = "transparent";
-            document.getElementById(plocation).style.backgroundColor = "transparent";
+            document.getElementById(row).style.backgroundColor = "transparent";
+            //document.getElementById(plocation).style.backgroundColor = "transparent";
         };
     }
 
@@ -296,6 +321,7 @@
         var plocation = "location" + element;
         var ptime = "time" + element;
         var ppcount = "pedcount" + element;
+        var row = "row" + element;
         var speaktime = document.getElementById(ptime).innerHTML;
         var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
             + ", " + document.getElementById(ppcount).innerHTML;
@@ -305,12 +331,12 @@
         utterance.rate = 1;
         speechSynthesis.speak(utterance);
         utterance.onstart = function (event) {
-            document.getElementById(ptime).style.backgroundColor = "#FDFF47";
-            document.getElementById(plocation).style.backgroundColor = "#FDFF47";
+            document.getElementById(row).style.backgroundColor = "#FDFF47";
+            //document.getElementById(plocation).style.backgroundColor = "#FDFF47";
         };
         utterance.onend = function (event) {
-            document.getElementById(ptime).style.backgroundColor = "transparent";
-            document.getElementById(plocation).style.backgroundColor = "transparent";
+            document.getElementById(row).style.backgroundColor = "transparent";
+            //document.getElementById(plocation).style.backgroundColor = "transparent"; 
         };
     }
 

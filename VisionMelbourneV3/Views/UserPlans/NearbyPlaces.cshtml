@@ -94,11 +94,11 @@
     }
 
     function callback(results, status) {
-        //table.clear();
+
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             var location = document.getElementById('location');
             var tripInstructions = [];
-            //table.destroy();
+
             destination = [];
             latitude = [];
             longitude = [];
@@ -114,11 +114,11 @@
                 location.innerHTML = tripInstructions.join("");
             }
         }
-        //table = $('.table').DataTable();
+
     }
 
     function newPlan(element) {
-        $("div[id$=dvProgress]").show();
+        document.body.style.cursor = 'wait';
         var to = destination[element.id];
         var from = "@startLocation";
         var jdate = "@Date";
@@ -133,14 +133,14 @@
             success: function (data) {
                 $("div[id$=dvProgress]").fadeOut("slow");
                 alert("Added " + to + " to your plan successfully");
-                console.log(to);
+                document.body.style.cursor = 'default';
             },
             error: function () {
                 alert("error");
             }
         });
     }
-    
+
     function createMarker(place, id) {
         var placeId = "place" + id;
         var marker = new google.maps.Marker({
@@ -167,8 +167,7 @@
                     scrollTop: topPos - 10,
                 }, 'slow');
             }
-           
-            
+
         });
 
         google.maps.event.addListener(infowindow, 'content_changed', function () {
@@ -195,14 +194,10 @@
         synth.speak(utterance);
         utterance.onstart = function (event) {
             document.getElementById(placeId).style.backgroundColor = "#FDFF47";
-        };      
+        };
     }
-    //var table;
-    //$(document).ready(function () {
-    //    table = $('.table').DataTable();
-    //    $("div[id$=dvProgress]").fadeOut("fast");
-    //});
-   
+
+
 </script>
 <body onload="initialize()" style="font-size:20px;">
     <div class="page-header">
@@ -219,38 +214,46 @@
     <h2>Explore near @nearlocation</h2>
     <div class="fullscreen-section">
         <div class="left">
-            <div id="map" style="width:100%; height:614px;"></div>
+            <div id="map" style="width:100%; height:694px;"></div>
         </div> <!-- end .left -->
         <div class="right">
+        <br/>
+            <div class="directory-filters">
+                <form name="frm_map" id="frm_map">
+                    <div class="row small" style="text-align:center">
+                        <div class="col-md-4 col-md-offset-1" >
+                            <div class="select-info small"><p style="font-size:20px"><b>Select category</b></p></div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="select-info small"><p style="font-size:20px"><b>Select distance</b></p></div>
+                        </div>
+                    </div>
+                    <div class="row small">
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group ">
+                                <select id="typeholder" onchange="changeFunc();">
+                                    <option value="church">Church</option>
+                                    <option value="cafe">Cafe</option>
+                                    <option value="park">Sports</option>
+                                    <option value="museum">Museum</option>
+                                    <option value="train_station">Transport</option>
+                                    <option value="shopping_mall">Shopping mall</option>
+                                </select>
+                            </div> <!-- end .form-group -->
+                        </div> <!-- end .col-sm-4 -->
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <select id="radius" onchange="changeFunc();">
+                                    <option value="1">1km</option>
+                                    <option value="2">2km</option>
+                                    <option value="3">3km</option>
+                                </select>
+                            </div> <!-- end .form-group -->
+                        </div> <!-- end .col-sm-4 -->
+                    </div> <!-- end .row -->
+                </form>
+            </div> <!-- end .directory-filters -->
             <div id="tablecontainer" class="inner" style="overflow-y:scroll">
-                <div class="directory-filters">
-                    <form name="frm_map" id="frm_map">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <select id="typeholder" onchange="changeFunc();">
-                                        <option value="church">Church</option>
-                                        <option value="cafe">Cafe</option>
-                                        <option value="park">Sports</option>
-                                        <option value="museum">Museum</option>
-                                        <option value="train_station">Transport</option>
-                                        <option value="shopping_mall">Shopping mall</option>
-                                    </select>
-                                </div> <!-- end .form-group -->
-                            </div> <!-- end .col-sm-4 -->
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <select id="radius" onchange="changeFunc();">
-                                        <option value="1">1km</option>
-                                        <option value="2">2km</option>
-                                        <option value="3">3km</option>
-                                    </select>
-                                </div> <!-- end .form-group -->
-                            </div> <!-- end .col-sm-4 -->
-                        </div> <!-- end .row -->
-                    </form>
-                </div> <!-- end .directory-filters -->
-
                 <div class="directory-list row">
                     <table class="table">
                         <thead>
@@ -278,7 +281,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @*@Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
-    @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")*@
+        @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")*@
 }
 
 

@@ -17,68 +17,15 @@ namespace VisionMelbourneV3.Controllers
 
         private Plan db = new Plan();
         // GET: UserPlans
-        //public ActionResult Index(string date)
-        //{
-        //    List<DetailedLocation> detailedLocations = new List<DetailedLocation>();
-        //    detailedLocations.AddRange(db.DetailedLocations.ToList());
-        //    db.DetailedLocations.RemoveRange(detailedLocations);
-        //    db.SaveChanges();
-        //    detailedLocations.Clear();
-        //    DateTime time = DateTime.Now;
-        //    if (!String.IsNullOrEmpty(fromLocation))
-        //    {               
-        //        if (!String.IsNullOrEmpty(date))
-        //        {
-        //            time = Convert.ToDateTime(date);
-        //        }
-        //        var day = Convert.ToString(time.DayOfWeek);
-        //        var hr = Convert.ToString(time.Hour);
-        //        var locations = db.Locations.ToList();
-        //        foreach (var item in locations)
-        //        {
-        //            var latitude = item.Latitude;
-        //            var longitude = item.Longitude;
-        //            int i = 1;
-        //            int peopleCount = 0;
+        public ActionResult Index()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            UserPlan userPlan = new UserPlan();
+            var plans = from a in db.UserPlans where a.UserID == currentUserId select a;
+            return View(plans.ToList());
+        }
 
-        //            var sensorLocations = db.SensorLocations.ToList();
-        //            foreach (var count in sensorLocations)
-        //            {
-        //                double dist = distance(latitude, longitude, count.latitude, count.longitude);
-        //                if (dist <= 150)
-        //                {
-        //                    var pedcount = from a in db.Pedcounts
-        //                                   where a.SensorID.Contains(count.sensor_id)
-        //                                   && a.Day.Contains(day) && a.Time.Contains(hr)
-        //                                   select a;
-        //                    foreach (var c in pedcount.ToList())
-        //                    {
-        //                        peopleCount = peopleCount + (int)c.PedCount1;
-        //                        i++;
-        //                    }
-        //                }
-        //            }
-        //            string avgCount = Convert.ToString(peopleCount / i);
-        //            DetailedLocation detailedLocation = new DetailedLocation();
-        //            detailedLocation.Location = item.Name;
-        //            detailedLocation.Latitude = Convert.ToDouble(item.Latitude);
-        //            detailedLocation.Longitude = Convert.ToDouble(item.Longitude);
-        //            detailedLocation.PeopleCount = avgCount;
-        //            detailedLocation.Date = time;
-        //            detailedLocation.Theme = item.Theme;
-        //            db.DetailedLocations.Add(detailedLocation);
-        //            db.SaveChanges();
-        //        }
-        //        return View(db.DetailedLocations.ToList());
-        //    }
-        //    if (!String.IsNullOrEmpty(date))
-        //    {
-        //        time = Convert.ToDateTime(date);
-        //    }
-        //    return RedirectToAction("PlanCreator", new { startdate = time });
-        //}
-
-[AllowAnonymous]
+        [AllowAnonymous]
         public double distance(String lat1, String lon1, String lat2, String lon2)
         {
             // generally used geo measurement function
@@ -156,6 +103,10 @@ namespace VisionMelbourneV3.Controllers
 
         public ActionResult PlanCreator(string date)
         {
+            if (String.IsNullOrEmpty(date))
+            {
+                return RedirectToAction("Index","Home");
+            }
             var currentUserId = User.Identity.GetUserId();
             DateTime plandate = Convert.ToDateTime(date);
             UserPlan userPlan = new UserPlan();
