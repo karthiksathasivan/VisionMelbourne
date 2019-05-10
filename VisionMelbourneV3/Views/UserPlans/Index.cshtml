@@ -20,7 +20,6 @@
                     <li>My Plans</li>
                 </ul>
             </div> <!-- end .breadcrumbs -->
-            @Html.ActionLink("< Home", "Index", "Home", null, new { @class = "button" })
         </div>
     </div> <!-- end .container -->
 </div> <!-- end .page-header -->
@@ -90,16 +89,20 @@
             var sd = new Date(plandate);
             var sm = moment(sd).format("YYYY-MM-DD");
             var start = new Date(sm + ' ' + time);
-            
-            var event = {
-                "title": title,
-                "start": start
-            };
-            events.push(event);
+            if (start >= new Date()) {
+                var event = {
+                    "title": title,
+                    "start": start
+                };
+                events.push(event);
+            }
+
         });
+        
         $("#calendar").fullCalendar({
             locale: 'au',
-            events: events,
+            events: events, 
+
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -107,14 +110,20 @@
             },
 
             dayClick: function (date, allDay, jsEvent, view) {
+                var current_date = moment().format('YYYY-MM-DD')
+                if (current_date > date.format())
+                {
+                    alert("You cannot choose these dates");
+                }
+                else {
+                    var d = new Date(date);
+                    var m = moment(d).format("YYYY-MM-DD");
+                    m = encodeURIComponent(m);
+                    var uri = "/UserPlans/PlanCreator?date=" + m;
+                    $(location).attr('href', uri);
+                }
 
-                var d = new Date(date);
-                var m = moment(d).format("YYYY-MM-DD");
-                m = encodeURIComponent(m);
-                var uri = "/UserPlans/PlanCreator?date=" + m;
-                $(location).attr('href', uri);
             }
-
 
         });
 

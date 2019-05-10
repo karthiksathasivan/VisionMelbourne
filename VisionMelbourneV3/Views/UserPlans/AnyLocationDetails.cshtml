@@ -21,23 +21,15 @@
                 <div class="breadcrumbs">
                     <ul class="list-unstyled">
                         <li><a href="/">Home</a></li>
-                        <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = Model.Theme })>@Model.Theme</a></li>
                         <li>@Model.Location</li>
                     </ul>
                 </div> <!-- end .breadcrumbs -->
             </div> <!-- end .container -->
-            <div class="row">
-                <div style="text-align:center">
-                    @Html.ActionLink("< Back to List", "CategoryIndex", new { category = Model.Theme, date = Model.Date }, new { @class = "button" })
-
-                </div>
-            </div>
         </div> <!-- end .page-header -->
 
-        <div class="page-title" style="background-image: url('../images/background15.jpg');">
-            <div class="inner">
-                <h2>See more details about @Model.Location , @Model.Theme</h2>
-                <p>enjoy the travel in the Melbourne CBD!</p>
+        <div class="page-title small" style="background-image: url('../images/background15.jpg');">
+            <div class="inner small">
+                <h2>See more details about @Model.Location</h2>
             </div> <!-- end .inner -->
         </div> <!-- end .page-title -->
 
@@ -45,34 +37,38 @@
             <div class="inner">
                 <div class="container">
                     <div class="box">
-
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="blog-post gallery product-gallery">
-                                    <div class="blog-gallery owl-carousel owl-theme owl-loaded">
-                                        <div id='map' style='width: 100%; height: 600px;'></div>
-                                    </div> <!-- end .blog-gallery -->
-                                    <br />
-                                    <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
-                                    <br />
-                                </div> <!-- end .blog-post -->
-                            </div> <!-- end col-md-6 -->
-                            
-                            <div class="col-md-6">
-                                @using (Html.BeginForm("Details", "UserPlans"))
-                                {
-                                    <div class="searchform" style="text-align:left">
+                            @using (Html.BeginForm("AnyLocationDetails", "UserPlans"))
+                            {
+                                <div class="row searchform">
+                                    <div class="col-md-8">
                                         <label for="FLocation">* Date and Time</label>
-                                        <input id="Date" type="datetime" name="Date" class="date-container" value=@Model.Date placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
+                                        <input id="Date" type="datetime" name="Date" class="date-container" value=@Model.Date placeholder="@date,@time" onfocus="this.placeholder=''" onblur="this.placeholder =@date,@time" style="border:solid" />
                                         <button><i class="fa fa-calendar"></i></button>
                                         <br />
                                         <input name="date" hidden id="detailsDate" type="text" value=@Model.Date />
-                                        <input name="id" hidden value=@Model.LocationID />
-                                        <div style="text-align:center">
-                                            <br />
-                                            <input type="submit" value="Update Details" class="button" />
-                                        </div>
+                                        @Html.Hidden("location",Model.Location)
+                                        @Html.Hidden("lat",Model.Latitude)
+                                        @Html.Hidden("lon",Model.Longitude)
+                                        
                                     </div>
+                                    <div class="col-md-4">
+                                        <input type="submit" value="Update Details" class="button" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="blog-post gallery product-gallery">
+                                        <div class="blog-gallery owl-carousel owl-theme owl-loaded">
+                                            <div id='map' style='width: 100%; height: 600px;'></div>
+                                        </div> <!-- end .blog-gallery -->
+                                        <br />
+                                        <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
+                                        <br />
+                                    </div> <!-- end .blog-post -->
+                                </div> <!-- end col-md-6 -->
+
+                                <div class="col-md-6">
+
                                     <div class="row">
                                         <div class="col-md-3">
                                             <b>Place</b>
@@ -184,27 +180,25 @@
                                         </div>
                                     </div>
                                     <br />
-                                }
-                                @using (Html.BeginForm("NewPlan", "UserPlans"))
-                                {
-                                    <div class="searchform" style="text-align:center">
-                                        <label for="CLocation">Like to checkout this Place? Add to your Planner.</label>
-                                    </div>
-                                    @Html.Hidden("location", tolocation)
-                                    <input hidden type="text" name="lat" value=@Model.Latitude />
-                                    <input hidden type="text" name="lon" value=@Model.Longitude />
-                                    <input id="plannedDate" hidden type="text" name="plandate" value=@Model.Date />
-                                    <input id="plannedTime" hidden type="text" name="time" value="@Model.Time" />
-                                    <div class="row">
+                                </div> <!-- end col-md-6 -->
+                            }
+                            @using (Html.BeginForm("NewPlan", "UserPlans"))
+                            {
+                                <div class="searchform" style="text-align:center">
+                                    <label for="CLocation">Like to checkout this Place? Add to your Planner.</label>
+                                </div>
+                                @Html.Hidden("location", tolocation)
+                                <input hidden type="text" name="lat" value=@Model.Latitude />
+                                <input hidden type="text" name="lon" value=@Model.Longitude />
+                                <input id="plannedDate" hidden type="text" name="plandate" value=@Model.Date />
+                                <input id="plannedTime" hidden type="text" name="time" value="@Model.Time" />
+                                <div class="row">
 
-                                        <div style="text-align:center">
-                                            <input type="submit" value="Add to Plan" class="button" />
-                                        </div>
+                                    <div style="text-align:center">
+                                        <input type="submit" value="Add to Plan" class="button" />
                                     </div>
-                                }
-                            </div> <!-- end col-md-6 -->
-                            
-                            
+                                </div>
+                            }
                         </div> <!-- end .row -->
                     </div> <!-- end .box -->
                 </div> <!-- end .container -->
@@ -224,7 +218,6 @@
     var latit = @Model.Latitude;
     var lon = @Model.Longitude;
     var currentLocation = "";
-  
     function initMap() {
         var geocoder = new google.maps.Geocoder();
         var infowindow = new google.maps.InfoWindow();
@@ -264,6 +257,20 @@
 
     }
 
+    var cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-38.067807865, 144.5148742199),
+        new google.maps.LatLng(-37.5687831234, 145.4157531261));
+
+    var options = {
+        bounds: cityBounds,
+        componentRestrictions: { country: "au" }
+    };
+    var input = document.getElementById('autocomplete');
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+    });
+
     function getCurrentLocation() {
         var options = {
             enableHighAccuracy: true,
@@ -273,7 +280,19 @@
 
         function success(pos) {
             currentLocation = pos.coords;
-            window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
+            var latlng = { lat: parseFloat(currentLocation.latitude), lng: parseFloat(currentLocation.longitude) };
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({ 'location': latlng }, function (results, status) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        document.getElementById('autocomplete').value = results[0].formatted_address;
+                    } else {
+                        window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
         }
 
         function error(err) {
@@ -283,11 +302,12 @@
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
-    function returnMapUrl(userLat, userLon) {
-        return "https://www.google.com/maps/dir/?api=1&origin=" + userLat + "," + userLon +"&destination=" + latit + "," + lon + " &dir_action=navigate";
+    function returnMapUrl(dlat, dlng) {
+        return "https://www.google.com/maps/dir/?api=1&origin=" + dlat + ',' + dlng + "&destination=" + latit + ',' + lon ;
     }
     function redirectToMaps() {
         getCurrentLocation();
+        window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
     }
 
 </script>

@@ -32,9 +32,10 @@
     var displayDate = "";
     int plansCount = 1;
     var plans = Model.ToList();
+    bool hasPlans = false;
 }
 
-@*jumbotron display plan date and start location*@
+@*jumbotron display plan date*@
 
 @foreach (var item in Model)
 {
@@ -43,7 +44,7 @@
     var month = item.Date.ToString("MMMM");
     var year = item.Date.ToString("yyyy");
     displayDate = item.Date.DayOfWeek + "," + item.Date.Day + " " + month + ' ' + year;
-
+    if (String.IsNullOrEmpty(item.Location)) { hasPlans = false; } else { hasPlans = true; }
 }
 
 <body style="padding-top:0px;">
@@ -58,131 +59,145 @@
                 <div class="breadcrumbs">
                     <ul class="list-unstyled">
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>My Plans</li>
+                        <li>@Html.ActionLink("My Plans", "Index", "UserPlans")</li>
+                        <li>@displayDate</li>
                     </ul>
-                    @Html.ActionLink("< My Plans", "Index", "UserPlans", null, new { @class = "button" })
                 </div> <!-- end .breadcrumbs -->
             </div> <!-- end .container -->
         </div> <!-- end .page-header -->
-        <br /><br /><br /><br/>
+        <br /><br /><br />
         <div class="section small boxed-section light">
             <div class="inner">
                 <div class="container">
                     <div class="box">
-                        <div style="text-align:center;">
-                            <a id=@plansCount class="btn btn-warning" onclick="dofullTTS(this.id)">
-                                Listen to All plans
-                                <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
-                            </a>
-                            <h3 style="font-size:30px">Your plans for @displayDate</h3>
-                            <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button>
+                        <div style="text-align:left;">
+                            <div class="row">
+                                <div class="col-md-9"><h3 style="font-size:30px">Your plans for @displayDate</h3></div>
+                                <div class="col-md-3"> <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button></div>
+                            </div>
+                            <br />
                         </div>
-                        <br /><br />
-                        <div class="table-responsive">
-                            <table class="table cart-items light-inputs">
-                                <thead>
-                                    <tr>
-                                        <th>Location</th>
-                                        <th>Time</th>
-                                        <th>Pedestrian traffic</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var userPlan in Model)
-                                    {
-                                        if (userPlan.Location != null)
+                        @if (!hasPlans)
+                        {<br /><div style="text-align:center"><h4>Oops! We could not find any plans today!</h4></div> }
+                        else
+                        {
+                            <div style="text-align:left;">
+                                <a id=@plansCount class="btn btn-warning" onclick="dofullTTS(this.id)">
+                                    Listen to All plans
+                                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table cart-items light-inputs">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Time</th>
+                                            <th>Pedestrian traffic</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var userPlan in Model)
+                                                    {
+                                                        if (userPlan.Location != null && hasPlans)
+                                                        {
+                                                            hasPlans = true;
+                                                            destinationLocation = userPlan.Location;
+                                                            int pedcount = Convert.ToInt32(userPlan.PeopleCount);
+                                                            TimeSpan time = (TimeSpan)userPlan.Time;
+                                                            var travtime = time.ToString(@"hh\:mm");
+                                                            var locationID = "location" + plansCount;
+                                                            var timeID = "time" + plansCount;
+                                                            var peopleCountID = "pedcount" + plansCount;
+                                                            var rowID = "row" + plansCount;
+                                                <tr id=@rowID>
+                                                    <td>
+                                                        <a id=@plansCount class="btn btn-warning" onclick="doTTS(this.id)">
+                                                            Listen to Plan
+                                                            <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                                                        </a>
+
+                                                        <div id=@locationID>@Html.DisplayFor(modelItem => userPlan.Location)</div>
+                                                    </td>
+                                                    <td>
+                                                        @if (time.Hours >= 12)
+                                                        {
+                                                            <div hidden>@Html.DisplayFor(modelItem => userPlan.Time)</div>
+                                                            <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))pm</p></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))am</p></div>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (pedcount == 0)
                                         {
-                                            destinationLocation = userPlan.Location;
-                                            int pedcount = Convert.ToInt32(userPlan.PeopleCount);
-                                            TimeSpan time = (TimeSpan)userPlan.Time;
-                                            var travtime = time.ToString(@"hh\:mm");
-                                            var locationID = "location" + plansCount;
-                                            var timeID = "time" + plansCount;
-                                            var peopleCountID = "pedcount" + plansCount;
-                                            var rowID = "row" + plansCount;
-                                            <tr id=@rowID>
-                                                <td>
-                                                    <a id=@plansCount class="btn btn-warning" onclick="doTTS(this.id)">
-                                                        Listen to Plan
-                                                        <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
-                                                    </a>
+                                                            <div class="row cardContainer">
+                                                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                                                <p>Sorry no info found!</p>
+                                                                <p id=@peopleCountID hidden>Sorry, no pedestrian traffic info found at your planned location!</p>
 
-                                                    <div id=@locationID>@Html.DisplayFor(modelItem => userPlan.Location)</div>
-                                                </td>
-                                                <td>
-                                                    @if (time.Hours >= 12)
-                                                    {
-                                                        <div hidden>@Html.DisplayFor(modelItem => userPlan.Time)</div>
-                                                        <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))pm</p></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div id=@timeID class="col-md-4"><p>@Html.DisplayName(time.ToString(@"hh\:mm"))am</p></div>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @if (pedcount == 0)
-                                                    {
-                                                        <div class="row cardContainer">
-                                                            <i class="glyphicon glyphicon-ban-circle"></i>
-                                                            <p>Sorry no info found!</p>
-                                                            <p id=@peopleCountID hidden>Sorry, no pedestrian traffic info found at your planned location!</p>
+                                                            </div>
+                                                        }
+                                                        @if (pedcount <= 200 && pedcount > 0)
+                                        {
+                                                            <div class="row cardContainer">
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <p>Free Street!</p>
+                                                                <p id=@peopleCountID hidden>The Streets are usually free at this time!</p>
 
-                                                        </div>
-                                                    }
-                                                    @if (pedcount <= 200 && pedcount > 0)
-                                                    {
-                                                        <div class="row cardContainer">
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <p>Free Street!</p>
-                                                            <p id=@peopleCountID hidden>The Streets are usually free at this time!</p>
+                                                            </div>
 
-                                                        </div>
+                                                        }
 
-                                                    }
+                                        @if (pedcount <= 400 && pedcount > 200)
+                                        {
+                                                            <div class="row cardContainer">
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <p>Busy street!</p>
+                                                                <p id=@peopleCountID hidden>The Streets are usually Busy at this time!</p>
+                                                            </div>
+                                                        }
+                                        @if (pedcount > 400)
+                                        {
+                                                            <div class="row cardContainer">
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                                <p>Crowder Than Usual!</p>
+                                                                <p id=@peopleCountID hidden>The Streets are usually Crowded at this time!</p>
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href="@Url.Action("NearbyPlaces", "UserPlans",
+                    new { planstart = start, nearlocation = destinationLocation, date = planDate, locLat = userPlan.Latitude, locLng = userPlan.Longitude, planTime = userPlan.Time })"
+                                                           class="btn btn-primary">
+                                                            Explore nearby
+                                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a href="@Url.Action("Delete", "UserPlans", new { id = userPlan.Id })" class="btn btn-danger">
+                                                            Delete
+                                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                        </a>
 
-                                                    @if (pedcount <= 400 && pedcount > 200)
-                                                    {
-                                                        <div class="row cardContainer">
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <p>Busy street!</p>
-                                                            <p id=@peopleCountID hidden>The Streets are usually Busy at this time!</p>
-                                                        </div>
-                                                    }
-                                                    @if (pedcount > 400)
-                                                    {
-                                                        <div class="row cardContainer">
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                            <p>Crowder Than Usual!</p>
-                                                            <p id=@peopleCountID hidden>The Streets are usually Crowded at this time!</p>
-                                                        </div>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <a href="@Url.Action("NearbyPlaces", "UserPlans",
-                                            new { planstart = start, nearlocation = destinationLocation, date = planDate, locLat = userPlan.Latitude, locLng = userPlan.Longitude , planTime = userPlan.Time})"
-                                                       class="btn btn-primary">
-                                                        Explore nearby
-                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                                    </a>
-                                                    <a href="@Url.Action("Delete", "UserPlans",new { id = userPlan.Id })" class="btn btn-danger">
-                                                        Delete
-                                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                                    </a>
+                                                    </td>
+                                                </tr>
+                                                hasPlans = false;
+                                            }
 
-                                                </td>
-                                            </tr>
+                                            plansCount++;
                                         }
-                                        plansCount++;
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
 
+                            <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
+
+                        }
                     </div> <!-- end .box -->
                 </div> <!-- end .container -->
             </div> <!-- end .inner -->
@@ -202,15 +217,15 @@
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
                                         <label for="CLocation">Enter your plan location</label>
-                                        <input
-                                               id="autocomplete"
+                                        @*<input id="autocomplete"
                                                onchange="codeAddress();"
-                                               autocomplete="off" 
-                                               type="text" name="location" 
-                                               placeholder="Add a Location" 
-                                               required 
-                                               onfocus="this.placeholder=''" 
-                                               onblur="this.placeholder ='Add a location'" />
+                                               autocomplete="off"
+                                               type="text" name="location"
+                                               placeholder="Add a Location"
+                                               required
+                                               onfocus="this.placeholder=''"
+                                               onblur="this.placeholder ='Add a location'" />*@
+                                    @Html.TextBox("location",null, new { @id = "autocomplete", @onChange = "codeAddress();" })
                                         <button type="button"><i class="fa fa-location-arrow"></i></button>
                                         <input hidden id="lat" type="text" name="lat" />
                                         <input hidden id="lon" type="text" name="lon" />
@@ -256,15 +271,24 @@
 </script>
 
 <script>
-    var address = "";    
+
+    $('.Down').click(function () {
+        $('html, body').animate({
+            scrollTop: $("#newPlan").offset().top
+        }, 'slow');
+        return false;
+    });
+
+    var auto = false;
     var input = document.getElementById('autocomplete');
 
     function codeAddress() {
-        if (address === "") {
-            address = input.value + ',Melbourne VIC, Australia';
+        if (!auto) {
+            var address = input.value + ',Melbourne VIC, Australia';
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status === 'OK') {
+                    console.log(address);
                     document.getElementById('lat').value = results[0].geometry.location.lat();
                     document.getElementById('lon').value = results[0].geometry.location.lng();
                 } else {
@@ -272,9 +296,8 @@
                 }
             });
         }
-            
     }
-       
+
     var cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-38.067807865, 144.5148742199),
         new google.maps.LatLng(-37.5687831234, 145.4157531261));
@@ -286,13 +309,14 @@
 
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener('place_changed', function () {
-        address = autocomplete.getPlace();
-        document.getElementById('lat').value = address.geometry.location.lat();
-        document.getElementById('lon').value = address.geometry.location.lng();
+        place = autocomplete.getPlace();
+        auto = true;
+        document.getElementById('lat').value = place.geometry.location.lat();
+        document.getElementById('lon').value = place.geometry.location.lng();
+        console.log(place);
     });
 
     function speak(element) {
-        plans = @plans.Count;
         var plocation = "location" + element;
         var ptime = "time" + element;
         var ppcount = "pedcount" + element;
@@ -307,16 +331,13 @@
         speechSynthesis.speak(utterance);
         utterance.onstart = function (event) {
             document.getElementById(row).style.backgroundColor = "#FDFF47";
-            //document.getElementById(plocation).style.backgroundColor = "#FDFF47";
         };
         utterance.onend = function (event) {
             document.getElementById(row).style.backgroundColor = "transparent";
-            //document.getElementById(plocation).style.backgroundColor = "transparent";
         };
     }
 
     function doTTS(element) {
-        plans = @plans.Count;
         speechSynthesis.cancel();
         var plocation = "location" + element;
         var ptime = "time" + element;
@@ -332,23 +353,54 @@
         speechSynthesis.speak(utterance);
         utterance.onstart = function (event) {
             document.getElementById(row).style.backgroundColor = "#FDFF47";
-            //document.getElementById(plocation).style.backgroundColor = "#FDFF47";
         };
         utterance.onend = function (event) {
             document.getElementById(row).style.backgroundColor = "transparent";
-            //document.getElementById(plocation).style.backgroundColor = "transparent"; 
         };
     }
 
 
 </script>
-<script>
-    $('.Down').click(function () {
-        $('html, body').animate({
-            scrollTop: $("#newPlan").offset().top
-        }, 'slow');
-        return false;
-    });
+<script type="text/javascript">
+    var currentLocation = "";
+    var waypoints = "";
+    @foreach (var item in Model)
+    {
+        @:addWaypoints(@item.Latitude, @item.Longitude);
+    }
+
+    function addWaypoints(wlat, wlon) {
+        waypoints = waypoints + wlat + ',' + wlon + '%7C';
+    }
+
+    function getCurrentLocation() {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        function success(pos) {
+            currentLocation = pos.coords;
+            waypoints = waypoints.replace(/\%7C([^\%7C]*)$/, '$1');
+            window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
+        }
+
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+
+    function returnMapUrl(userLat, userLon) {
+        console.log(waypoints);
+        return "https://www.google.com/maps/dir/?api=1&origin=" + userLat + "," + userLon + "&destination=" + userLat + "," + userLon + "&waypoints=" + waypoints + " &dir_action=navigate";
+    }
+
+    function redirectToMaps() {
+        getCurrentLocation();
+    }
 </script>
 <script>
     var plans = "";

@@ -7,6 +7,8 @@
     string longitude = ViewBag.longitude;
     string Date = ViewBag.planDate;
     string Time = ViewBag.Time;
+    DateTime dDate = Convert.ToDateTime(Date);
+    string displayDate = dDate.Date.DayOfWeek + "," + dDate.Date.Day + " " + dDate.Date.ToString("MMMM") + ' ' + dDate.Date.ToString("yyyy");
 }
 
 <link href="~/Content/Site.css" rel="stylesheet" />
@@ -206,12 +208,13 @@
                 <ul class="list-unstyled">
                     <li><a href="/">Home</a></li>
                     <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a></li>
+                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>@displayDate</a></li>
                     <li>Nearby</li>
                 </ul>
             </div> <!-- end .breadcrumbs -->
         </div> <!-- end .container -->
     </div>
-    <h2>Explore near @nearlocation</h2>
+    <h3 style="font-size:26px"><b>Explore places near @nearlocation</b></h3>
     <div class="fullscreen-section">
         <div class="left">
             <div id="map" style="width:100%; height:694px;"></div>
@@ -220,7 +223,7 @@
         <br/>
             <div class="directory-filters">
                 <form name="frm_map" id="frm_map">
-                    <div class="row small" style="text-align:center">
+                    <div class="row small" style="text-align:left">
                         <div class="col-md-4 col-md-offset-1" >
                             <div class="select-info small"><p style="font-size:20px"><b>Select category</b></p></div>
                         </div>

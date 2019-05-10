@@ -7,31 +7,42 @@
 <link href="~/Content/style.css" rel="stylesheet" />
 <link href="~/Content/floating.css" rel="stylesheet" />
 
-@using (Html.BeginForm("PlanCreator", "UserPlans"))
+@using (Html.BeginForm("AnyLocationDetails", "UserPlans"))
 {
     <div class="section small transparent dark text-center" style="background-image: url('../../images/background.jpg');">
         <div class="inner">
             <div class="container">
                 <div class="frame">
                     <div class="zoom">
-                        <h1>Plan your Trips around Melbourne CBD</h1>
+                        <h1>Plan Trips around Melbourne City</h1>
                     </div>
                 </div>
+                <br/>
                 <div class="row">
                     <form>
                         <div class="col-sm-6 col-sm-offset-3">
                             <div class="searchform" style="text-align:left">
                                 <div class="frame">
                                     <div class="zoom">
-                                        <label for="FLocation">Plan Date</label>
+                                        <label for="FLocation">Plan Location</label>
                                     </div>
                                 </div>
                                 <div class="frame">
                                     <div class="zoom">
-                                        <input id="Date" type="datetime" name="Date" class="date-container" required placeholder="Please choose your plan date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your plan date'" />
+                                        <input id="autocomplete"
+                                               onchange="codeAddress();"
+                                               autocomplete="off"
+                                               type="text" name="location"
+                                               placeholder="Add a Location"
+                                               required
+                                               onfocus="this.placeholder=''"
+                                               onblur="this.placeholder ='Search for a location'" />
+                                        <button type="button"><i class="fa fa-location-arrow"></i></button>
+                                        <input hidden id="lat" type="text" name="lat" />
+                                        <input hidden id="lon" type="text" name="lon" />
+                                        @Html.Hidden("date", DateTime.Now)
                                     </div>
                                 </div>
-                                <button type="button"><i class="fa fa-calendar"></i></button>
                             </div> <!-- end .form-group -->
                         </div> <!-- end .col-sm-4 -->
                         <div class="col-sm-12">
@@ -51,7 +62,7 @@
                 <div class="avatar">
                     <div class="frame">
                         <div class="zoom">
-                            <a class="glyphicon glyphicon-arrow-down" href="">Explore our Top picks</a>
+                            <a class="glyphicon glyphicon-arrow-down" href=""></a>
                         </div>
                     </div>
                 </div>
@@ -235,6 +246,41 @@
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
+
+    var address = "";
+    var input = document.getElementById('autocomplete');
+
+    function codeAddress() {
+        if (address === "") {
+            address = input.value + ',Melbourne VIC, Australia';
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('lon').value = results[0].geometry.location.lng();
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+    }
+
+    var cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-38.067807865, 144.5148742199),
+        new google.maps.LatLng(-37.5687831234, 145.4157531261));
+
+    var options = {
+        bounds: cityBounds,
+        componentRestrictions: { country: "au" }
+    };
+
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        address = autocomplete.getPlace();
+        document.getElementById('lat').value = address.geometry.location.lat();
+        document.getElementById('lon').value = address.geometry.location.lng();
+    });
 
 </script>
 

@@ -29,11 +29,9 @@ namespace VisionMelbourneV3.Models
 
         public DateTime? Date { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string Theme { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string Radius { get; set; }
 
