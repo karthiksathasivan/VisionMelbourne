@@ -40,7 +40,7 @@
                                         <button type="button"><i class="fa fa-location-arrow"></i></button>
                                         <input hidden id="lat" type="text" name="lat" />
                                         <input hidden id="lon" type="text" name="lon" />
-                                        @Html.Hidden("date", DateTime.Now)
+                                        @Html.Hidden("date", TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")))
                                     </div>
                                 </div>
                             </div> <!-- end .form-group -->
@@ -249,21 +249,13 @@
 
     var address = "";
     var input = document.getElementById('autocomplete');
-
+    var auto = false;
     function codeAddress() {
-        if (address === "") {
-            address = input.value + ',Melbourne VIC, Australia';
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    document.getElementById('lat').value = results[0].geometry.location.lat();
-                    document.getElementById('lon').value = results[0].geometry.location.lng();
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
-
+        if (!auto) {
+            document.getElementById('lat').value = null;
+            document.getElementById('lon').value = null;
+            document.getElementById('autocomplete').value = null;
+        } else { auto = false; }
     }
 
     var cityBounds = new google.maps.LatLngBounds(
@@ -280,7 +272,8 @@
         address = autocomplete.getPlace();
         document.getElementById('lat').value = address.geometry.location.lat();
         document.getElementById('lon').value = address.geometry.location.lng();
+        auto = true;
+        codeAddress();
     });
-
 </script>
 

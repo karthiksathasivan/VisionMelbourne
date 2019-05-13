@@ -33,6 +33,7 @@
     int plansCount = 1;
     var plans = Model.ToList();
     bool hasPlans = false;
+    var count = 0;
 }
 
 @*jumbotron display plan date*@
@@ -44,7 +45,8 @@
     var month = item.Date.ToString("MMMM");
     var year = item.Date.ToString("yyyy");
     displayDate = item.Date.DayOfWeek + "," + item.Date.Day + " " + month + ' ' + year;
-    if (String.IsNullOrEmpty(item.Location)) { hasPlans = false; } else { hasPlans = true; }
+    if (String.IsNullOrEmpty(item.Location)) { hasPlans = false; count = 0; } else { hasPlans = true; count++; }
+
 }
 
 <body style="padding-top:0px;">
@@ -58,9 +60,15 @@
             <div class="container">
                 <div class="breadcrumbs">
                     <ul class="list-unstyled">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("My Plans", "Index", "UserPlans")</li>
-                        <li>@displayDate</li>
+                        <li>
+                            @Html.ActionLink("Home", "Index", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("My Plans", "Index", "UserPlans")
+                        </li>
+                        <li>
+                            @displayDate
+                        </li>
                     </ul>
                 </div> <!-- end .breadcrumbs -->
             </div> <!-- end .container -->
@@ -72,14 +80,26 @@
                     <div class="box">
                         <div style="text-align:left;">
                             <div class="row">
-                                <div class="col-md-9"><h3 style="font-size:30px">Your plans for @displayDate</h3></div>
-                                <div class="col-md-3"> <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button></div>
+                                <div class="col-md-9">
+                                    <div class="frame">
+                                        <div class="zoom"><h3 style="font-size:30px">Your plans for @displayDate</h3></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="frame">
+                                        <div class="zoom"> <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button></div>
+                                    </div>
+                                </div>
                             </div>
                             <br />
                         </div>
-                        @if (!hasPlans)
-                        {<br /><div style="text-align:center"><h4>Oops! We could not find any plans today!</h4></div> }
-                        else
+                        @if (!hasPlans && count == 0)
+                        {<br /><div style="text-align:center">
+                                <div class="frame">
+                                    <div class="zoom"><h4>Oops! We could not find any plans today!</h4></div>
+                                </div>
+                            </div> }
+                        else if (count > 0)
                         {
                             <div style="text-align:left;">
                                 <a id=@plansCount class="btn btn-warning" onclick="dofullTTS(this.id)">
@@ -99,18 +119,18 @@
                                     </thead>
                                     <tbody>
                                         @foreach (var userPlan in Model)
-                                                    {
-                                                        if (userPlan.Location != null && hasPlans)
-                                                        {
-                                                            hasPlans = true;
-                                                            destinationLocation = userPlan.Location;
-                                                            int pedcount = Convert.ToInt32(userPlan.PeopleCount);
-                                                            TimeSpan time = (TimeSpan)userPlan.Time;
-                                                            var travtime = time.ToString(@"hh\:mm");
-                                                            var locationID = "location" + plansCount;
-                                                            var timeID = "time" + plansCount;
-                                                            var peopleCountID = "pedcount" + plansCount;
-                                                            var rowID = "row" + plansCount;
+                                        {
+                                            if (userPlan.Location != null && hasPlans)
+                                            {
+
+                                                destinationLocation = userPlan.Location;
+                                                int pedcount = Convert.ToInt32(userPlan.PeopleCount);
+                                                TimeSpan time = (TimeSpan)userPlan.Time;
+                                                var travtime = time.ToString(@"hh\:mm");
+                                                var locationID = "location" + plansCount;
+                                                var timeID = "time" + plansCount;
+                                                var peopleCountID = "pedcount" + plansCount;
+                                                var rowID = "row" + plansCount;
                                                 <tr id=@rowID>
                                                     <td>
                                                         <a id=@plansCount class="btn btn-warning" onclick="doTTS(this.id)">
@@ -133,7 +153,7 @@
                                                     </td>
                                                     <td>
                                                         @if (pedcount == 0)
-                                        {
+                                                        {
                                                             <div class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-ban-circle"></i>
                                                                 <p>Sorry no info found!</p>
@@ -142,7 +162,7 @@
                                                             </div>
                                                         }
                                                         @if (pedcount <= 200 && pedcount > 0)
-                                        {
+                                                        {
                                                             <div class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <p>Free Street!</p>
@@ -152,8 +172,8 @@
 
                                                         }
 
-                                        @if (pedcount <= 400 && pedcount > 200)
-                                        {
+                                                        @if (pedcount <= 400 && pedcount > 200)
+                                                        {
                                                             <div class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
@@ -161,8 +181,8 @@
                                                                 <p id=@peopleCountID hidden>The Streets are usually Busy at this time!</p>
                                                             </div>
                                                         }
-                                        @if (pedcount > 400)
-                                        {
+                                                        @if (pedcount > 400)
+                                                        {
                                                             <div class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
@@ -186,9 +206,7 @@
 
                                                     </td>
                                                 </tr>
-                                                hasPlans = false;
                                             }
-
                                             plansCount++;
                                         }
                                     </tbody>
@@ -211,22 +229,33 @@
                 @using (Html.BeginForm("NewPlan", "UserPlans"))
                 {
                     <div class="container">
-                        <h1>Create Plan</h1>
+                        <div class="frame">
+                            <div class="zoom">
+                                <h1>Create Plan</h1>
+                            </div>
+                        </div>
                         <div class="row">
                             <form>
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
-                                        <label for="CLocation">Enter your plan location</label>
-                                        @*<input id="autocomplete"
-                                               onchange="codeAddress();"
-                                               autocomplete="off"
-                                               type="text" name="location"
-                                               placeholder="Add a Location"
-                                               required
-                                               onfocus="this.placeholder=''"
-                                               onblur="this.placeholder ='Add a location'" />*@
-                                    @Html.TextBox("location",null, new { @id = "autocomplete", @onChange = "codeAddress();" })
-                                        <button type="button"><i class="fa fa-location-arrow"></i></button>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <label for="CLocation">Enter your plan location</label>
+                                            </div>
+                                        </div>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <input id="autocomplete"
+                                                       autocomplete="off"
+                                                       onchange="codeAddress();"
+                                                       type="text" name="location"
+                                                       placeholder="Add a Location"
+                                                       required
+                                                       onfocus="this.placeholder=''"
+                                                       onblur="this.placeholder = '*This field is required'" />
+                                                <button type="button"><i class="fa fa-location-arrow"></i></button>
+                                            </div>
+                                        </div>
                                         <input hidden id="lat" type="text" name="lat" />
                                         <input hidden id="lon" type="text" name="lon" />
                                         <input hidden type="text" name="plandate" value=@planDate />
@@ -235,14 +264,25 @@
                                 </div> <!-- end .col-sm-4 -->
                                 <div class="col-sm-6">
                                     <div class="searchform" style="text-align:left">
-                                        <label for="FLocation">Pick a time: </label>
-                                        <input id="Date" autocomplete="off" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
-                                        <button type="button"><i class="fa fa-calendar"></i></button>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <label for="FLocation">Pick a time: </label>
+                                            </div>
+                                        </div><div class="frame">
+                                            <div class="zoom">
+                                                <input id="Date" autocomplete="off" type="datetime" name="time" placeholder="Pick a time" required class="form-control" />
+                                                <button type="button"><i class="fa fa-calendar"></i></button>
+                                            </div>
+                                        </div>
                                     </div> <!-- end .form-group -->
                                 </div> <!-- end .col-sm-4 -->
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <input type="submit" value="Add Place" class="button" />
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <input type="submit" value="Add Place" class="button" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -271,7 +311,7 @@
 </script>
 
 <script>
-
+   
     $('.Down').click(function () {
         $('html, body').animate({
             scrollTop: $("#newPlan").offset().top
@@ -279,23 +319,15 @@
         return false;
     });
 
-    var auto = false;
+    var address = "";
     var input = document.getElementById('autocomplete');
-
+    var auto = false;
     function codeAddress() {
         if (!auto) {
-            var address = input.value + ',Melbourne VIC, Australia';
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    console.log(address);
-                    document.getElementById('lat').value = results[0].geometry.location.lat();
-                    document.getElementById('lon').value = results[0].geometry.location.lng();
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
+            document.getElementById('lat').value = null;
+            document.getElementById('lon').value = null;
+            document.getElementById('autocomplete').value = null;
+        } else { auto = false;}
     }
 
     var cityBounds = new google.maps.LatLngBounds(
@@ -309,11 +341,11 @@
 
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener('place_changed', function () {
-        place = autocomplete.getPlace();
+        address = autocomplete.getPlace();
+        document.getElementById('lat').value = address.geometry.location.lat();
+        document.getElementById('lon').value = address.geometry.location.lng();
         auto = true;
-        document.getElementById('lat').value = place.geometry.location.lat();
-        document.getElementById('lon').value = place.geometry.location.lng();
-        console.log(place);
+        codeAddress();
     });
 
     function speak(element) {

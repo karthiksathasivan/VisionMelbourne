@@ -4,6 +4,7 @@
     string tolocation = Model.Location;
     DateTime fulldate = (DateTime)Model.Date;
     TimeSpan fulltime = (TimeSpan)fulldate.TimeOfDay;
+    string weatherDate = fulldate.Date.ToString("yyyy-MM-dd");
     string date = fulldate.Date.ToString("dd/MM/yyyy");
     string time = fulldate.TimeOfDay.ToString(@"hh\:mm");
 }
@@ -20,9 +21,15 @@
             <div class="container">
                 <div class="breadcrumbs">
                     <ul class="list-unstyled">
-                        <li><a href="/">Home</a></li>
-                        <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = Model.Theme })>@Model.Theme</a></li>
-                        <li>@Model.Location</li>
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        <li>
+                            <a href=@Url.Action(controllerName: "UserPlans",actionName: "CategoryIndex", routeValues: new { category = Model.Theme })>@Model.Theme</a>
+                        </li>
+                        <li>
+                            @Model.Location
+                        </li>
                     </ul>
                 </div> <!-- end .breadcrumbs -->
             </div> <!-- end .container -->
@@ -34,10 +41,18 @@
             </div>
         </div> <!-- end .page-header -->
 
-        <div class="page-title" style="background-image: url('../images/background15.jpg');">
+        <div class="page-title">
             <div class="inner">
-                <h2>See more details about @Model.Location , @Model.Theme</h2>
-                <p>enjoy the travel in the Melbourne CBD!</p>
+                <div class="frame">
+                    <div class="zoom">
+                        <h2>See more details about @Model.Location , @Model.Theme</h2>
+                    </div>
+                </div>
+                <div class="frame">
+                    <div class="zoom">
+                        <p>enjoy the travel in the Melbourne CBD!</p>
+                    </div>
+                </div>
             </div> <!-- end .inner -->
         </div> <!-- end .page-title -->
 
@@ -53,76 +68,121 @@
                                         <div id='map' style='width: 100%; height: 600px;'></div>
                                     </div> <!-- end .blog-gallery -->
                                     <br />
-                                    <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
-                                    <br />
+                                    <div class="frame">
+                                        <div class="zoom">
+                                            <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
+                                        </div>
+                                    </div><br />
                                 </div> <!-- end .blog-post -->
                             </div> <!-- end col-md-6 -->
-                            
+
                             <div class="col-md-6">
                                 @using (Html.BeginForm("Details", "UserPlans"))
                                 {
                                     <div class="searchform" style="text-align:left">
-                                        <label for="FLocation">* Date and Time</label>
-                                        <input id="Date" type="datetime" name="Date" class="date-container" value=@Model.Date placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
-                                        <button><i class="fa fa-calendar"></i></button>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <label for="FLocation">*Plan Date and Time</label>
+                                            </div>
+                                        </div>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <input id="Date" required type="datetime" name="date" class="date-container" placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
+                                                <button><i class="fa fa-calendar"></i></button>
+                                            </div>
+                                        </div>
                                         <br />
-                                        <input name="date" hidden id="detailsDate" type="text" value=@Model.Date />
                                         <input name="id" hidden value=@Model.LocationID />
                                         <div style="text-align:center">
-                                            <br />
                                             <input type="submit" value="Update Details" class="button" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <b>Place</b>
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <p><b>Place</b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             <div style="text-align:center">
-                                                @Model.Location
+                                                <div class="frame">
+                                                    <div class="zoom">
+                                                        <p>@Model.Location</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <b>Date</b>
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <p><b>Date</b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             <div style="text-align:center">
-                                                @date
+                                                <div class="frame">
+                                                    <div class="zoom">
+                                                        <p>@date</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <b>Time </b>
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <p><b>Time </b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             <div style="text-align:center">
-                                                @time
+                                                <div class="frame">
+                                                    <div class="zoom">
+                                                        <p>@time</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <br />
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <b>Pedestrian Traffic  </b>
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <p><b>Pedestrian Traffic  </b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             @if (Convert.ToInt32(Model.PeopleCount) == 0)
                                             {
                                                 <div style="text-align:center">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i>
-                                                    <p>Sorry no info found!</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <i class="glyphicon glyphicon-ban-circle"></i>
+                                                            <p>Sorry no info found!</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
                                             @if (Convert.ToInt32(Model.PeopleCount) <= 200 && Convert.ToInt32(Model.PeopleCount) > 0)
                                             {
                                                 <div style="text-align:center">
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <p>Free Street!</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <p>Free Street!</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             }
@@ -130,18 +190,26 @@
                                             @if (Convert.ToInt32(Model.PeopleCount) <= 400 && Convert.ToInt32(Model.PeopleCount) > 200)
                                             {
                                                 <div style="text-align:center">
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <p>Busy street!</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <p>Busy street!</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
                                             @if (Convert.ToInt32(Model.PeopleCount) > 400)
                                             {
                                                 <div style="text-align:center">
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                                    <p>Crowder Than Usual!</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                            <p>Crowder Than Usual!</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
 
@@ -149,46 +217,81 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <b>Accessibility Level  </b>
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <p><b>Accessibility Level  </b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             @if (Convert.ToInt32(Model.AccessibilityRating) == 0)
                                             {
                                                 <div style="text-align:center">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i>
-                                                    <p>Sorry no Accessibility info found!</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <i class="glyphicon glyphicon-ban-circle"></i>
+                                                            <p>Sorry no Accessibility info found!</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
                                             @if (Convert.ToInt32(Model.AccessibilityRating) == 1)
                                             {
                                                 <div style="text-align:center">
-                                                    <img src="~/images/LowAccessibility.png" />
-                                                    <p>Low Level Accessibility</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <img src="~/images/LowAccessibility.png" />
+                                                            <p>Low Level Accessibility</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
 
                                             @if (Convert.ToInt32(Model.AccessibilityRating) == 2)
                                             {
                                                 <div style="text-align:center">
-                                                    <img src="~/images/MediumAccessibility.png" />
-                                                    <p>Moderate Level Accessibility</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <img src="~/images/MediumAccessibility.png" />
+                                                            <p>Moderate Level Accessibility</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
                                             @if (Convert.ToInt32(Model.AccessibilityRating) == 3)
                                             {
                                                 <div style="text-align:center">
-                                                    <img src="~/images/HighAccessibility.png" />
-                                                    <p>High Level Accessibility</p>
+                                                    <div class="frame">
+                                                        <div class="zoom">
+                                                            <img src="~/images/HighAccessibility.png" />
+                                                            <p>High Level Accessibility</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
                                         </div>
                                     </div>
                                     <br />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><b>Weather Situation</b></p>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div style="text-align:center">
+                                                <div id="weatherimg"></div>
+                                                <p id="weather"></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 }
                                 @using (Html.BeginForm("NewPlan", "UserPlans"))
                                 {
                                     <div class="searchform" style="text-align:center">
-                                        <label for="CLocation">Like to checkout this Place? Add to your Planner.</label>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <label for="CLocation">Like to checkout this Place? Add to your Planner.</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     @Html.Hidden("location", tolocation)
                                     <input hidden type="text" name="lat" value=@Model.Latitude />
@@ -196,15 +299,18 @@
                                     <input id="plannedDate" hidden type="text" name="plandate" value=@Model.Date />
                                     <input id="plannedTime" hidden type="text" name="time" value="@Model.Time" />
                                     <div class="row">
-
                                         <div style="text-align:center">
-                                            <input type="submit" value="Add to Plan" class="button" />
+                                            <div class="frame">
+                                                <div class="zoom">
+                                                    <input type="submit" value="Add to Plan" class="button" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 }
                             </div> <!-- end col-md-6 -->
-                            
-                            
+
+
                         </div> <!-- end .row -->
                     </div> <!-- end .box -->
                 </div> <!-- end .container -->
@@ -224,7 +330,7 @@
     var latit = @Model.Latitude;
     var lon = @Model.Longitude;
     var currentLocation = "";
-  
+
     function initMap() {
         var geocoder = new google.maps.Geocoder();
         var infowindow = new google.maps.InfoWindow();
@@ -292,52 +398,58 @@
 
 </script>
 <script>
-    //var currentLocation;
-    //var cityBounds = new google.maps.LatLngBounds(
-    //    new google.maps.LatLng(-38.067807865, 144.5148742199),
-    //    new google.maps.LatLng(-37.5687831234, 145.4157531261));
+    $(document).ready(function () {
+        $.get("@Url.Action("GetWeather", "Home")", function (response) {
+            var weatherimg = document.getElementById("weatherimg");
+            for (i = 1; i < 40; i++)
+            {
+                var calendar_left = response.list[i - 1].dt_txt;
+                var calendar_right = response.list[i].dt_txt;
+                var cur_date = "@date";
+                var cur_time = " @fulltime";
+                var cur_time_detail = cur_date + cur_time;
+                weatherimg.innerHTML = "";
+                var weather = response.list[i - 1].weather[0].main;
+                var result1 = cur_time_detail.localeCompare(calendar_left);
+                var result2 = cur_time_detail.localeCompare(calendar_right);
+                if (((result1 == 1) || (result1 == 0)) && (result2 == -1))
+                {
+                    switch (weather.toLowerCase()) {
+                        case ("rain"):
+                        case ("drizzle"):
+                        case ("wind"):
+                            $("#weather").text("Wet weather! Be careful!");
+                            weatherimg.innerHTML = '<img src="/images/Moderate.png"/>'
+                            break;
 
-    //var options = {
-    //    bounds: cityBounds,
-    //    componentRestrictions: { country: "au" }
-    //};
-    //var input = document.getElementById('autocomplete');
-    //var autocomplete = new google.maps.places.Autocomplete(input, options);
-    //autocomplete.addListener('place_changed', function () {
-    //    var place = autocomplete.getPlace();
-    //});
+                        case ("clear"):
+                        case ("clouds"):
+                            $("#weather").text("Fine weather! Enjoy your trips!");
+                            weatherimg.innerHTML = '<img src="/images/good.png" />';
+                            break;
 
-    //function getCurrentLocation() {
-    //    var options = {
-    //        enableHighAccuracy: true,
-    //        timeout: 5000,
-    //        maximumAge: 0
-    //    };
-
-    //    function success(pos) {
-    //        currentLocation = pos.coords;
-    //        var latlng = { lat: parseFloat(currentLocation.latitude), lng: parseFloat(currentLocation.longitude) };
-    //        var geocoder = new google.maps.Geocoder;
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    document.getElementById('autocomplete').value = results[0].formatted_address;
-    //                    console.log(results[0].formatted_address);
-    //                } else {
-    //                    window.alert('No results found');
-    //                }
-    //            } else {
-    //                window.alert('Geocoder failed due to: ' + status);
-    //            }
-    //        });
-    //    }
-
-    //    function error(err) {
-    //        console.warn(`ERROR(${err.code}): ${err.message}`);
-    //    }
-
-    //    navigator.geolocation.getCurrentPosition(success, error, options);
-    //}
+                        case ("thunderstorm"):
+                        case ("snow"):
+                        case ("mist"):
+                        case ("smoke"):
+                        case ("haze"):
+                        case ("dust"):
+                        case ("fog"):
+                        case ("sand"):
+                        case ("ash"):
+                        case ("squall"):
+                        case ("tornado"):
+                            $("#weather").text("Terrible Weather! Not Recommended!");
+                            weatherimg.innerHTML = '<img src="/images/Bad.png"/>';
+                            break;
+                    }
+                    return;
+                }
+            }
+            weatherimg.innerhtml = '<i class="glyphicon glyphicon-ban-circle"></i>';
+            $("#weather").text("Sorry no Info Found!");
+        });
+    });
 </script>
 <script type="text/javascript">
     $(function () {
@@ -346,7 +458,7 @@
         }).on('dp.change', function (e) {
             document.getElementById("plannedDate").value = e.date.format("MM/DD/YYYY");
             document.getElementById("plannedTime").value = e.date.format("HH:mm:ss");
-            document.getElementById("detailsDate").value = e.date.format("MM/DD/YYYY HH:mm:ss");
+            document.getElementById("Date").value = e.date.format("MM/DD/YYYY HH:mm:ss");
         });
     });
 

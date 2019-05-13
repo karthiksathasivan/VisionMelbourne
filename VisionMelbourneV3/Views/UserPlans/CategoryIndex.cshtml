@@ -10,8 +10,9 @@
     foreach (var item in Model) { header = item.Theme; }
     ViewBag.Title = header;
     int plansCount = 1;
+    DateTime userDate = new DateTime();
 }
-<body style="padding:10px; font-size:24px;">
+<body onload="getUserDate();" style="padding:10px; font-size:24px;">
     <div class="page-header">
         <div class="container">
             <div class="breadcrumbs">
@@ -44,7 +45,7 @@
                             @Html.DisplayFor(modelItem => location.Name)
                         </td>
                         <td>
-                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = DateTime.Now }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time\\Dynamic DST")) }, new { @class = "btn btn-primary" })
                             <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
                                 Speak
                                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
@@ -83,6 +84,11 @@
             utterance.onend = function (event) {
                 document.getElementById(plocation).style.backgroundColor = "transparent";
             };
+        }
+
+        function getUserDate() {
+            var systemdate = new Date();
+            @userDate = systemdate;
         }
 
     </script>

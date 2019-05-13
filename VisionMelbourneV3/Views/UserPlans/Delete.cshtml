@@ -16,58 +16,98 @@
         <div class="container">
             <div class="box">
                 <div class="row">
-                    <div style="text-align:center"><h2>@ViewBag.Title plan for @Model.Location</h2></div>
+                    <div style="text-align:center">
+                        <div class="frame">
+                            <div class="zoom"><h2>@ViewBag.Title plan for @Model.Location</h2></div>
+                        </div>
+                    </div>
                     <div class="col-md-6 col-md-offset-3">
                         <div class="row">
                             <div class="col-md-3">
-                                <b>Plan Location</b>
+                                <div class="frame">
+                                    <div class="zoom">
+                                        <b>Plan Location</b>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div style="text-align:center">
-                                    @Model.Location
+                                    <div class="frame">
+                                        <div class="zoom">
+                                            @Model.Location
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-md-3">
-                                <b>Date</b>
+                                <div class="frame">
+                                    <div class="zoom">
+                                        <b>Date</b>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div style="text-align:center">
-                                    @date
+                                    <div class="frame">
+                                        <div class="zoom">
+                                            @date
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-md-3">
-                                <b>Time </b>
+                                <div class="frame">
+                                    <div class="zoom">
+                                        <b>Time </b>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div style="text-align:center">
-                                    @time
+                                    <div class="frame">
+                                        <div class="zoom">
+                                            @time
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-md-3">
-                                <b>Pedestrian Traffic  </b>
+                                <div class="frame">
+                                    <div class="zoom">
+                                        <b>Pedestrian Traffic  </b>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 @if (Convert.ToInt32(Model.PeopleCount) == 0)
                                 {
                                     <div style="text-align:center">
-                                        <i class="glyphicon glyphicon-ban-circle"></i>
-                                        <p>Sorry no info found!</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                                <p>Sorry no info found!</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                                 @if (Convert.ToInt32(Model.PeopleCount) <= 200 && Convert.ToInt32(Model.PeopleCount) > 0)
                                 {
                                     <div style="text-align:center">
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                        <p>Free Street!</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                <p>Free Street!</p>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 }
@@ -75,17 +115,25 @@
                                 @if (Convert.ToInt32(Model.PeopleCount) <= 400 && Convert.ToInt32(Model.PeopleCount) > 200)
                                 {
                                     <div style="text-align:center">
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                        <p>Busy street!</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                <p>Busy street!</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                                 @if (Convert.ToInt32(Model.PeopleCount) > 400)
                                 {
                                     <div style="text-align:center">
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
-                                        <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                                <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
+                                            </div>
+                                        </div>
                                         <p>Crowder Than Usual!</p>
                                     </div>
                                 }
@@ -94,36 +142,56 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <b>Accessibility Level  </b>
+                                <div class="frame">
+                                    <div class="zoom">
+                                        <b>Accessibility Level  </b>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 @if (Convert.ToInt32(Model.AccessibilityRating) == 0)
                                 {
                                     <div style="text-align:center">
-                                        <i class="glyphicon glyphicon-ban-circle"></i>
-                                        <p>Sorry no Accessibility info found!</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                                <p>Sorry no Accessibility info found!</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                                 @if (Convert.ToInt32(Model.AccessibilityRating) == 1)
                                 {
                                     <div style="text-align:center">
-                                        <img src="~/images/LowAccessibility.png" />
-                                        <p>Low Level Accessibility</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <img src="~/images/LowAccessibility.png" />
+                                                <p>Low Level Accessibility</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
 
                                 @if (Convert.ToInt32(Model.AccessibilityRating) == 2)
                                 {
                                     <div style="text-align:center">
-                                        <img src="~/images/MediumAccessibility.png" />
-                                        <p>Moderate Level Accessibility</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <img src="~/images/MediumAccessibility.png" />
+                                                <p>Moderate Level Accessibility</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                                 @if (Convert.ToInt32(Model.AccessibilityRating) == 3)
                                 {
                                     <div style="text-align:center">
-                                        <img src="~/images/HighAccessibility.png" />
-                                        <p>High Level Accessibility</p>
+                                        <div class="frame">
+                                            <div class="zoom">
+                                                <img src="~/images/HighAccessibility.png" />
+                                                <p>High Level Accessibility</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
                             </div>
@@ -134,10 +202,9 @@
                 {
                     @Html.AntiForgeryToken()
                     <div class="form-actions no-color">
-                        @Html.ActionLink("Back to List", "PlanCreator", new { date = Model.Date }, new { @class = "button" })
+                        @Html.ActionLink("Back to List", "PlanCreator", new { date = Model.Date }, new { @class = "col-md-offset-3 button" })
                         <input type="submit" value="Delete" class="button col-md-offset-3" style="color:red" />
                     </div>
-
                 }
             </div>
         </div>

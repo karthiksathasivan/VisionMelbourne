@@ -87,9 +87,11 @@
             var plandate = $(".start", this).text().trim();
             var time = $(".time", this).text().trim();
             var sd = new Date(plandate);
+            var now = new Date();
+            var nm = moment(now).format("YYYY-MM-DD");
             var sm = moment(sd).format("YYYY-MM-DD");
             var start = new Date(sm + ' ' + time);
-            if (start >= new Date()) {
+            if (sm >= nm) {
                 var event = {
                     "title": title,
                     "start": start
@@ -113,7 +115,7 @@
                 var current_date = moment().format('YYYY-MM-DD')
                 if (current_date > date.format())
                 {
-                    alert("You cannot choose these dates");
+                    $.notify("You cannot choose this date", { position: "top-center" });
                 }
                 else {
                     var d = new Date(date);
@@ -122,9 +124,7 @@
                     var uri = "/UserPlans/PlanCreator?date=" + m;
                     $(location).attr('href', uri);
                 }
-
             }
-
         });
 
     </script>

@@ -14,10 +14,10 @@
 <link href="~/Content/Site.css" rel="stylesheet" />
 <link href="~/Content/style.css" rel="stylesheet" />
 
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 <script>
-
-
     function changeFunc() {
         var selectBox = document.getElementById("typeholder");
         selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -127,20 +127,24 @@
         var jtime = "@Time";
         var lat = latitude[element.id];
         var lng = longitude[element.id];
-        $.ajax({
-            url: 'NewPlan',
-            data: { 'plandate': jdate, 'time': jtime, 'lat': lat, 'lon': lng, 'fromlocation': from, 'location': to },
-            type: "post",
-            cache: false,
-            success: function (data) {
-                $("div[id$=dvProgress]").fadeOut("slow");
-                alert("Added " + to + " to your plan successfully");
-                document.body.style.cursor = 'default';
-            },
-            error: function () {
-                alert("error");
-            }
-        });
+
+
+            $.ajax({
+                url: 'NewPlan',
+                data: { 'plandate': jdate, 'time': jtime, 'lat': lat, 'lon': lng, 'fromlocation': from, 'location': to },
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("div[id$=dvProgress]").fadeOut("slow");
+                    $.notify("Added " + to + " to your plan successfully", "success", { position: "top-center" });
+                    document.body.style.cursor = 'default';
+                },
+                error: function () {
+                    $.notify("error");
+                }
+            });
+
+
     }
 
     function createMarker(place, id) {
@@ -206,29 +210,51 @@
         <div class="container">
             <div class="breadcrumbs">
                 <ul class="list-unstyled">
-                    <li><a href="/">Home</a></li>
-                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a></li>
-                    <li><a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>@displayDate</a></li>
-                    <li>Nearby</li>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                                <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a>                           
+                    </li>
+                    <li>
+                                <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>@displayDate</a>
+                    </li>
+                    <li>
+                        
+                                Nearby
+                          
+                    </li>
                 </ul>
             </div> <!-- end .breadcrumbs -->
         </div> <!-- end .container -->
     </div>
-    <h3 style="font-size:26px"><b>Explore places near @nearlocation</b></h3>
+    <div class="frame">
+        <div class="zoom">
+            <h3 style="font-size:26px"><b>Explore places near @nearlocation</b></h3>
+        </div>
+    </div>
     <div class="fullscreen-section">
         <div class="left">
             <div id="map" style="width:100%; height:694px;"></div>
         </div> <!-- end .left -->
         <div class="right">
-        <br/>
+            <br />
             <div class="directory-filters">
                 <form name="frm_map" id="frm_map">
                     <div class="row small" style="text-align:left">
-                        <div class="col-md-4 col-md-offset-1" >
-                            <div class="select-info small"><p style="font-size:20px"><b>Select category</b></p></div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="select-info small">
+                                <div class="frame">
+                                    <div class="zoom"><p style="font-size:20px"><b>Select category</b></p></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-4 col-md-offset-1">
-                            <div class="select-info small"><p style="font-size:20px"><b>Select distance</b></p></div>
+                            <div class="select-info small">
+                                <div class="frame">
+                                    <div class="zoom"><p style="font-size:20px"><b>Select distance</b></p></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row small">
@@ -283,8 +309,6 @@
 </body>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @*@Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
-        @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")*@
 }
 
 

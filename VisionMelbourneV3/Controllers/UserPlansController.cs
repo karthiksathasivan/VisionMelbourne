@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Geodesy;
 using VisionMelbourneV3.Models;
 using Microsoft.AspNet.Identity;
 
@@ -28,16 +29,33 @@ namespace VisionMelbourneV3.Controllers
         [AllowAnonymous]
         public double distance(String lat1, String lon1, String lat2, String lon2)
         {
-            // generally used geo measurement function
-            var R = 6378.137; // Radius of earth in KM
-            var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
-            var dLon = Convert.ToDouble(lon2) * Math.PI / 180 - Convert.ToDouble(lon1) * Math.PI / 180;
-            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-            Math.Cos(Convert.ToDouble(lat1) * Math.PI / 180) * Math.Cos(Convert.ToDouble(lat2) * Math.PI / 180) *
-            Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            var d = R * c;
-            return d * 1000; // meters
+            // Haversine funtion (generally used geo measurement function)
+            //var R = 6378.137; // Radius of earth in KM
+            //var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
+            //var dLon = Convert.ToDouble(lon2) * Math.PI / 180 - Convert.ToDouble(lon1) * Math.PI / 180;
+            //var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+            //Math.Cos(Convert.ToDouble(lat1) * Math.PI / 180) * Math.Cos(Convert.ToDouble(lat2) * Math.PI / 180) *
+            //Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            //var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            //var d = R * c;
+            //return d * 1000; // meters
+
+            Ellipsoid reference = Ellipsoid.GRS80;
+            GeodeticCalculator geoCalc = new GeodeticCalculator(reference);
+            // set Lincoln Memorial coordinates
+            GlobalCoordinates lincolnMemorial;
+            lincolnMemorial = new GlobalCoordinates(
+                new Angle(Convert.ToDouble(lat1)), new Angle(Convert.ToDouble(lon1))
+            );
+
+            GlobalCoordinates eiffelTower;
+            eiffelTower = new GlobalCoordinates(
+                new Angle(Convert.ToDouble(lat2)), new Angle(Convert.ToDouble(lon2))
+            );
+
+            GeodeticCurve geoCurve = geoCalc.CalculateGeodeticCurve(lincolnMemorial, eiffelTower);
+            double ellipseMeters = geoCurve.EllipsoidalDistance;
+            return ellipseMeters;
         }
 
         [AllowAnonymous]
@@ -67,11 +85,11 @@ namespace VisionMelbourneV3.Controllers
             foreach (var count in sensorLocations)
             {
                 double dist = distance(latitude, longitude, count.latitude, count.longitude);
-                if (dist <= 150)
+                if (dist <= 170)
                 {
                     var pedcount = from a in db.Pedcounts
-                                   where a.SensorID.Contains(count.sensor_id)
-                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+                                   where a.SensorID.Equals(count.sensor_id)
+                                   && a.Day.Equals(day) && a.Time.Equals(hr)
                                    select a;
                     foreach (var c in pedcount.ToList())
                     {
@@ -99,6 +117,7 @@ namespace VisionMelbourneV3.Controllers
             return View(detailedLocation);
         }
 
+        [AllowAnonymous]
         public ActionResult AnyLocationDetails(string location, double lat, double lon, DateTime date)
         {
             DateTime newTime = Convert.ToDateTime(date);
@@ -107,19 +126,19 @@ namespace VisionMelbourneV3.Controllers
             var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
-            string dayPeopleCount = "";
-            int i = 1;
+            int i = 0;
             int peopleCount = 0;
             var sensorLocations = db.SensorLocations.ToList();
             foreach (var count in sensorLocations)
             {
                 double dist = distance(Convert.ToString(lat), Convert.ToString(lon), count.latitude, count.longitude);
-                if (dist <= 150)
+                if (dist <= 170)
                 {
                     var pedcount = from a in db.Pedcounts
-                                   where a.SensorID.Contains(count.sensor_id)
-                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+                                   where a.SensorID.Equals(count.sensor_id)
+                                   && a.Day.Equals(day) && a.Time.Equals(hr)
                                    select a;
+                    
                     foreach (var c in pedcount.ToList())
                     {
                         peopleCount = peopleCount + (int)c.PedCount1;
@@ -151,7 +170,6 @@ namespace VisionMelbourneV3.Controllers
             var currentUserId = User.Identity.GetUserId();
             DateTime plandate = Convert.ToDateTime(date);
             UserPlan userPlan = new UserPlan();
-            //var plans = from a in db.UserPlans where a.Date == plandate && a.StartLocation == startlocation select a;
             var plans = from a in db.UserPlans where a.UserID == currentUserId && a.Date == plandate select a;
             plans = plans.OrderBy(p => p.Time);
             List<UserPlan> planList = new List<UserPlan>();
@@ -182,11 +200,11 @@ namespace VisionMelbourneV3.Controllers
             foreach (var count in sensorLocations)
             {
                 double dist = distance(lat, lon, count.latitude, count.longitude);
-                if (dist <= 150)
+                if (dist <= 170)
                 {
                     var pedcount = from a in db.Pedcounts
-                                   where a.SensorID.Contains(count.sensor_id)
-                                   && a.Day.Contains(day) && a.Time.Contains(hr)
+                                   where a.SensorID.Equals(count.sensor_id)
+                                   && a.Day.Equals(day) && a.Time.Equals(hr)
                                    select a;
                     foreach (var c in pedcount.ToList())
                     {
@@ -227,7 +245,6 @@ namespace VisionMelbourneV3.Controllers
 
         public ViewResult NearbyPlaces(string planstart, string nearlocation, string date, string locLat, string locLng, string planTime)
         {
-
             ViewBag.planstartLocation = planstart;
             ViewBag.findnearLocation = nearlocation;
             ViewBag.planDate = date;
@@ -274,6 +291,8 @@ namespace VisionMelbourneV3.Controllers
             db.SaveChanges();
             return RedirectToAction("PlanCreator", new { date = plandate });
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

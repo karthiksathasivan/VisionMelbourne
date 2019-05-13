@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 using System.Web.Mvc;
+using VisionMelbourneV3.Models;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+using Twilio.TwiML;
+using Twilio.AspNet.Mvc;
+
+
 
 namespace VisionMelbourneV3.Controllers
 {
@@ -33,6 +42,12 @@ namespace VisionMelbourneV3.Controllers
             ViewBag.Message = "Accessibility Tips";
 
             return View();
+        }
+        
+        public JsonResult GetWeather()
+        {
+            Weather weather = new Weather();
+            return Json(weather.getWeatherForecast(), JsonRequestBehavior.AllowGet);
         }
     }
 }
