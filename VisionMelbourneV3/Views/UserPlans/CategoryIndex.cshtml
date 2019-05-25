@@ -45,7 +45,7 @@
                             @Html.DisplayFor(modelItem => location.Name)
                         </td>
                         <td>
-                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time\\Dynamic DST")) }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")) }, new { @class = "btn btn-primary" })
                             <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
                                 Speak
                                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>

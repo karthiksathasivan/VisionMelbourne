@@ -151,7 +151,7 @@ namespace VisionMelbourneV3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email , TextSize = model.TextSize};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email , EmergencyContact = model.EmergencyContact};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

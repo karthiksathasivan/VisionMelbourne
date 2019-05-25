@@ -44,6 +44,14 @@ namespace VisionMelbourneV3.Controllers
             return View();
         }
         
+        public ActionResult TactileSurface()
+        {
+            ViewBag.Message = "Tactile Surfaces";
+
+            return View();
+        }
+
+        //Constructing Weather object which contains the API call to OpenWeather 
         public JsonResult GetWeather()
         {
             Weather weather = new Weather();

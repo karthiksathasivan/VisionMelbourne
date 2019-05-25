@@ -196,8 +196,8 @@
                                                         <a href="@Url.Action("NearbyPlaces", "UserPlans",
                     new { planstart = start, nearlocation = destinationLocation, date = planDate, locLat = userPlan.Latitude, locLng = userPlan.Longitude, planTime = userPlan.Time })"
                                                            class="btn btn-primary">
-                                                            Explore nearby
-                                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                            Nearby
+                                                            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                                                         </a>
                                                         <a href="@Url.Action("Delete", "UserPlans", new { id = userPlan.Id })" class="btn btn-danger">
                                                             Delete
@@ -231,7 +231,7 @@
                     <div class="container">
                         <div class="frame">
                             <div class="zoom">
-                                <h1>Create Plan</h1>
+                                <h1>Add a place</h1>
                             </div>
                         </div>
                         <div class="row">
@@ -240,19 +240,19 @@
                                     <div class="searchform" style="text-align:left">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <label for="CLocation">Enter your plan location</label>
+                                                <label for="CLocation">* Where to go</label>
                                             </div>
                                         </div>
                                         <div class="frame">
                                             <div class="zoom">
                                                 <input id="autocomplete"
+                                                       onclick="setFlag();"
                                                        autocomplete="off"
-                                                       onchange="codeAddress();"
                                                        type="text" name="location"
-                                                       placeholder="Add a Location"
+                                                       placeholder="Search a location"
                                                        required
                                                        onfocus="this.placeholder=''"
-                                                       onblur="this.placeholder = '*This field is required'" />
+                                                       onblur="this.placeholder = 'Search a location'" />
                                                 <button type="button"><i class="fa fa-location-arrow"></i></button>
                                             </div>
                                         </div>
@@ -280,7 +280,8 @@
                                     <div class="form-group">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <input type="submit" value="Add Place" class="button" />
+                                                <button onclick="geocodeAddress();" type="button" class="button">Add place</button>
+                                                <button id="submitPlace" type="submit" hidden></button>
                                             </div>
                                         </div>
                                     </div>
@@ -311,41 +312,12 @@
 </script>
 
 <script>
-   
+
     $('.Down').click(function () {
         $('html, body').animate({
             scrollTop: $("#newPlan").offset().top
         }, 'slow');
         return false;
-    });
-
-    var address = "";
-    var input = document.getElementById('autocomplete');
-    var auto = false;
-    function codeAddress() {
-        if (!auto) {
-            document.getElementById('lat').value = null;
-            document.getElementById('lon').value = null;
-            document.getElementById('autocomplete').value = null;
-        } else { auto = false;}
-    }
-
-    var cityBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(-38.067807865, 144.5148742199),
-        new google.maps.LatLng(-37.5687831234, 145.4157531261));
-
-    var options = {
-        bounds: cityBounds,
-        componentRestrictions: { country: "au" }
-    };
-
-    var autocomplete = new google.maps.places.Autocomplete(input, options);
-    autocomplete.addListener('place_changed', function () {
-        address = autocomplete.getPlace();
-        document.getElementById('lat').value = address.geometry.location.lat();
-        document.getElementById('lon').value = address.geometry.location.lng();
-        auto = true;
-        codeAddress();
     });
 
     function speak(element) {
@@ -446,6 +418,61 @@
     }
 </script>
 
+<script>
+    var auto = false;
+    function setFlag() {
+        auto = false;
+    }
+
+    var address = "";
+    var input = document.getElementById('autocomplete');
+    var geocoder = new google.maps.Geocoder();
+
+    var cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-38.067807865, 144.5148742199),
+        new google.maps.LatLng(-37.5687831234, 145.4157531261));
+
+    var options = {
+        bounds: cityBounds,
+        componentRestrictions: { country: "au" }
+    };
+
+
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.addListener('place_changed', function () {
+        address = autocomplete.getPlace();
+        auto = true;
+    });
+
+    function geocodeAddress() {
+        if (auto) {
+            var autocompleteAddress = document.getElementById('autocomplete').value;
+            geocoder.geocode({ 'address': autocompleteAddress }, function (results, status) {
+                if (status === 'OK') {
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('lon').value = results[0].geometry.location.lng();
+                    $("#submitPlace").click();
+                } else {
+
+                    document.getElementById('autocomplete').value = null;
+                }
+            });
+        }
+        else {
+            alert('Please enter a valid Destination!');
+            document.getElementById('lat').value = null;
+            document.getElementById('lon').value = null;
+            document.getElementById('autocomplete').value = null;
+        }
+
+    }
+
+    google.maps.event.addDomListener(input, 'keydown', function (e) {
+        if (e.keyCode == 13 && $('.pac-container:visible').length) {
+            e.preventDefault();
+        }
+    });
+</script>
 
 
 

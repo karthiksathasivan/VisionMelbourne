@@ -10,7 +10,6 @@ namespace VisionMelbourneV3.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "VisionMelbourneV3.Models.ApplicationDbContext";
         }
 
         protected override void Seed(VisionMelbourneV3.Models.ApplicationDbContext context)

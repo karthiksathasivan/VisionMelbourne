@@ -1,96 +1,128 @@
 ﻿@model VisionMelbourneV3.Models.RegisterViewModel
 @{
+
 }
-<span></span>
 
-<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/assets/style.css" rel="stylesheet" />
 <link href="~/Content/style.css" rel="stylesheet" />
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
 
-    <div class="data">
-        @Html.AntiForgeryToken()
-        <div class="frame">
-            <div class="zoom">
-                <h4>Create a new account</h4>
-            </div>
-        </div>
-        <hr />
-        <div class="frame">
-            <div class="zoom">
-                @Html.ValidationSummary("", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="frame">
-                <div class="zoom">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="frame">
-                    <div class="zoom">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="frame">
-                <div class="zoom">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="frame">
-                    <div class="zoom">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="frame">
-                <div class="zoom">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="frame">
-                    <div class="zoom">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="frame">
-                <div class="zoom">
-                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="frame">
-                    <div class="zoom">
-                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="frame">
-                    <div class="zoom">
-                        <input type="submit" class="btn btn-default" value="Register" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+   
+    
+        $('#password').tooltip({
+            title: "-The password should be atleast 6 characeter in length/n" +
+            "-Must include One small letter/n-Must include One capital letter/n-Must include one digit/n-Must include One special character"
+            , placement: "right", trigger: "focus"
+        });
+ 
+    </script>
+   
+}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title>
+</head>
+<body>
+    <div class="page-header">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ul class="list-unstyled">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>Register</li>
+                </ul>
+            </div> <!-- end .breadcrumbs -->
+        </div> <!-- end .container -->
+    </div>
+
+    <div class="section small transparent dark text-center" style="background-image: url('../../images/background.jpg');">
+        <div class="inner">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <div class="frame">
+                                <div class="zoom">
+                                    <h3 style="color:white">Register to MelEyes</h3>
+                                </div>
+                            </div>
+                            <div class="frame">
+                                <div class="zoom">
+                                    <p>Fill in the form:</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-top-right">
+                            <div class="frame">
+                                <div class="zoom">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <div class="frame">
+                                    <div class="zoom">
+                                        @Html.Label("Email", new { @class = "col-md-12" })
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "someone@example.com" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="frame">
+                                    <div class="zoom">
+                                        @Html.Label("*Password", new { @class = "col-md-12" })
+                                        <div class="col-md-12">
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "password" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="frame">
+                                    <div class="zoom">
+                                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12" })
+                                        <div class="col-md-12">
+                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="frame">
+                                    <div class="zoom">
+                                        @Html.LabelFor(m => m.EmergencyContact, new { @class = "col-md-12" })
+                                        <div class="col-md-12">
+                                            @Html.PasswordFor(m => m.EmergencyContact, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-md-6" style="text-align:center">
+                                    <input type="submit" value="Register" class="button" />
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
-}
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+</body>
+

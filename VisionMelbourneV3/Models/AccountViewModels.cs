@@ -66,10 +66,6 @@ namespace VisionMelbourneV3.Models
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "User name")] 
-        public string UserName { get; set; }
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -85,8 +81,9 @@ namespace VisionMelbourneV3.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Display(Name = "Text Size")]
-        public string TextSize { get; set; }
+        [Phone]
+        [Display(Name = "Emergency Contact")]
+        public string EmergencyContact { get; set; }
     }
 
     public class ResetPasswordViewModel

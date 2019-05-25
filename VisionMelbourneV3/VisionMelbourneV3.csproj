@@ -229,6 +229,10 @@
     <Compile Include="Migrations\201904140658321_Planner.Designer.cs">
       <DependentUpon>201904140658321_Planner.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905151500074_EmergencyContact.cs" />
+    <Compile Include="Migrations\201905151500074_EmergencyContact.Designer.cs">
+      <DependentUpon>201905151500074_EmergencyContact.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DetailedLocation.cs" />
@@ -595,7 +599,10 @@
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
     <None Include="Properties\PublishProfiles\MelEyes - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MelEyes - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy2.pubxml" />
     <None Include="Properties\PublishProfiles\VisionMelbourneI2 - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -870,6 +877,7 @@
     <Content Include="Scripts\locale\vi.js" />
     <Content Include="Scripts\locale\zh-cn.js" />
     <Content Include="Scripts\locale\zh-tw.js" />
+    <Content Include="Scripts\location.js" />
     <Content Include="Scripts\MapSearch.js" />
     <Content Include="Scripts\materialize.js" />
     <Content Include="Scripts\materialize.min.js" />
@@ -924,6 +932,7 @@
     <Content Include="Views\UserPlans\NearbyPlaces.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\UserPlans\AnyLocationDetails.cshtml" />
+    <Content Include="Views\Home\TactileSurface.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904110952585_InitialCreate.resx">
@@ -934,6 +943,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904140658321_Planner.resx">
       <DependentUpon>201904140658321_Planner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905151500074_EmergencyContact.resx">
+      <DependentUpon>201905151500074_EmergencyContact.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

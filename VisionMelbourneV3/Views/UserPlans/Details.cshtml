@@ -13,7 +13,7 @@
 <link href="~/Content/Site.css" rel="stylesheet" />
 <link href="~/Content/style.css" rel="stylesheet" />
 
-<body data-gr-c-s-loaded="true" rlt="1" style="" onload="initMap()">
+<body onload="getCurrentLocation();">
 
     <div>
 
@@ -283,6 +283,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><b>Pedestrian Guides</b></p>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div style="text-align:center">
+                                                <p id="TactileAdvisor"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 }
                                 @using (Html.BeginForm("NewPlan", "UserPlans"))
                                 {
@@ -329,11 +341,25 @@
     var address = "@Model.Location";
     var latit = @Model.Latitude;
     var lon = @Model.Longitude;
-    var currentLocation = "";
+    var currentLocation;
+    var currentLat;
+    var currentLong;
+    var geocoder;
+    var start;
+    var end;
+    var tactileCoords = [];
+    var directionsService;
+    var directionsDisplay;
+    var stepDisplay;
+    var markerArray = [];
 
     function initMap() {
-        var geocoder = new google.maps.Geocoder();
-        var infowindow = new google.maps.InfoWindow();
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        geocoder = new google.maps.Geocoder();
+        getCurrentLocation();
+        start = new google.maps.LatLng(currentLat, currentLong);
+        end = new google.maps.LatLng(latit, lon);
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
             center: { lat: latit, lng: lon },
@@ -356,19 +382,33 @@
                 position: google.maps.ControlPosition.RIGHT_BOTTOM
             }
         });
+        directionsDisplay.setMap(map);
+        stepDisplay = new google.maps.InfoWindow();
 
-
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'WALKING',
+            region: 'AU'
+        };
+        directionsService.route(request, function (response, status) {
+            if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+                showSteps(response);
+            }
+        });
         var marker = new google.maps.Marker({
             map: map,
             position: { lat: latit, lng: lon }
         });
 
         google.maps.event.addListener(marker, 'click', function () {
-            infowindow.setContent("@tolocation");
-            infowindow.open(map, this);
+            stepDisplay.setContent("@tolocation");
+            stepDisplay.open(map, this);
         });
 
     }
+
 
     function getCurrentLocation() {
         var options = {
@@ -379,7 +419,8 @@
 
         function success(pos) {
             currentLocation = pos.coords;
-            window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
+            currentLat = currentLocation.latitude;
+            currentLong = currentLocation.longitude;
         }
 
         function error(err) {
@@ -389,15 +430,41 @@
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
+    function round(value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    }
+
+    //Show route navigation function
+    function showSteps(directionResult) {
+        var isWaypoint = 0;
+        var tadvisor = document.getElementById('TactileAdvisor');
+
+
+        var myRoute = directionResult.routes[0].legs[0];
+
+        for (var i = 0; i < myRoute.steps.length; i++) {
+            //check route for tactile grounds
+            for (j = 0; j < tactileCoords.length; j++) {
+                if (round(myRoute.steps[i].start_point.lat(), 3) === round(tactileCoords[j].lat(), 3) &&
+                    round(myRoute.steps[i].start_point.lng(), 3) === round(tactileCoords[j].lng(), 3)) {
+                    tadvisor.innerHTML = '<span><h3 style="background-color: #7FFF00;">Your route includes tactile surfaces!</h3></span>';
+                    isWaypoint = 1;
+                }
+            }
+        }
+        if (isWaypoint === 0) {
+            tadvisor.innerHTML = '<span><h3 style="background-color: #e50000;">Our database could not find any tactile surfaces in your route!</h3></span>';
+        }
+    }
+
+
     function returnMapUrl(userLat, userLon) {
         return "https://www.google.com/maps/dir/?api=1&origin=" + userLat + "," + userLon +"&destination=" + latit + "," + lon + " &dir_action=navigate";
     }
     function redirectToMaps() {
         getCurrentLocation();
+        window.open(returnMapUrl(currentLat, currentLong), '_blank');
     }
-
-</script>
-<script>
     $(document).ready(function () {
         $.get("@Url.Action("GetWeather", "Home")", function (response) {
             var weatherimg = document.getElementById("weatherimg");
@@ -405,15 +472,15 @@
             {
                 var calendar_left = response.list[i - 1].dt_txt;
                 var calendar_right = response.list[i].dt_txt;
-                var cur_date = "@date";
+                var cur_date = "@weatherDate";
                 var cur_time = " @fulltime";
                 var cur_time_detail = cur_date + cur_time;
+                var utc_time = convertToUtcDate(cur_time_detail);
                 weatherimg.innerHTML = "";
                 var weather = response.list[i - 1].weather[0].main;
-                var result1 = cur_time_detail.localeCompare(calendar_left);
-                var result2 = cur_time_detail.localeCompare(calendar_right);
-                if (((result1 == 1) || (result1 == 0)) && (result2 == -1))
-                {
+                var result1 = utc_time.localeCompare(calendar_left);
+                var result2 = utc_time.localeCompare(calendar_right);
+                if (((result1 == 1) || (result1 == 0)) && (result2 == -1)) {
                     switch (weather.toLowerCase()) {
                         case ("rain"):
                         case ("drizzle"):
@@ -445,11 +512,73 @@
                     }
                     return;
                 }
+                else {
+                    weatherimg.innerHTML = '<i class="glyphicon glyphicon-ban-circle"></i>';
+                    $("#weather").text("Sorry no Info Found!");
+                }
             }
-            weatherimg.innerhtml = '<i class="glyphicon glyphicon-ban-circle"></i>';
-            $("#weather").text("Sorry no Info Found!");
         });
+        $.ajax({
+            url: "https://data.melbourne.vic.gov.au/resource/s3kn-ciyb.json",
+            type: "GET",
+            data: {
+                "$limit": 5000,
+                "$$app_token": "m5zAxv4nRKXpqpGjptErnXQXC"
+            }
+        }).done(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var coords = data[i].location.coordinates;
+                var latlng = new google.maps.LatLng(coords[1], coords[0]);
+                tactileCoords.push(latlng);
+            }
+            initMap();
+            });
+
     });
+
+    function convertToUtcDate(date) {
+        var newDate = new Date(date);
+
+        var year = newDate.getUTCFullYear().toString();
+        if (newDate.getUTCMonth() < 9) {
+            var month = "0" + (newDate.getUTCMonth() + 1).toString();
+        }
+        else {
+            var month = (newDate.getUTCMonth() + 1).toString();
+        }
+
+        if (newDate.getUTCDate() < 10) {
+            var day = "0" + newDate.getUTCDate().toString();
+        }
+        else {
+            var day = newDate.getUTCDate().toString();
+        }
+
+        if (newDate.getUTCHours() < 10) {
+            var hour = "0" + newDate.getUTCHours().toString();
+        }
+        else {
+            var hour = newDate.getUTCHours().toString();
+        }
+
+        if (newDate.getUTCMinutes() < 10) {
+            var minute = "0" + newDate.getUTCMinutes().toString();
+        }
+        else {
+            var minute = newDate.getUTCMinutes().toString();
+        }
+
+        if (newDate.getUTCSeconds() == 0) {
+            var second = newDate.getUTCSeconds().toString() + "0";
+        }
+        else {
+            var second = newDate.getUTCSeconds().toString();
+        }
+
+        var utc_time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        console.log(utc_time);
+        return (utc_time);
+    };
 </script>
 <script type="text/javascript">
     $(function () {

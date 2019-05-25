@@ -106,12 +106,14 @@
             position: absolute;
             right: 0;
             bottom: 120px;
+            z-index:1;
         }
 
         #div2 {
             position: absolute;
             right: 0;
             bottom: 20px;
+            z-index: 1;
         }
 
         .zoom {
@@ -185,7 +187,6 @@
             else
             {
                 <div class="right">
-                    @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
                     @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "button" })
                 </div>
             }

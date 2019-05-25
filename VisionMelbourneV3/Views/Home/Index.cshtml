@@ -15,29 +15,31 @@
                 <div class="frame">
                     <div class="zoom">
                         <h1>Plan Trips around Melbourne City</h1>
+                        <p>Search a location and we will find pedestrian traffic info at that location</p>
                     </div>
                 </div>
-                <br/>
+                <br />
                 <div class="row">
                     <form>
                         <div class="col-sm-6 col-sm-offset-3">
                             <div class="searchform" style="text-align:left">
                                 <div class="frame">
                                     <div class="zoom">
-                                        <label for="FLocation">Plan Location</label>
+                                        <label for="FLocation" style="font-size:20px;">*Where to go</label>
                                     </div>
                                 </div>
                                 <div class="frame">
                                     <div class="zoom">
                                         <input id="autocomplete"
-                                               onchange="codeAddress();"
+                                               onclick="setFlag();"
                                                autocomplete="off"
                                                type="text" name="location"
-                                               placeholder="Add a Location"
+                                               placeholder="Search for a location"
                                                required
                                                onfocus="this.placeholder=''"
-                                               onblur="this.placeholder ='Search for a location'" />
-                                        <button type="button"><i class="fa fa-location-arrow"></i></button>
+                                               onblur="this.placeholder ='Search for a location'"
+                                               style="padding-right:50px" />
+                                        <button type="button"><i class="fa fa-map-marker"></i></button>
                                         <input hidden id="lat" type="text" name="lat" />
                                         <input hidden id="lon" type="text" name="lon" />
                                         @Html.Hidden("date", TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")))
@@ -49,7 +51,8 @@
                             <div class="form-group">
                                 <div class="frame">
                                     <div class="zoom">
-                                        <button type="submit" class="button">Plan Trips</button>
+                                        <button onclick="geocodeAddress();" type="button" class="button">Plan Trips</button>
+                                        <button id="submitPlace" type="submit" hidden></button>
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +65,7 @@
                 <div class="avatar">
                     <div class="frame">
                         <div class="zoom">
-                            <a class="glyphicon glyphicon-arrow-down" href=""></a>
+                            <a style="font-size:20px;" class="glyphicon glyphicon-arrow-down" href=""></a>
                         </div>
                     </div>
                 </div>
@@ -157,7 +160,7 @@
                             <div class="services">
                                 <img src="~/images/services-icon01.png" alt="icon" class="img-responsive center-block">
                                 <h3>Choose<br>What To Do</h3>
-                                <p>Looking for the tram to take, a restaurant to eat, a church to visit or a mall to do some shopping?</p>
+                                <p style="font-size:22px;">Looking for the tram to take, a restaurant to eat, a church to visit or a mall to do some shopping.</p>
                             </div> <!-- end .services -->
                         </div>
                     </div>
@@ -168,7 +171,7 @@
                             <div class="services">
                                 <img src="~/images/services-icon02.png" alt="icon" class="img-responsive center-block">
                                 <h3>Find<br>What You Want</h3>
-                                <p>Search and filter hundreds of listings, read information and find the perfect spot.</p>
+                                <p style="font-size:22px;">Search and filter hundreds of listings, read information and find the perfect spot.</p>
                             </div> <!-- end .services -->
                         </div>
                     </div>
@@ -179,7 +182,7 @@
                             <div class="services">
                                 <img src="~/images/services-icon03.png" alt="icon" class="img-responsive center-block">
                                 <h3>Explore<br>Amazing Places</h3>
-                                <p>Go and have a good time or even make your own plans from the listing page. All of those, thanks to Vision Melbourne!</p>
+                                <p style="font-size:22px;">Go and have a good time or even make your own plans from the listing page. All of those, thanks to MelEyes!</p>
                             </div> <!-- end .services -->
                         </div>
                     </div>
@@ -212,51 +215,17 @@
 
 
     speechSynthesis.cancel();
-    function getCurrentLocation() {
-        var options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-        };
+</script>
 
-        function success(pos) {
-            var currentLocation = pos.coords;
-            document.getElementById('lat').value = currentLocation.latitude;
-            document.getElementById('lon').value = currentLocation.longitude;
-            var latlng = { lat: parseFloat(currentLocation.latitude), lng: parseFloat(currentLocation.longitude) };
-            var geocoder = new google.maps.Geocoder;
-            geocoder.geocode({ 'location': latlng }, function (results, status) {
-                if (status === 'OK') {
-                    if (results[0]) {
-                        document.getElementById('autocomplete').value = results[0].formatted_address;
-                        console.log(results[0].formatted_address);
-                    } else {
-                        window.alert('No results found');
-                    }
-                } else {
-                    window.alert('Geocoder failed due to: ' + status);
-                }
-            });
-        }
-
-        function error(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
-
-        navigator.geolocation.getCurrentPosition(success, error, options);
+<script>
+    var auto = false;
+    function setFlag() {
+        auto = false;
     }
-
 
     var address = "";
     var input = document.getElementById('autocomplete');
-    var auto = false;
-    function codeAddress() {
-        if (!auto) {
-            document.getElementById('lat').value = null;
-            document.getElementById('lon').value = null;
-            document.getElementById('autocomplete').value = null;
-        } else { auto = false; }
-    }
+    var geocoder = new google.maps.Geocoder();
 
     var cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-38.067807865, 144.5148742199),
@@ -267,13 +236,40 @@
         componentRestrictions: { country: "au" }
     };
 
+
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     autocomplete.addListener('place_changed', function () {
         address = autocomplete.getPlace();
-        document.getElementById('lat').value = address.geometry.location.lat();
-        document.getElementById('lon').value = address.geometry.location.lng();
         auto = true;
-        codeAddress();
+    });
+
+    function geocodeAddress() {
+        if (auto) {
+            var autocompleteAddress = document.getElementById('autocomplete').value;
+            geocoder.geocode({ 'address': autocompleteAddress }, function (results, status) {
+                if (status === 'OK') {
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('lon').value = results[0].geometry.location.lng();
+                    $("#submitPlace").click();
+                } else {
+
+                    document.getElementById('autocomplete').value = null;
+                }
+            });
+        }
+        else {
+            alert('Please enter a valid Destination!');
+            document.getElementById('lat').value = null;
+            document.getElementById('lon').value = null;
+            document.getElementById('autocomplete').value = null;
+        }
+
+    }
+
+    google.maps.event.addDomListener(input, 'keydown', function (e) {
+        if (e.keyCode == 13 && $('.pac-container:visible').length) {
+            e.preventDefault();
+        }
     });
 </script>
 

@@ -1,0 +1,73 @@
+﻿
+
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Check my Route";
+}
+<head style="overflow-x:hidden"></head>
+<style>
+    .geocoder {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        padding: 1%;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 90%;
+        margin-left: 5%;
+    }
+
+        .card:hover {
+            box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+        }
+
+    .container {
+        padding: 2px 16px;
+    }
+</style>
+<body onload="initMap()">
+    <br />
+    <div class="text-center"><h4>Enter your destination in the text box and click on Check button to see if your route has tactile ground surfaces in CBD!</h4></div>
+    <br />
+
+    <div id="TactileAdvisor" class="text-xl-center text-sm-center text-md-center text-center"></div>
+
+    <br />
+
+
+            <div class="card">
+                <div id='geocoder' class='geocoder'>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-10 searchform">
+                            <input id="startAddress" type="text" placeholder="From" value="" class="form-control" aria-label="Source">
+                            <button class="location" onclick="getCurrentLocation();" type="button" id="button-addon2" style="padding-right:30px;padding-top: 0px;padding-bottom: 0px;"><i class="fa fa-dot-circle-o"></i></button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 col-xs-10 searchform">
+                            <input id="address" type="text" class="form-control" placeholder="To" aria-label="Destination">
+                            <button class="location" onclick="checkRoute(); initMap();" type="button" id="button-addon2" style="padding-right:30px;padding-top: 0px;padding-bottom: 0px;"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id='map' style='width: 100%; height: 600px;'></div>
+            </div>
+
+</body>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/google")
+}
+
+<style>
+    .location{
+        position:absolute
+    }
+</style>

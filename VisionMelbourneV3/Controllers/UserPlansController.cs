@@ -10,6 +10,7 @@ using Geodesy;
 using VisionMelbourneV3.Models;
 using Microsoft.AspNet.Identity;
 
+//Controller to manage all 
 namespace VisionMelbourneV3.Controllers
 {
     [Authorize]
@@ -26,23 +27,14 @@ namespace VisionMelbourneV3.Controllers
             return View(plans.ToList());
         }
 
+
         [AllowAnonymous]
         public double distance(String lat1, String lon1, String lat2, String lon2)
         {
-            // Haversine funtion (generally used geo measurement function)
-            //var R = 6378.137; // Radius of earth in KM
-            //var dLat = Convert.ToDouble(lat2) * Math.PI / 180 - Convert.ToDouble(lat1) * Math.PI / 180;
-            //var dLon = Convert.ToDouble(lon2) * Math.PI / 180 - Convert.ToDouble(lon1) * Math.PI / 180;
-            //var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-            //Math.Cos(Convert.ToDouble(lat1) * Math.PI / 180) * Math.Cos(Convert.ToDouble(lat2) * Math.PI / 180) *
-            //Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-            //var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            //var d = R * c;
-            //return d * 1000; // meters
-
+            
             Ellipsoid reference = Ellipsoid.GRS80;
             GeodeticCalculator geoCalc = new GeodeticCalculator(reference);
-            // set Lincoln Memorial coordinates
+            
             GlobalCoordinates lincolnMemorial;
             lincolnMemorial = new GlobalCoordinates(
                 new Angle(Convert.ToDouble(lat1)), new Angle(Convert.ToDouble(lon1))
@@ -73,7 +65,6 @@ namespace VisionMelbourneV3.Controllers
             var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
-            string dayPeopleCount = "";
             Location location = db.Locations.Find(id);
 
             var latitude = location.Latitude;
@@ -126,7 +117,7 @@ namespace VisionMelbourneV3.Controllers
             var time = date;
             var day = Convert.ToString(time.DayOfWeek);
             var hr = Convert.ToString(time.Hour);
-            int i = 0;
+            int i = 1;
             int peopleCount = 0;
             var sensorLocations = db.SensorLocations.ToList();
             foreach (var count in sensorLocations)
@@ -259,6 +250,7 @@ namespace VisionMelbourneV3.Controllers
         public ActionResult CategoryIndex(string category)
         {
             var locations = db.Locations.Where(g => g.Theme.Contains(category)).ToList();
+
             return View(locations);
         }
 
