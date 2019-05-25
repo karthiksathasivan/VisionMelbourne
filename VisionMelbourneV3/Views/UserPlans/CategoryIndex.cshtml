@@ -10,9 +10,8 @@
     foreach (var item in Model) { header = item.Theme; }
     ViewBag.Title = header;
     int plansCount = 1;
-    DateTime userDate = new DateTime();
 }
-<body onload="getUserDate();" style="padding:10px; font-size:24px;">
+<body style="padding:10px; font-size:24px !important;">
     <div class="page-header">
         <div class="container">
             <div class="breadcrumbs">
@@ -23,40 +22,43 @@
             </div> <!-- end .breadcrumbs -->
         </div> <!-- end .container -->
     </div> <!-- end .page-header -->
-    <h2>List of @header</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.Label("Location")
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var location in Model)
-            {
+    
+    <div class="container">
+        <h2>List of @header</h2>
+        <table class="table">
+            <thead>
                 <tr>
-                    @if (location.Name != null)
-                    {
-                        var locationID = "location" + plansCount;
-
-                        <td id=@locationID>
-                            @Html.DisplayFor(modelItem => location.Name)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Details", "Details", new { id = location.Id, date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")) }, new { @class = "btn btn-primary" })
-                            <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
-                                Speak
-                                <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
-                            </a>
-                        </td>
-                    }
+                    <th>
+                        @Html.Label("Location")
+                    </th>
+                    <th></th>
                 </tr>
-                plansCount = plansCount + 1;
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var location in Model)
+                {
+                    <tr>
+                        @if (location.Name != null)
+                        {
+                            var locationID = "location" + plansCount;
+
+                            <td id=@locationID>
+                                @Html.DisplayFor(modelItem => location.Name)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", new { id = location.Id, date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time")) }, new { @class = "btn btn-primary" })
+                                <a id=@plansCount class="btn btn-warning" onclick="doTTS(this)">
+                                    Speak
+                                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                    plansCount = plansCount + 1;
+                }
+            </tbody>
+        </table>
+    </div>
 
 </body>
 @section Scripts {
@@ -69,26 +71,28 @@
         });
     </script>
     <script>
+        //speech synthesis script
         function doTTS(element) {
+            //cancel previous speech
             speechSynthesis.cancel();
             var plocation = "location" + element.id;
+            //construct the text to be spoken
             var text = "Location, " + document.getElementById(plocation).innerHTML;
             const utterance = new SpeechSynthesisUtterance(text);
+            //configure the utterance pitch, volume and rate
             utterance.pitch = 1.5;
             utterance.volume = 1.5;
             utterance.rate = 1;
+            //speak the utterance
             speechSynthesis.speak(utterance);
+            //on utterance start, highlight the div element being spokens
             utterance.onstart = function (event) {
                 document.getElementById(plocation).style.backgroundColor = "#FDFF47";
             };
+            //on utterance end, remove highlight
             utterance.onend = function (event) {
                 document.getElementById(plocation).style.backgroundColor = "transparent";
             };
-        }
-
-        function getUserDate() {
-            var systemdate = new Date();
-            @userDate = systemdate;
         }
 
     </script>

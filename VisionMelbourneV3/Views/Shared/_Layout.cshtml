@@ -8,14 +8,43 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+
+    @*Import the styles for the page*@
     <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
 
+    <script type="text/javascript">
+        function showPosition() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    $.ajax({
+                        url: '/Home/SendSms',
+                        data: { 'userLat': position.coords.latitude, 'userLon': position.coords.longitude },
+                        type: "post",
+                        cache: false,
+                        success: function (data) {
+                            $("div[id$=dvProgress]").fadeOut("slow");
+                            alert("Your current location was sent to emergency contact number ", "success", { position: "top-center" });
+                            document.body.style.cursor = 'default';
+                        },
+                        error: function () {
+                            $.alert("Error! Could not send SMS to this number.");
+                        }
+                    });
+                });
+            } else {
+                alert("Sorry, your browser does not support HTML5 geolocation.");
+            }
+        }
+    </script>
+
     @*google maps script loaded*@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeWVnvpK2hWLTBmmt1yLn2BG0TNVnsMMQ&libraries=places"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
     @*zoom function script*@
     <script>
         var flag = true;
@@ -65,12 +94,12 @@
         function hightlightBtn() {
             if (flag) {
                 flag = false;
-                $("#div1").css({ "cursor": "zoom-in", "border": "solid", "height": "64", "width": "64" });
+                $("#div1").css({ "cursor": "zoom-in", "border": "solid", "height": "100", "width": "100" });
                 $('#magnifier').on('click', openZoom());
             }
             else {
                 flag = true;
-                $("#div1").css({ "cursor": "pointer", "border": "none", "height": "32", "width": "32" });
+                $("#div1").css({ "cursor": "pointer", "border": "none", "height": "64", "width": "64" });
                 $('#magnifier').on('click', closeZoom());
             }
 
@@ -78,14 +107,17 @@
 
         window.onscroll = function () {
             var oDiv1 = document.getElementById('div1');
+            var oDiv2 = document.getElementById('div2');
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
             startMove(parseInt((document.documentElement.clientHeight - oDiv1.offsetHeight) / 2 + scrollTop));
+            startMove(parseInt((document.documentElement.clientHeight - oDiv1.offsetHeight) / 2 - oDiv2.offsetHeight + scrollTop));
         };
 
         var timer = null;
 
         function startMove(target) {
             var oDiv1 = document.getElementById('div1');
+            var oDiv2 = document.getElementById('div2');
 
             clearInterval(timer);
             timer = setInterval(function () {
@@ -96,6 +128,7 @@
                 }
                 else {
                     oDiv1.style.top = oDiv1.offsetTop + speed + 'px';
+                    oDiv2.style.top = oDiv2.offsetTop + speed + 'px';
                 }
             }, 30);
         }
@@ -105,19 +138,17 @@
         #div1 {
             position: absolute;
             right: 0;
-            bottom: 120px;
-            z-index:1;
+            bottom: 200px;
         }
 
         #div2 {
             position: absolute;
             right: 0;
-            bottom: 20px;
-            z-index: 1;
+            bottom: 50px;
         }
 
         .zoom {
-            font-size: 1.3vw;
+            font-size: 22px;
             transition: transform 0.2s linear;
         }
     </style>
@@ -128,41 +159,31 @@
 <body style="padding-top:0px">
     <div class="main-content">
         <header class="header fixed">
-
             <div class="left">
-                <div class="frame">
-                    <div class="zoom">
-                        <div class="logo">
-                            <a href="/Home/Index/">
-                                <img src="~/images/logo.png" alt="ExploreCity" class="img-responsive" />
-                            </a>
-                        </div>
-                    </div>
+                <div class="logo">
+                    <a href="/Home/Index/">
+                        <img src="~/images/logo.png" alt="ExploreCity" class="img-responsive" />
+                    </a>
                 </div> <!-- end .logo -->
             </div> <!-- end .left -->
             <div class="navigation clearfix">
                 <nav class="main-nav">
                     <ul class="list-unstyled">
                         <li>
-                            <div class="frame">
-                                <div class="zoom">
-                                    @Html.ActionLink("Home", "Index", "Home")
-                                </div>
-                            </div>
+                            @Html.ActionLink("Home", "Index", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Tactile Routes", "TactileSurface", "Home")
                         </li>
                         <li class="menu-item-has-children">
-                            <div class="frame">
-                                <div class="zoom">
-                                    @Html.ActionLink("Accessibility Tips", "Help", "Home")
-                                </div>
-                            </div>
+                            @Html.ActionLink("Support Services", "SupportServices", "Home")
                             <ul>
                                 <li>
-                                    <div class="frame">
-                                        <div class="zoom">
-                                            @Html.ActionLink("Talkback Tips", "Help", "Home")
-                                        </div>
-                                    </div>
+                                    @Html.ActionLink("Learn Braille", "LearnBraille", "Home")
+
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Talkback Tips", "Help", "Home")
                                 </li>
                             </ul>
                         </li>
@@ -173,6 +194,7 @@
                 </nav> <!-- end .main-nav -->
                 <a href="" class="responsive-menu-open"><i class="fa fa-bars"></i></a>
             </div> <!-- end .navigation -->
+            @*Check if the user is authenticated or not to display the login or log off button*@
             @if (Request.IsAuthenticated)
             {
                 using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "right" }))
@@ -181,7 +203,6 @@
 
                     @Html.ActionLink("My Plans", "Index", "UserPlans", null, new { @class = "button" })
                     <a class="button" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-
                 }
             }
             else
@@ -199,7 +220,6 @@
     </div>
 
     @RenderBody()
-
     <hr />
 
     <footer class="section inner">
@@ -208,62 +228,36 @@
                 <div class="row footer-top mb-md-5 mb-4">
                     <div class="col-lg-5 col-md-5 footer-grid_section_1its" data-aos="fade-right">
                         <div class="footer-title-w3pvt">
-                            <div class="frame">
-                                <div class="zoom">
-                                    <h3>Our Mission</h3>
-                                </div>
-                            </div>
+                            <h3>Our Mission</h3>
                         </div>
                         <div class="footer-text" style="text-align:left">
-                            <div class="frame">
-                                <div class="zoom">
-                                    <p>To help people with low vision capabilities to navigate around the city of Melbourne independently.</p>
-                                </div>
-                            </div>
+                            <p>To help people with low vision capabilities to navigate around the city of Melbourne independently.</p>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-5 footer-grid_section_1its" data-aos="fade-right">
                         <div class="footer-title-w3pvt">
-                            <div class="frame">
-                                <div class="zoom">
-                                    <h3>Contact Us</h3>
-                                </div>
-                            </div>
+
+                            <h3>Contact Us</h3>
                         </div>
                         <div class="footer-text">
-
-                            <div class="frame">
-                                <div class="zoom">
-                                    <p>Email : visionmelbournevic@gmail.com </p>
-                                </div>
-                            </div>
-
-
+                            <p>Email : visionmelbournevic@gmail.com </p>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-2 mt-md-0 mt-4 footer-grid_section_1its">
                         <div class="footer-title-w3pvt">
-                            <div class="frame">
-                                <div class="zoom">
-                                    <h3>Quick Links</h3>
-                                </div>
-                            </div>
+                            <h3>Quick Links</h3>
                         </div>
                         <div class="row no-gutters">
-                            <ul class="links">
+                            <ul class="links" style="font-size:15px;">
                                 <li>
-                                    <div class="frame">
-                                        <div class="zoom">
-                                            @Html.ActionLink("Home", "Index", "Home")
-                                        </div>
-                                    </div>
+                                    @Html.ActionLink("Home", "Index", "Home")
                                 </li>
                                 <li>
-                                    <div class="frame">
-                                        <div class="zoom">
-                                            @Html.ActionLink("Accessibility Tips", "Help", "Home")
-                                        </div>
-                                    </div>
+                                    @Html.ActionLink("TactileRoutes", "TactileSurface", "Home")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Support Services", "SupportServices", "Home")
+
                                 </li>
                             </ul>
                         </div>
@@ -272,7 +266,7 @@
             </div>
         </div>
         <br>
-        <p style="text-align:center">&copy; @DateTime.Now.Year - MelEyes</p>
+        <p style="text-align:center">&copy; @DateTime.Now.Year - MelEyes </p>
     </footer>
 
 
@@ -282,6 +276,16 @@
     <script src="~/Scripts/notify.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="~/Scripts/script.js"></script>
-    <button type="button" id="magnifier" onclick="hightlightBtn()" style="border:0;background-color:transparent"><img src="/images/magnifier.png" id="div1" /></button>
+
+    <button type="button" id="magnifier" onclick="hightlightBtn();" style="border:0;background-color:transparent"><img src="~/images/magnifier.png" id="div1" /></button>
+   @* If the user is not authenticated hide the SOS button *@
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button type="button" id="magnifier" onclick="showPosition();" style="border:0;background-color:transparent"><img src="~/images/emergency.png" id="div2" /></button>
+    }
+    else
+    {
+        <button hidden type="button" id="magnifier" onclick="showPosition();" style="border:0;background-color:transparent"><img src="~/images/emergency.png" id="div2" /></button>
+    }
 </body>
 </html>

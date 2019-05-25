@@ -18,9 +18,21 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <script>
+    var selectedValue = "church";
+    var radius = 1;
+    var destination = [];
+    var latitude = [];
+    var longitude = [];
+    var map;
+    var infowindow;
+    var selectedTypes = [];
+    var typeid = 1;
+
     function changeFunc() {
+        //get the selected option
         var selectBox = document.getElementById("typeholder");
         selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        //set the typeid to get the corresponding image
         switch (selectedValue) {
             case "church": typeid = 1; break;
             case "cafe": typeid = 2; break;
@@ -37,87 +49,88 @@
     }
 
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    var selectedValue = "church";
-    var radius = 1;
-    var destination = [];
-    var latitude = [];
-    var longitude = [];
-    var map;
-    var infowindow;
-    var selectedTypes = [];
-    var typeid = 1;
     function initialize() {
-
-        var pyrmont = new google.maps.LatLng(@latitude, @longitude);
+        //set the center of the map at userdefined location
+        var center = new google.maps.LatLng(@latitude, @longitude);
 
         map = new google.maps.Map(document.getElementById('map'), {
-            center: pyrmont,
+            center: center,
             zoom: 12
         });
         var marker = new google.maps.Marker({
             map: map,
-            position: pyrmont
+            position: center
         });
     }
 
     function renderMap(value) {
-        // Get the user defined values
+        // Get the user defined values, radius and selected value
         radius = radius * 1000;
-
-
         selectedTypes = [];
-        selectedTypes.push(value)
+        selectedTypes.push(value);
 
-               var pyrmont = new google.maps.LatLng(@latitude, @longitude);
+        var center = new google.maps.LatLng(@latitude, @longitude);
 
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: pyrmont,
-                    zoom: 15
-                });
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: pyrmont
-                });
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: center,
+            zoom: 15
+        });
+        var marker = new google.maps.Marker({
+            map: map,
+            position: center
+        });
 
-
-                var request = {
-                    location: pyrmont,
-                    radius: radius,
-                    types: selectedTypes
-                };
+        //create a nearby places request with user defined values as parameters
+        var request = {
+            location: center,
+            radius: radius,
+            types: selectedTypes
+        };
+        //clear the selected types
         selectedTypes = [];
-                infowindow = new google.maps.InfoWindow();
-                var service = new google.maps.places.PlacesService(map);
-                service.nearbySearch(request, callback);
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        //call the nearbySearch function
+        service.nearbySearch(request, callback);
     }
 
+
     function callback(results, status) {
-        destination = [];
-        latitude = [];
-        longitude = [];
+        //if the results were retrieved
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            //get the location element
             var location = document.getElementById('location');
+            //empty the arrays
             var tripInstructions = [];
+            destination = [];
+            latitude = [];
+            longitude = [];
+            //for each element in the result
             for (var i = 0; i < results.length; i++) {
+                //push the name and address values to the destination array
                 destination.push(results[i].name + ',' + results[i].vicinity);
+
+                //push the coordinate values to the lat, longitude array
                 latitude.push(results[i].geometry.location.lat());
                 longitude.push(results[i].geometry.location.lng());
+                //create markers for each result
                 createMarker(results[i], i);
                 var placename = results[i].name;
                 var placeaddress = results[i].vicinity;
+                //construct table row elements
                 tripInstructions.push('<tr id = "place' + i + '"><td>' + placename + '</td><td>' + placeaddress +
                     '</td><td><a id="' + i + '" class= "btn btn-primary" onclick="newPlan(this)"> Add To Plan</a ></td ></tr > ');
+                //include the table row elements to the main table
                 location.innerHTML = tripInstructions.join("");
             }
         }
 
     }
 
+    //Add to plan function
     function newPlan(element) {
+        //on new request, disable the pointer events
+        document.body.style.pointerEvents = 'none';
         document.body.style.cursor = 'wait';
         var to = destination[element.id];
         var from = "@startLocation";
@@ -126,25 +139,25 @@
         var lat = latitude[element.id];
         var lng = longitude[element.id];
 
-
+        //create an ajax request to the server to add new plan
             $.ajax({
                 url: 'NewPlan',
                 data: { 'plandate': jdate, 'time': jtime, 'lat': lat, 'lon': lng, 'fromlocation': from, 'location': to },
                 type: "post",
                 cache: false,
                 success: function (data) {
-                    $("div[id$=dvProgress]").fadeOut("slow");
+                    //on success notify the user and enable pointer Events back to auto
                     $.notify("Added " + to + " to your plan successfully", "success", { position: "top-center" });
-                    document.body.style.cursor = 'default';
+                    document.body.style.pointerEvents = 'auto';
                 },
                 error: function () {
-                    $.notify("error");
+                    //display error message if failed
+                    $.notify("error! The location was not added to your plan");
                 }
             });
-
-
     }
 
+    // create markers for each place based on their type ID
     function createMarker(place, id) {
         var placeId = "place" + id;
         var marker = new google.maps.Marker({
@@ -157,15 +170,21 @@
             animation: google.maps.Animation.DROP
         });
 
+        //add click listener to the markers
         google.maps.event.addListener(marker, 'click', function () {
+            //initialise the contents of the infowindow on click
             infowindow.setContent(place.name + '<br>' + place.vicinity);
             infowindow.open(map, this);
+            //speak the contents of the location clicked
             doTTS(id);
+            //if the screen size is mobile scroll to the row element as top
             if (screen.width <= 1280) {
                 $('html, body').animate({
                     scrollTop: $("#" + placeId).offset().top
                 }, 'slow');
-            } else {
+            }
+            //else give an offset of 10 
+            else {
                 var topPos = document.getElementById(placeId).offsetTop;
                 $('#tablecontainer').animate({
                     scrollTop: topPos - 10,
@@ -174,11 +193,13 @@
 
         });
 
+        //infowindow content_change event listener to stop speech and remove highlight
         google.maps.event.addListener(infowindow, 'content_changed', function () {
             document.getElementById(placeId).style.backgroundColor = "transparent";
             speechSynthesis.cancel();
         });
 
+        //infowindow close button click listener to stop speech and remove highlight
         google.maps.event.addListener(infowindow, 'closeclick', function () {
             document.getElementById(placeId).style.backgroundColor = "transparent";
             speechSynthesis.cancel();
@@ -186,16 +207,22 @@
     }
 
     function doTTS(eid) {
+        //initialise the speech synthesis
         var synth = window.speechSynthesis;
+        //cancel all previous speech
         synth.cancel();
         var placeId = "place" + eid;
         var to = destination[eid];
+         //construct the text to be spoken
         var text = to;
         const utterance = new SpeechSynthesisUtterance(text);
+        //configure the utterance pitch, volume and rate
         utterance.pitch = 1.5;
         utterance.volume = 1.5;
         utterance.rate = 1;
+        //speak the utterance
         synth.speak(utterance);
+        //on utterance start, highlight the div element being spoken
         utterance.onstart = function (event) {
             document.getElementById(placeId).style.backgroundColor = "#FDFF47";
         };
@@ -212,15 +239,13 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                                <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a>                           
+                        <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>My Plans</a>
                     </li>
                     <li>
-                                <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>@displayDate</a>
+                        <a href=@Url.Action(controllerName: "UserPlans",actionName: "PlanCreator", routeValues: new { date = Date})>@displayDate</a>
                     </li>
                     <li>
-                        
-                                Nearby
-                          
+                        Explore Nearby
                     </li>
                 </ul>
             </div> <!-- end .breadcrumbs -->

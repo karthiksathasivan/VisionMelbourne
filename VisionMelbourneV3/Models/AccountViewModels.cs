@@ -67,22 +67,22 @@ namespace VisionMelbourneV3.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "*Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long, must have at least one digit, one small letter, one capital letter and one special character .", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "*Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "*Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Phone]
-        [Display(Name = "Emergency Contact")]
+        [StringLength(10, ErrorMessage = "The phone number must be {2} characters long.", MinimumLength = 10)]
+        [Display(Name = "Text Size")]
         public string EmergencyContact { get; set; }
     }
 

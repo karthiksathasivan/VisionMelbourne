@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="frame">
-                                        <div class="zoom"> <button class="Down button" title="Add new plan"><i class="glyphicon glyphicon-plus"></i> Add new plan</button></div>
+                                        <div class="zoom"> <button class="Down button" title="Add a place"><i class="glyphicon glyphicon-plus"></i> Add Places</button></div>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                     <thead>
                                         <tr>
                                             <th>Location</th>
-                                            <th>Time</th>
+                                            <th style="padding-left:22px;">Time</th>
                                             <th>Pedestrian traffic</th>
                                             <th></th>
                                         </tr>
@@ -163,7 +163,7 @@
                                                         }
                                                         @if (pedcount <= 200 && pedcount > 0)
                                                         {
-                                                            <div class="row cardContainer">
+                                                            <div style="padding-left:20px" ; class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <p>Free Street!</p>
                                                                 <p id=@peopleCountID hidden>The Streets are usually free at this time!</p>
@@ -174,7 +174,7 @@
 
                                                         @if (pedcount <= 400 && pedcount > 200)
                                                         {
-                                                            <div class="row cardContainer">
+                                                            <div style="padding-left:20px" ;class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <p>Busy street!</p>
@@ -183,7 +183,7 @@
                                                         }
                                                         @if (pedcount > 400)
                                                         {
-                                                            <div class="row cardContainer">
+                                                            <div style="padding-left:20px" ;class="row cardContainer">
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
                                                                 <i class="glyphicon glyphicon-user"></i> <i class="glyphicon glyphicon-user"></i>
@@ -193,14 +193,16 @@
                                                         }
                                                     </td>
                                                     <td>
-                                                        <a href="@Url.Action("NearbyPlaces", "UserPlans",
+                                                        <div style="padding-bottom:5px;">
+                                                            <a href="@Url.Action("NearbyPlaces", "UserPlans",
                     new { planstart = start, nearlocation = destinationLocation, date = planDate, locLat = userPlan.Latitude, locLng = userPlan.Longitude, planTime = userPlan.Time })"
-                                                           class="btn btn-primary">
-                                                            Nearby
-                                                            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                        </a>
+                                                               class="btn btn-primary">
+                                                                Nearby
+                                                                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                                            </a>
+                                                        </div>
                                                         <a href="@Url.Action("Delete", "UserPlans", new { id = userPlan.Id })" class="btn btn-danger">
-                                                            Delete
+                                                            Remove
                                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                         </a>
 
@@ -240,7 +242,7 @@
                                     <div class="searchform" style="text-align:left">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <label for="CLocation">* Where to go</label>
+                                                <label for="CLocation">*Where to go</label>
                                             </div>
                                         </div>
                                         <div class="frame">
@@ -248,11 +250,12 @@
                                                 <input id="autocomplete"
                                                        onclick="setFlag();"
                                                        autocomplete="off"
+                                                       onchange="codeAddress();"
                                                        type="text" name="location"
-                                                       placeholder="Search a location"
+                                                       placeholder="*Enter your plan location"
                                                        required
                                                        onfocus="this.placeholder=''"
-                                                       onblur="this.placeholder = 'Search a location'" />
+                                                       onblur="this.placeholder = '*Enter your plan location'" />
                                                 <button type="button"><i class="fa fa-location-arrow"></i></button>
                                             </div>
                                         </div>
@@ -266,7 +269,7 @@
                                     <div class="searchform" style="text-align:left">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <label for="FLocation">Pick a time: </label>
+                                                <label for="FLocation">*Pick a time: </label>
                                             </div>
                                         </div><div class="frame">
                                             <div class="zoom">
@@ -280,7 +283,7 @@
                                     <div class="form-group">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <button onclick="geocodeAddress();" type="button" class="button">Add place</button>
+                                                <button onclick="geocodeAddress();" type="button" class="button">Plan Trips</button>
                                                 <button id="submitPlace" type="submit" hidden></button>
                                             </div>
                                         </div>
@@ -300,19 +303,16 @@
 
 @*Time picker for new plan*@
 <script type="text/javascript">
+    //Attach a datetimepicker element to the input input element. Time only format.
     $(function () {
         $('#Date').datetimepicker({
             format: 'HH:mm'
         });
     });
-
-    $(document).ready(function () {
-        $("div[id$=dvProgress]").fadeOut("fast");
-    });
 </script>
 
 <script>
-
+     //Scroll to the new plan div element when the Down class is clicked
     $('.Down').click(function () {
         $('html, body').animate({
             scrollTop: $("#newPlan").offset().top
@@ -320,63 +320,22 @@
         return false;
     });
 
-    function speak(element) {
-        var plocation = "location" + element;
-        var ptime = "time" + element;
-        var ppcount = "pedcount" + element;
-        var row = "row" + element;
-        var speaktime = document.getElementById(ptime).innerHTML;
-        var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
-            + ", " + document.getElementById(ppcount).innerHTML;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.pitch = 1.5;
-        utterance.volume = 1.5;
-        utterance.rate = 1;
-        speechSynthesis.speak(utterance);
-        utterance.onstart = function (event) {
-            document.getElementById(row).style.backgroundColor = "#FDFF47";
-        };
-        utterance.onend = function (event) {
-            document.getElementById(row).style.backgroundColor = "transparent";
-        };
-    }
-
-    function doTTS(element) {
-        speechSynthesis.cancel();
-        var plocation = "location" + element;
-        var ptime = "time" + element;
-        var ppcount = "pedcount" + element;
-        var row = "row" + element;
-        var speaktime = document.getElementById(ptime).innerHTML;
-        var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
-            + ", " + document.getElementById(ppcount).innerHTML;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.pitch = 1.5;
-        utterance.volume = 1.5;
-        utterance.rate = 1;
-        speechSynthesis.speak(utterance);
-        utterance.onstart = function (event) {
-            document.getElementById(row).style.backgroundColor = "#FDFF47";
-        };
-        utterance.onend = function (event) {
-            document.getElementById(row).style.backgroundColor = "transparent";
-        };
-    }
-
-
 </script>
 <script type="text/javascript">
     var currentLocation = "";
     var waypoints = "";
+    //for item in the model add latitude and longitude as the waypoints
     @foreach (var item in Model)
     {
         @:addWaypoints(@item.Latitude, @item.Longitude);
     }
 
+    //construct waypoints based on the google maps URL standard
     function addWaypoints(wlat, wlon) {
         waypoints = waypoints + wlat + ',' + wlon + '%7C';
     }
 
+    //get the users current network location
     function getCurrentLocation() {
         var options = {
             enableHighAccuracy: true,
@@ -386,7 +345,9 @@
 
         function success(pos) {
             currentLocation = pos.coords;
+            //on success remove the last separator from the waypoints string
             waypoints = waypoints.replace(/\%7C([^\%7C]*)$/, '$1');
+            //redirect to google maps window with current location as start and end points
             window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
         }
 
@@ -398,7 +359,6 @@
     }
 
     function returnMapUrl(userLat, userLon) {
-        console.log(waypoints);
         return "https://www.google.com/maps/dir/?api=1&origin=" + userLat + "," + userLon + "&destination=" + userLat + "," + userLon + "&waypoints=" + waypoints + " &dir_action=navigate";
     }
 
@@ -407,57 +367,109 @@
     }
 </script>
 <script>
+    //speech synthesis script
+    function speak(element) {
+        var plocation = "location" + element;
+        var ptime = "time" + element;
+        var ppcount = "pedcount" + element;
+        var row = "row" + element;
+        var speaktime = document.getElementById(ptime).innerHTML;
+        //construct the text to be spoken
+        var text = "At " + speaktime + ", You have planned to travel to " + document.getElementById(plocation).innerHTML
+            + ", " + document.getElementById(ppcount).innerHTML;
+        const utterance = new SpeechSynthesisUtterance(text);
+        //configure the utterance pitch, volume and rate
+        utterance.pitch = 1.5;
+        utterance.volume = 1.5;
+        utterance.rate = 1;
+        //speak the utterance
+        speechSynthesis.speak(utterance);
+        //on utterance start, highlight the div element being spoken
+        utterance.onstart = function (event) {
+            document.getElementById(row).style.backgroundColor = "#FDFF47";
+        };
+        //on utterance end, remove highlight
+        utterance.onend = function (event) {
+            document.getElementById(row).style.backgroundColor = "transparent";
+        };
+    }
+
+    //on single plan TTS click
+    function doTTS(element) {
+        //cancel previous speech
+        speechSynthesis.cancel();
+        //speak new plan element
+        speak(element);
+    }
+
+    //full plan TTS
     var plans = "";
     function dofullTTS() {
+        //lenght of plans
         plans = @plans.Count;
+        //cancel previous speech
         speechSynthesis.cancel();
         for (i = 1; i <= plans; i++)
         {
+            //speak new plan element in the list
             speak(i);
         }
     }
 </script>
 
 <script>
+    //flag to identify if autocomplete value changed
     var auto = false;
+
+    //set the autocomplete flag to false whenever the input element is clicked
     function setFlag() {
         auto = false;
     }
 
-    var address = "";
+    //get the input element attributes
     var input = document.getElementById('autocomplete');
+    //initialise the geocoder of google
     var geocoder = new google.maps.Geocoder();
 
+    //setting the latitude longitude bbox boundaries for the autocomplete to retrieve restricted results
     var cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-38.067807865, 144.5148742199),
         new google.maps.LatLng(-37.5687831234, 145.4157531261));
 
+    //Set the options with the citybounds and country set to Australia
     var options = {
         bounds: cityBounds,
         componentRestrictions: { country: "au" }
     };
 
-
+    //Attach an autocomplete element to the input field
     var autocomplete = new google.maps.places.Autocomplete(input, options);
+    //add a listener to the autocomplete element
     autocomplete.addListener('place_changed', function () {
-        address = autocomplete.getPlace();
+        //on change get the place address and store in the input HTML element
+        var address = autocomplete.getPlace();
+        //set the autocomplete flag to true
         auto = true;
     });
 
     function geocodeAddress() {
+        //if the autocomplete flag is true geocode the text in the input element
         if (auto) {
             var autocompleteAddress = document.getElementById('autocomplete').value;
             geocoder.geocode({ 'address': autocompleteAddress }, function (results, status) {
+                //if the geocode was successfull, set the values for lat and lon elements in the document.
                 if (status === 'OK') {
                     document.getElementById('lat').value = results[0].geometry.location.lat();
                     document.getElementById('lon').value = results[0].geometry.location.lng();
                     $("#submitPlace").click();
-                } else {
-
+                }
+                //else clear the input field
+                else {
                     document.getElementById('autocomplete').value = null;
                 }
             });
         }
+        //if the autocomplete flag is false clear the values of the input field and alert the user
         else {
             alert('Please enter a valid Destination!');
             document.getElementById('lat').value = null;
@@ -467,6 +479,8 @@
 
     }
 
+    //Set a key listener to the autocomplete element. Set prevent default to preven the form
+    //from submitting on "Enter" key press
     google.maps.event.addDomListener(input, 'keydown', function (e) {
         if (e.keyCode == 13 && $('.pac-container:visible').length) {
             e.preventDefault();

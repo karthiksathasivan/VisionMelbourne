@@ -23,65 +23,70 @@
         </div>
     </div> <!-- end .container -->
 </div> <!-- end .page-header -->
-<div id="calendar" style="padding:25px"></div>
-<div style="display: none">
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PeopleCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccessibilityLevel)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr class="events">
-                <td class="title">
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PeopleCount)
-                </td>
-
-                <td class="start">
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-
-                <td class="time">
-                    @Html.DisplayFor(modelItem => item.Time)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccessibilityLevel)
-                </td>
-
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+<div id="calendar" class="container"></div>
+<div  >
+    <div style="display: none" >
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PeopleCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccessibilityLevel)
+                </th>
+                <th></th>
             </tr>
-        }
 
-    </table>
+            @foreach (var item in Model)
+            {
+                <tr class="events">
+                    <td class="title">
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PeopleCount)
+                    </td>
+                    <td class="id">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td class="start">
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+
+                    <td class="time">
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccessibilityLevel)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
 </div>
 
 
 @section Scripts{
     @Scripts.Render("~/bundles/fullcalendar")
     <script>
-
+        //create an array to store all the plan items
         var events = [];
+        //for each plan item create the title and start date and time
         $(".events").each(function () {
             var title = $(".title", this).text().trim();
             var plandate = $(".start", this).text().trim();
@@ -91,6 +96,7 @@
             var nm = moment(now).format("YYYY-MM-DD");
             var sm = moment(sd).format("YYYY-MM-DD");
             var start = new Date(sm + ' ' + time);
+            //populate the events only if the plan's date is greater than or equal to today's date
             if (sm >= nm) {
                 var event = {
                     "title": title,
@@ -100,7 +106,8 @@
             }
 
         });
-        
+
+
         $("#calendar").fullCalendar({
             locale: 'au',
             events: events, 
@@ -113,10 +120,11 @@
 
             dayClick: function (date, allDay, jsEvent, view) {
                 var current_date = moment().format('YYYY-MM-DD')
-                if (current_date > date.format())
-                {
+                //if the user clicks invalid dates throw error message
+                if (current_date > date.format()) {
                     $.notify("You cannot choose this date", { position: "top-center" });
                 }
+                //else get the date and lista all plans for the date
                 else {
                     var d = new Date(date);
                     var m = moment(d).format("YYYY-MM-DD");
@@ -125,6 +133,8 @@
                     $(location).attr('href', uri);
                 }
             }
+           
+
         });
 
     </script>

@@ -163,8 +163,8 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="Twilio, Version=5.28.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Twilio.5.28.4\lib\net451\Twilio.dll</HintPath>
+    <Reference Include="Twilio, Version=5.29.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.5.29.0\lib\net451\Twilio.dll</HintPath>
     </Reference>
     <Reference Include="Twilio.AspNet.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Twilio.AspNet.Common.5.20.1\lib\net45\Twilio.AspNet.Common.dll</HintPath>
@@ -229,9 +229,9 @@
     <Compile Include="Migrations\201904140658321_Planner.Designer.cs">
       <DependentUpon>201904140658321_Planner.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201905151500074_EmergencyContact.cs" />
-    <Compile Include="Migrations\201905151500074_EmergencyContact.Designer.cs">
-      <DependentUpon>201905151500074_EmergencyContact.cs</DependentUpon>
+    <Compile Include="Migrations\201905241418421_EmergencyContact.cs" />
+    <Compile Include="Migrations\201905241418421_EmergencyContact.Designer.cs">
+      <DependentUpon>201905241418421_EmergencyContact.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -451,7 +451,10 @@
     <Content Include="images\background05.jpg" />
     <Content Include="images\background16.jpg" />
     <Content Include="images\Bad.png" />
+    <Content Include="images\bg01.png" />
     <Content Include="images\blind.jpg" />
+    <Content Include="images\Braille Alaphat.png" />
+    <Content Include="images\braille.png" />
     <Content Include="images\C.png" />
     <Content Include="images\category1.jpg" />
     <Content Include="images\category2.jpg" />
@@ -463,6 +466,8 @@
     <Content Include="images\D.png" />
     <Content Include="images\dropdown.png" />
     <Content Include="images\E.png" />
+    <Content Include="images\emergency.png" />
+    <Content Include="images\emergencytip.png" />
     <Content Include="images\F.png" />
     <Content Include="images\G.png" />
     <Content Include="images\good.png" />
@@ -476,6 +481,7 @@
     <Content Include="images\icon05.png" />
     <Content Include="images\icon06.png" />
     <Content Include="images\icon07.png" />
+    <Content Include="images\Intoduction.png" />
     <Content Include="images\J.png" />
     <Content Include="images\K.png" />
     <Content Include="images\L.png" />
@@ -506,6 +512,7 @@
     <Content Include="images\top.png" />
     <Content Include="images\U.png" />
     <Content Include="images\V.png" />
+    <Content Include="images\voiceover.png" />
     <Content Include="images\W.png" />
     <Content Include="images\X.png" />
     <Content Include="images\Y.png" />
@@ -598,20 +605,10 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
-    <None Include="Properties\PublishProfiles\MelEyes - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\MelEyes - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy1.pubxml" />
-    <None Include="Properties\PublishProfiles\VisionMelbourne - Web Deploy2.pubxml" />
     <None Include="Properties\PublishProfiles\VisionMelbourneI2 - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Braille.js" />
-    <Content Include="Scripts\calender.js" />
-    <Content Include="Scripts\Chart.bundle.js" />
-    <Content Include="Scripts\Chart.bundle.min.js" />
-    <Content Include="Scripts\Chart.js" />
-    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -692,7 +689,14 @@
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\gcal.js" />
     <Content Include="Scripts\gcal.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -878,7 +882,6 @@
     <Content Include="Scripts\locale\zh-cn.js" />
     <Content Include="Scripts\locale\zh-tw.js" />
     <Content Include="Scripts\location.js" />
-    <Content Include="Scripts\MapSearch.js" />
     <Content Include="Scripts\materialize.js" />
     <Content Include="Scripts\materialize.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -902,7 +905,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\LearnBraille.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -944,8 +946,8 @@
     <EmbeddedResource Include="Migrations\201904140658321_Planner.resx">
       <DependentUpon>201904140658321_Planner.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905151500074_EmergencyContact.resx">
-      <DependentUpon>201905151500074_EmergencyContact.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905241418421_EmergencyContact.resx">
+      <DependentUpon>201905241418421_EmergencyContact.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

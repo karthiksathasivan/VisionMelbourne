@@ -1,6 +1,6 @@
 ﻿var map;
 var geocoder;
-var currentLat = -37.8136;
+var currentLat = -37.8136 ;
 var currentLong = 144.9631;
 var start;
 var end; 
@@ -8,40 +8,26 @@ var tactileCoords = [];
 var directionsService;
 var directionsDisplay;
 var stepDisplay;
-var marker;
 var markerArray = [];
 var startLocation = document.getElementById('startAddress');
 var endLocation = document.getElementById('address');
 var auto = false;
 
 
-//Check the contents of input element
 function codeAddress(element) {
-    //check the autocomplete flag.
-    //If the address was not provided by autocomplete
     if (!auto) {
-        //Delete the contents of the input element
         document.getElementById(element.id).value = null;
-
-    }
-    else
-    {
-        //set the autocomplete flag to false.
-        auto = false;
-    }
+    } else { auto = false; }
 }
 
-//Set the Latitude and Longitude boundaries for Melbourne
 var cityBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(-38.067807865, 144.5148742199),
     new google.maps.LatLng(-37.5687831234, 145.4157531261));
 
-//Set the options for autocomplete result filtering
 var options = {
     bounds: cityBounds,
     componentRestrictions: { country: "au" }
 };
-
 
 var autocompleteStart = new google.maps.places.Autocomplete(startLocation, options);
 autocompleteStart.addListener('place_changed', function () {
@@ -66,8 +52,8 @@ function initMap() {
         center: new google.maps.LatLng(currentLat, currentLong),
         mapTypeControl: true,
         mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-            position: google.maps.ControlPosition.RIGHT_CENTER
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.BOTTOM_CENTER
         },
         zoomControl: true,
         zoomControlOptions: {
@@ -86,7 +72,7 @@ function initMap() {
     directionsDisplay.setMap(map);  
 
     stepDisplay = new google.maps.InfoWindow();
-    marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
         map: map,
         position: { lat: currentLat, lng: currentLong }
     });
@@ -133,7 +119,7 @@ function checkRoute() {
     start = "";
     end = null;
     var startAddress = document.getElementById('startAddress').value;
-    
+        
     geocoder.geocode({ 'address': startAddress }, function (results, status) {
             if (status === 'OK') {
                 map.setCenter(results[0].geometry.location);
@@ -158,7 +144,7 @@ function checkRoute() {
             end = results[0].geometry.location;         
             calcRoute();
         } else {
-            alert('Please enter a valid Destination!');
+            alert('Please enter a Destination!');
         }
     });
 }
@@ -204,17 +190,16 @@ function showSteps(directionResult) {
             if (round(myRoute.steps[i].start_point.lat(), 3) === round(tactileCoords[j].lat(), 3) &&
                 round(myRoute.steps[i].start_point.lng(), 3) === round(tactileCoords[j].lng(), 3)) {
                 tadvisor.innerHTML = '<span><h3 style="background-color: #7FFF00;">Your route includes tactile surfaces!</h3></span>';
-                isWaypoint = 1;    
-                //Plot waypoints
-                var marker = new google.maps.Marker({
-                    position: myRoute.steps[i].start_point,
-                    map: map
-                });
-                attachInstructionText(marker, myRoute.steps[i].instructions);
-                markerArray[i] = marker;
+                isWaypoint = 1;                                     
             }
-            
         }   
+        //Plot waypoints
+        var marker = new google.maps.Marker({
+            position: myRoute.steps[i].start_point,
+            map: map
+        });
+        attachInstructionText(marker, myRoute.steps[i].instructions);
+        markerArray[i] = marker;
     }
     if (isWaypoint === 0) {
         tadvisor.innerHTML = '<span><h3 style="background-color: #e50000;">Our database could not find any tactile surfaces in your route!</h3></span>';

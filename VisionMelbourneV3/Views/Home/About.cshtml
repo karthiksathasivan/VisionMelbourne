@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
+<style>
+    .circle-btn {
+        height: 130px;
+        width: 130px;
+        border-radius: 50%;
+        border: 1px solid black;
+        background: #4679BD;
+    }
+
+    .key-container {
+        text-align: center;
+        max-height: 20%;
+    }
+
+    td {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+</style>
+<h1>Braille Code Checker</h1>
+<p>Type the code to know the corresponding alphabet</p>
+<div class="key-container">
+    <table style="width:100%; height:40%;position:static;">
+        <tr>
+            <td><div id="Text"><h1></h1></div></td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btn1" onclick="clickFunction(this)" value="1" class="circle-btn btn btn-default btn-text">1</button>
+                <button id="btn4" onclick="clickFunction(this)" value="4" class="circle-btn btn btn-default">4</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="btn2" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="2">2</button>
+                <button id="btn5" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="5">5</button>
+            </td>
+        </tr>
+        <tr />
+        <tr>
+            <td>
+                <button id="btn3" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="3">3</button>
+                <button id="btn6" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="6">6</button>
+            </td>
+        </tr>
+        <tr />
+        <tr>
+            <td>
+                <button id="submit" class="btn btn-default btn-primary" onclick="doTTS()" value="Check">Check</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/braille")
+}

@@ -10,6 +10,7 @@
         <div class="breadcrumbs">
             <ul class="list-unstyled">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Support Services", "SupportServices", "Home")</li>
                 <li>Learn Braille</li>
             </ul>
         </div> <!-- end .breadcrumbs -->
@@ -21,8 +22,7 @@
         <div class="container">
             <div class="frame">
                 <div class="zoom">
-                    <h1>Translate the Word in Braille</h1>
-                    <br /><br />
+                    <h2>Braille Dictionary</h2>
                 </div>
             </div>
 
@@ -31,7 +31,7 @@
                     <div class="frame">
                         <div class="zoom">
                             <div class="searchform">
-                                <input type="text" id="input" placeholder="Please enter the word eg.abc" onfocus="this.placeholder=''" onblur="this.placeholder ='Please enter the word eg.abc'" onchange= "searchBraille()" autocomplete="off" />
+                                <input type="text" id="input" placeholder="Please enter the word eg.abc" onfocus="this.placeholder=''" onblur="this.placeholder ='Please enter the word eg.abc'" autocomplete="off" />
                                 <button type="button" style="padding-bottom: 0px; padding-top: 0px;" onclick="doTTS()"><i class="fa fa-volume-up"></i></button>
                             </div> <!-- end .form-group -->
                         </div> <!-- end .col-sm-6 -->
@@ -61,7 +61,37 @@
                     </div>
                 </div>
             </div>
+
         </div>
+    </div>
+</div>
+
+<br><br>
+
+<div id="explore" class="container">
+    <div class="row">
+        <div class="frame">
+            <div class="zoom">
+                <h2 class="tittle  text-center my-lg-5 my-3">What is Braille ?</h2>
+                <br>
+            </div>
+        </div>
+        <div class="frame">
+            <div class="zoom">
+                <div class="col-md-6">
+                    <img src="~/images/Braille Alaphat.png" class="img2" />
+                </div>
+            </div>
+        </div>
+
+        <div class="frame">
+            <div class="zoom">
+                <div class="col-md-6">
+                    <img src="~/images/Intoduction.png" class="img2" />
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -69,12 +99,16 @@
 <script>
     function searchBraille() {
         var text = "";
+        //get the value of the input text box
         var input = document.getElementById("input").value;
         var output = document.getElementById("output");
         output.innerHTML = "";
+        //convert the characters to lower case
         text = input.replace(/\s/g, '').toLowerCase();
         $(".div1").css("height", "auto");
+        //check if the characters are all letters of alphabet
         if (text.match("^[a-z]+$")) {
+            //for each character get the corresponding braille code image and append to the output element
             for (i = 0; i < text.length; i++) {
                 switch (text.charAt(i)) {
                     case ('a'):
@@ -158,9 +192,11 @@
                 }
             }
         }
+        //If the input is empty, display the error message in the output element
         else if (text.replace(/\s/g, '').match("^\d*$")) {
             output.innerHTML = output.innerHTML + '<h3>Please enter words first!</h3>'
         }
+        //else display the error message saying only words are supported
         else {
             output.innerHTML = output.innerHTML + '<h3>Sorry! Currently we only support word eearch. There is some special characters in your searching. Use the example eg. abc</h3>';
         }
@@ -168,6 +204,7 @@
 
     function doTTS() {
         var text = document.getElementById("input").value;
+        //check if the characters are all letters of alphabet and speak the entered word
         if (text.replace(/\s/g, '').toLowerCase().match("^[a-z]+$")) {
             var content = "You are searching for the word," + text + ", You can click the 'Translate' button to view this word in braille";
             const utterance = new SpeechSynthesisUtterance(content);
@@ -176,6 +213,7 @@
             utterance.rate = 0.7;
             speechSynthesis.speak(utterance);
         }
+        //If the input is empty, speak the error message
         else if (text.replace(/\s/g, '').match("^\d*$")) {
             var content = "Please enter words first";
             const utterance = new SpeechSynthesisUtterance(content);
@@ -184,6 +222,7 @@
             utterance.rate = 1;
             speechSynthesis.speak(utterance);
         }
+        //else speak the error message saying only words are supported
         else {
             var content = "Sorry! Currently we only support Word Search. There is some special characters in your searching. Use the example eg. abc";
             const utterance = new SpeechSynthesisUtterance(content);
@@ -192,8 +231,8 @@
             utterance.rate = 1;
             speechSynthesis.speak(utterance);
         }
-
     };
+
 </script>
 
 <style>
@@ -209,79 +248,12 @@
         border-color: black;
         margin: 5px;
         border-width: 3px;
-        width: 69px;
-        height: 115px;
+        width: 100px;
+        height: 200px;
+    }
+
+    .img2 {
+        width: 100%;
+        height: 280px;
     }
 </style>
-
-
-
-@*@{
-        ViewBag.Title = "About";
-    }
-    <link href="~/Content/Site.css" rel="stylesheet" />
-    <link href="~/Content/style.css" rel="stylesheet" />
-    <style>
-        .circle-btn {
-            height: 130px;
-            width: 130px;
-            border-radius: 50%;
-            border: 1px solid black;
-            background: #4679BD;
-        }
-
-        .key-container {
-            text-align: center;
-            max-height: 20%;
-        }
-
-        td {
-            padding-top: 3px;
-            padding-bottom: 3px;
-        }
-    </style>
-    <h1>Braille Code Checker</h1>
-    <p>Type the code to know the corresponding alphabet</p>
-    <div class="key-container">
-        <table style="width:100%; height:40%;position:static;">
-            <tr>
-                <td><div id="Text"></div></td>
-            </tr>
-            <tr>
-                <td>
-                    <button id="btn1" onclick="clickFunction(this)" value="1" class="circle-btn btn btn-default btn-text">1</button>
-                    <button id="btn4" onclick="clickFunction(this)" value="4" class="circle-btn btn btn-default">4</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button id="btn2" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="2">2</button>
-                    <button id="btn5" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="5">5</button>
-                </td>
-            </tr>
-            <tr />
-            <tr>
-                <td>
-                    <button id="btn3" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="3">3</button>
-                    <button id="btn6" class="circle-btn btn btn-default" onclick="clickFunction(this)" value="6">6</button>
-                </td>
-            </tr>
-            <tr />
-            <tr>
-                <td>
-                    <button id="submit" class="button" onclick="doTTS()" value="Check">Check</button>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div>
-        <input id="brailletext" type="text" placeholder="Please type a word" onfocus="this.placeholder=''" onblur="this.placeholder ='Please type a word'" />
-        <button type="button" class="button" onclick="findBraille();">Convert to Braille</button>
-    </div>
-
-
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/braille")
-    }*@

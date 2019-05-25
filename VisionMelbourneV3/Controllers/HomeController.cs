@@ -10,7 +10,7 @@ using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 using Twilio.TwiML;
 using Twilio.AspNet.Mvc;
-
+using Microsoft.AspNet.Identity;
 
 
 namespace VisionMelbourneV3.Controllers
@@ -39,23 +39,55 @@ namespace VisionMelbourneV3.Controllers
 
         public ActionResult Help()
         {
-            ViewBag.Message = "Accessibility Tips";
+            ViewBag.Message = "Talkbacks Tips";
 
             return View();
         }
-        
-        public ActionResult TactileSurface()
+
+        public ActionResult SendSms(String userLat, String userLon)
         {
-            ViewBag.Message = "Tactile Surfaces";
-
-            return View();
+            //get the user ID of the current logged in user
+            var currentUser = User.Identity.GetUserId();
+            //get an instance of the User DB
+            ApplicationDbContext db = new ApplicationDbContext();
+            //Find the user name and emergency contact numbers for the current user
+            var userResult = db.Users.FirstOrDefault(u => u.Id == currentUser);
+            var userName = userResult.UserName;
+            var emergencyPhone = userResult.EmergencyContact;
+            //Initialise the twilio client object
+            var accountSid = "AC4d7cb0f1f4bee0c12254985debdb902a";
+            var authToken = "046d5885c25abf215401ec970d58de6e";
+            TwilioClient.Init(accountSid, authToken);
+            var to = new PhoneNumber(emergencyPhone);
+            var from = new PhoneNumber("+61429594296");
+            var message = MessageResource.Create(
+                to: to,
+                from: from,
+                body: "EMERGENCY! " +
+                "Your friend "+ userName +" is in an emergency now! Plseae click the link to get the location  - https://www.google.com/maps/search/?api=1&query=" + userLat + "," + userLon);
+            return Content(message.Sid);
         }
 
-        //Constructing Weather object which contains the API call to OpenWeather 
         public JsonResult GetWeather()
         {
             Weather weather = new Weather();
             return Json(weather.getWeatherForecast(), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult SupportServices()
+        {
+            ViewBag.Message = "Support Services ";
+
+            return View();
+        }
+
+
+        public ActionResult TactileSurface()
+        {
+            ViewBag.Message = "TactileSurface Services ";
+
+            return View();
+        }
+
     }
 }

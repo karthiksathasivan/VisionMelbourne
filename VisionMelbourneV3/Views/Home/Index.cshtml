@@ -193,83 +193,64 @@
 </div> <!-- end .section -->
 
 
-<script type="text/javascript">
-    $(function () {
-        $('.date-container').datetimepicker({
-            minDate: new Date(),
-            format: 'L'
-        });
-    });
-    $(document).ready(function () {
-        $("div[id$=dvProgress]").fadeOut("fast");
-    });
-</script>
-
 <script>
+    //Scroll to the explore categories div element when the container is clicked
     $('.container1').click(function () {
         $('html, body').animate({
             scrollTop: $("#explore").offset().top
         }, 'slow');
         return false;
     });
-
-
+    //stop all speech utterances
     speechSynthesis.cancel();
 </script>
 
 <script>
+    //flag to identify if autocomplete value changed
     var auto = false;
+
+    //set the autocomplete flag to false whenever the input element is clicked
     function setFlag() {
         auto = false;
     }
 
-    var address = "";
+    //get the input element attributes
     var input = document.getElementById('autocomplete');
-    var geocoder = new google.maps.Geocoder();
+
+    function codeAddress() {
+        if (address === "") {
+            address = input.value + ',Melbourne VIC, Australia';
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('lon').value = results[0].geometry.location.lng();
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+    }
 
     var cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-38.067807865, 144.5148742199),
         new google.maps.LatLng(-37.5687831234, 145.4157531261));
 
+    //Set the options with the citybounds and country set to Australia
     var options = {
         bounds: cityBounds,
         componentRestrictions: { country: "au" }
     };
 
-
+    //Attach an autocomplete element to the input field
     var autocomplete = new google.maps.places.Autocomplete(input, options);
+    //add a listener to the autocomplete element
     autocomplete.addListener('place_changed', function () {
         address = autocomplete.getPlace();
-        auto = true;
+        document.getElementById('lat').value = address.geometry.location.lat();
+        document.getElementById('lon').value = address.geometry.location.lng();
     });
 
-    function geocodeAddress() {
-        if (auto) {
-            var autocompleteAddress = document.getElementById('autocomplete').value;
-            geocoder.geocode({ 'address': autocompleteAddress }, function (results, status) {
-                if (status === 'OK') {
-                    document.getElementById('lat').value = results[0].geometry.location.lat();
-                    document.getElementById('lon').value = results[0].geometry.location.lng();
-                    $("#submitPlace").click();
-                } else {
-
-                    document.getElementById('autocomplete').value = null;
-                }
-            });
-        }
-        else {
-            alert('Please enter a valid Destination!');
-            document.getElementById('lat').value = null;
-            document.getElementById('lon').value = null;
-            document.getElementById('autocomplete').value = null;
-        }
-
-    }
-
-    google.maps.event.addDomListener(input, 'keydown', function (e) {
-        if (e.keyCode == 13 && $('.pac-container:visible').length) {
-            e.preventDefault();
-        }
-    });
 </script>
 

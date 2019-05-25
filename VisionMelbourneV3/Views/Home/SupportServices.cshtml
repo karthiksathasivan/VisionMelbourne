@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "SupportServices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/style.css" rel="stylesheet" />
+
+
+<div class="page-header">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ul class="list-unstyled">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>Support Services</li>
+            </ul>
+        </div> <!-- end .breadcrumbs -->
+    </div> <!-- end .container -->
+</div>
+
+<div class="page-title" style="background-image: url('../../images/background.jpg');">
+    <div class="inner">
+        <div class="frame">
+            <div class="zoom">
+                <h1 style="color:white">Preparation for Future</h1>
+                <p>Discover how MelEyes can help you adapt future life</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section boxed-section light">
+    <div class="inner">
+        <div class="container">
+            <div class="box no-side-padding">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="frame">
+                            <div class="zoom">
+                                <div class="services">
+                                    <img src="~/images/braille.png" class="img-responsive center-block img1">
+                                    <h3>Learn Braille</h3>
+                                    <p>Have a basic understanding of braille and how it looks like for each word</p>
+                                    <br><br>
+                                    <a href="/home/LearnBraille" class="button">Learn More</a>
+                                </div> <!-- end .services -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="frame">
+                            <div class="zoom">
+                                <div class="services">
+                                    <img src="~/images/voiceover.png" class="img-responsive center-block img1">
+                                    <h3>Talkback</h3>
+                                    <p>Both Android and IOS devices support Talkback. Let's see how it works</p>
+                                    <br><br>
+                                    <a href="/home/Help" class="button">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .img1 {
+        height: 120px;
+        width: 120px;
+    }
+</style>

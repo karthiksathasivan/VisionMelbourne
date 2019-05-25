@@ -13,10 +13,8 @@
 <link href="~/Content/Site.css" rel="stylesheet" />
 <link href="~/Content/style.css" rel="stylesheet" />
 
-<body onload="initMap();">
-
+<body data-gr-c-s-loaded="true" rlt="1" style="" onload="initMap()">
     <div>
-
         <div class="page-header">
             <div class="container">
                 <div class="breadcrumbs">
@@ -36,7 +34,7 @@
             <div class="inner">
                 <div class="frame">
                     <div class="zoom">
-                        <h2>See more details about @Model.Location</h2>
+                        <h2>See more details about @Model.Location , @Model.Theme</h2>
                     </div>
                 </div>
                 <div class="frame">
@@ -61,6 +59,7 @@
                                     <br />
                                     <div class="frame">
                                         <div class="zoom">
+                                            @*get firections button. redirect to google maps with start and destination*@
                                             <div style="text-align:center;"><button type="button" class="button" onclick="redirectToMaps();">get directions</button></div>
                                         </div>
                                     </div><br />
@@ -73,12 +72,20 @@
                                     <div class="searchform" style="text-align:left">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <p><label for="FLocation">*Plan Date and Time</label></p>
+                                                <label for="FLocation">*Plan Date and Time</label>
                                             </div>
                                         </div>
                                         <div class="frame">
                                             <div class="zoom">
-                                                <input id="Date" required type="datetime" name="date" class="date-container" placeholder="Please choose your departure date" onfocus="this.placeholder=''" onblur="this.placeholder ='Please choose your departure date'" style="border:solid" />
+                                                <input id="Date"
+                                                       required
+                                                       type="datetime"
+                                                       name="date"
+                                                       class="date-container"
+                                                       placeholder="Please choose your departure date"
+                                                       onfocus="this.placeholder=''"
+                                                       onblur="this.placeholder ='Please choose your departure date'"
+                                                       style="border:solid" />
                                                 <button><i class="fa fa-calendar"></i></button>
                                             </div>
                                         </div>
@@ -94,7 +101,7 @@
                                         <div class="col-md-3">
                                             <div class="frame">
                                                 <div class="zoom">
-                                                    <p><b>Place</b></p>
+                                                    <b>Place</b>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,7 +109,7 @@
                                             <div style="text-align:center">
                                                 <div class="frame">
                                                     <div class="zoom">
-                                                        <p>@Model.Location</p>
+                                                        @Model.Location
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,7 +120,7 @@
                                         <div class="col-md-3">
                                             <div class="frame">
                                                 <div class="zoom">
-                                                    <p><b>Date</b></p>
+                                                    <b>Date</b>
                                                 </div>
                                             </div>
                                         </div>
@@ -121,7 +128,7 @@
                                             <div style="text-align:center">
                                                 <div class="frame">
                                                     <div class="zoom">
-                                                        <p>@date</p>
+                                                        @date
                                                     </div>
                                                 </div>
                                             </div>
@@ -132,7 +139,7 @@
                                         <div class="col-md-3">
                                             <div class="frame">
                                                 <div class="zoom">
-                                                    <p><b>Time </b></p>
+                                                    <b>Time </b>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +147,7 @@
                                             <div style="text-align:center">
                                                 <div class="frame">
                                                     <div class="zoom">
-                                                        <p>@time</p>
+                                                        @time
                                                     </div>
                                                 </div>
                                             </div>
@@ -151,7 +158,7 @@
                                         <div class="col-md-3">
                                             <div class="frame">
                                                 <div class="zoom">
-                                                    <p><b>Pedestrian Traffic  </b></p>
+                                                    <b>Pedestrian Traffic  </b>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,11 +215,12 @@
 
                                         </div>
                                     </div>
+                                    <br />
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="frame">
                                                 <div class="zoom">
-                                                    <p><b>Accessibility Level  </b></p>
+                                                    <b>Accessibility Level  </b>
                                                 </div>
                                             </div>
                                         </div>
@@ -267,7 +275,7 @@
                                     <br />
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <p><b>Weather Situation</b></p>
+                                            <b>Weather Situation  </b>
                                         </div>
                                         <div class="col-md-9">
                                             <div style="text-align:center">
@@ -282,7 +290,7 @@
                                     <div class="searchform" style="text-align:center">
                                         <div class="frame">
                                             <div class="zoom">
-                                                <p><label for="CLocation">Like to checkout this Place? Add to your Planner.</label></p>
+                                                <label for="CLocation">Like to checkout this Place?<br /> Add to your Planner.</label>
                                             </div>
                                         </div>
                                     </div>
@@ -302,8 +310,6 @@
                                     </div>
                                 }
                             </div> <!-- end col-md-6 -->
-
-
                         </div> <!-- end .row -->
                     </div> <!-- end .box -->
                 </div> <!-- end .container -->
@@ -316,18 +322,18 @@
     </div>
 </body>
 
+
 <script>
-     var scenter = "";
+    var scenter = "";
     var address = "@Model.Location";
     var latit = @Model.Latitude;
     var lon = @Model.Longitude;
-    var currentLocation;
-    var currentLat;
-    var currentLong;
-    var stepDisplay;
-
+    var currentLocation = "";
+    //initialise the map with center at the user chosen location
     function initMap() {
-       
+        var geocoder = new google.maps.Geocoder();
+        var infowindow = new google.maps.InfoWindow();
+        //replace the controls to different locations
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
             center: { lat: latit, lng: lon },
@@ -351,13 +357,21 @@
             }
         });
 
+        // add marker at the location
+        var marker = new google.maps.Marker({
+            map: map,
+            position: { lat: latit, lng: lon }
+        });
+
+        //set the contents of the infowindow and add onclick listener to the marker
         google.maps.event.addListener(marker, 'click', function () {
-            stepDisplay.setContent("@tolocation");
-            stepDisplay.open(map, this);
+            infowindow.setContent("@tolocation");
+            infowindow.open(map, this);
         });
 
     }
 
+    //get the users current network location
     function getCurrentLocation() {
         var options = {
             enableHighAccuracy: true,
@@ -367,8 +381,8 @@
 
         function success(pos) {
             currentLocation = pos.coords;
-            currentLat = currentLocation.latitude;
-            currentLong = currentLocation.longitude;
+            //on success redirect to google maps window with current location as start
+            window.open(returnMapUrl(currentLocation.latitude, currentLocation.longitude), '_blank');
         }
 
         function error(err) {
@@ -378,14 +392,16 @@
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
-    function returnMapUrl(userLat, userLon) {
-        return "https://www.google.com/maps/dir/?api=1&origin=" + userLat + "," + userLon +"&destination=" + latit + "," + lon + " &dir_action=navigate";
+    function returnMapUrl(dlat, dlng) {
+        //open google maps with start as user location and end as the searched location
+        return "https://www.google.com/maps/dir/?api=1&origin=" + dlat + ',' + dlng + "&destination=" + latit + ',' + lon ;
     }
-
     function redirectToMaps() {
         getCurrentLocation();
-        window.open(returnMapUrl(currentLat, currentLong), '_blank');
     }
+
+</script>
+<script>
     $(document).ready(function () {
         $.get("@Url.Action("GetWeather", "Home")", function (response) {
             var weatherimg = document.getElementById("weatherimg");
@@ -439,27 +455,10 @@
                 }
             }
         });
-        $.ajax({
-            url: "https://data.melbourne.vic.gov.au/resource/s3kn-ciyb.json",
-            type: "GET",
-            data: {
-                "$limit": 5000,
-                "$$app_token": "m5zAxv4nRKXpqpGjptErnXQXC"
-            }
-        }).done(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                var coords = data[i].location.coordinates;
-                var latlng = new google.maps.LatLng(coords[1], coords[0]);
-                tactileCoords.push(latlng);
-            }
-            initMap();
-            });
-
     });
 
     function convertToUtcDate(date) {
         var newDate = new Date(date);
-
         var year = newDate.getUTCFullYear().toString();
         if (newDate.getUTCMonth() < 9) {
             var month = "0" + (newDate.getUTCMonth() + 1).toString();
@@ -497,17 +496,16 @@
         }
 
         var utc_time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-        console.log(utc_time);
         return (utc_time);
     };
 </script>
+
 <script type="text/javascript">
     $(function () {
         $('#Date').datetimepicker({
             minDate: new Date(),
         }).on('dp.change', function (e) {
-            document.getElementById("plannedDate").value = e.date.format("MM/DD/YYYY");
-            document.getElementById("plannedTime").value = e.date.format("HH:mm:ss");
+            //on change set the values for date element
             document.getElementById("Date").value = e.date.format("MM/DD/YYYY HH:mm:ss");
         });
     });

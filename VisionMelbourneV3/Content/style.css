@@ -1,48 +1,4 @@
-﻿/**
-*
-* Contents
-* 
-* 01. General Styles
-* 02. Buttons
-* 03. Forms
-* 04. Header
-* 05. Footer
-* 06. Sections
-* 07. Highlight Slider
-* 08. Categories
-* 09. Services
-* 10. Directory
-* 11. Directory Map
-* 12. Blog
-* 13. Reviews
-* 14. Login / Signup
-* 15. Pricing Table
-* 16. Icon Box
-* 17. Add Listing
-* 18. Dashboard
-* 19. Edit Profile
-* 20. My listings
-* 21. 404 page
-* 22. Coming Soon Page
-* 23. Shop Cart Page
-* 24. Blog Default Page
-* 25. Comments
-* 26. Blog-Gallery page
-* 27. Blog-Quote page
-* 28. Blog-Video page
-* 29. Shop details description page
-* 30. Related products slider
-* 31. Shop Page
-* 
-**/
 
-
-/* ==========================================================================
-   01. General Styles
-   ========================================================================== */
-
-/* Typography
-   ========================================================================== */
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,700|Quicksand:300,400,700|Poiret+One');
 
 body {
@@ -86,10 +42,7 @@ a {
             opacity: .9;
         }
 
- 
-    p{
-        font-size:20px;
-    }
+
     p.no-margin-bottom {
         margin-bottom: 0;
     }
@@ -106,7 +59,7 @@ h1 {
     line-height: 82px;
     font-weight: 300;
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     font-family: 'Quicksand Dash', sans-serif;
 }
 
@@ -117,7 +70,7 @@ h2 {
     line-height: 44px;
     color: #172434;
     margin: 0;
-    margin-bottom: 78px;
+    margin-bottom: 20px;
     letter-spacing: 0;
 }
 
@@ -131,7 +84,8 @@ h2 small {
         font-family: 'Poppins', sans-serif;
         font-weight: 400;
         letter-spacing: .8px;
-    }
+
+}
 
 h3 {
     font-family: 'Quicksand', sans-serif;
@@ -177,60 +131,18 @@ h5 {
     position: relative;
 }
 
-.form-box {
-    margin-top: 35px;
-}
-
-.form-top {
-    overflow: hidden;
-    padding: 15px 25px 15px 25px;
-    -moz-border-radius: 4px 4px 0 0;
-    -webkit-border-radius: 4px 4px 0 0;
-    border-radius: 4px 4px 0 0;
-    text-align: left;
-}
-
-.form-top-left {
-    float: left;
-    width: 75%;
-    padding-top: 25px;
-}
-
-    .form-top-left h3 {
-        margin-top: 0;
-    }
-
-.form-top-right {
-    float: left;
-    width: 25%;
-    padding-top: 5px;
-    font-size: 66px;
-    color: #ddd;
-    line-height: 100px;
-    text-align: right;
-}
-
-.form-bottom {
-    padding: 15px 25px 15px 25px;
-    -moz-border-radius: 0 0 4px 4px;
-    -webkit-border-radius: 0 0 4px 4px;
-    border-radius: 0 0 4px 4px;
-    text-align: left;
-}
-
-
 
 .section.dark h2 {
     color: #fff;
 }
 
-.nivo-lightbox-theme-default * {
+/*.nivo-lightbox-theme-default * {
     -webkit-box-sizing: initial !important;
     -moz-box-sizing: initial !important;
     box-sizing: initial !important;
-}
+}*/
 
-.aligned-cols {
+/*.aligned-cols {
     display: table;
     width: 100%;
     height: 100%;
@@ -275,9 +187,9 @@ h5 {
     float: right;
     margin-left: 24px;
     margin-bottom: 12px;
-}
+}*/
 
-.fa-ul {
+/*.fa-ul {
     margin-left: 0;
 }
 
@@ -325,7 +237,7 @@ h5 {
         font-size: 48px;
         line-height: 58px;
     }
-}
+}*/
 
 /* ==========================================================================
    02. Buttons
@@ -457,7 +369,7 @@ h5 {
         font-size: 16px;
     }*/
 
-.share-button .social {
+/*.share-button .social {
     position: absolute;
     top: 50%;
     left: 100%;
@@ -490,7 +402,7 @@ h5 {
 
     .share-button .social a img {
         margin: 0;
-    }
+    }*/
 
 @media all and (max-width: 768px) {
     /*.pagination > li.prev > a {
@@ -618,7 +530,7 @@ select, .light-inputs select {
         font-family: 'Montserrat', sans-serif;
         letter-spacing: .45px;
         font-weight: 700;
-        padding-left: 28px;
+        padding-left: 0px;
     }
 
     .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
@@ -651,7 +563,7 @@ select, .light-inputs select {
         outline: none !important;
     }
 
-.sweet-alert fieldset input {
+/*.sweet-alert fieldset input {
     display: none !important;
 }
 
@@ -711,7 +623,7 @@ select, .light-inputs select {
         margin-right: 0;
         margin-bottom: 12px;
     }
-}
+}*/
 
 /* ==========================================================================
    04. Header
@@ -757,7 +669,7 @@ select, .light-inputs select {
             max-height: 120px;
         }
 
-.header-search {
+/*.header-search {
     display: inline-block;
     vertical-align: top;
     position: relative;
@@ -808,7 +720,7 @@ select, .light-inputs select {
 
         .header-search button i {
             vertical-align: middle;
-        }
+        }*/
 
 .header .right {
     position: absolute;
@@ -956,16 +868,17 @@ select, .light-inputs select {
             .main-nav ul > li.menu-item-has-children > a:after {
                 content: '';
                 display: inline-block;
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background: #00b0ff;
                 margin-left: 8px;
                 -webkit-transition: .25s;
                 -moz-transition: .25s;
                 -o-transition: .25s;
                 -ms-transition: .25s;
                 transition: .25s;
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 10px solid #00b0ff;
             }
 
             .main-nav ul > li.active.menu-item-has-children > a:after {
@@ -1426,7 +1339,7 @@ select, .light-inputs select {
     letter-spacing: 1px;
 }
 
-.contact-info h4 {
+/*.contact-info h4 {
     font-style: normal;
     font-weight: 300;
     font-size: 1.3em;
@@ -1454,7 +1367,7 @@ select, .light-inputs select {
 
             .copyright p a:hover {
                 color: #fff;
-            }
+            }*/
 
 .footer_1its p,
 .footer_1its a,
@@ -1476,7 +1389,7 @@ select, .light-inputs select {
     color: #34bf49;
 }
 
-.foot-bottom-last img {
+/*.foot-bottom-last img {
     border: 4px solid rgba(76, 86, 95, 0.53);
     border-radius: 4px;
 }
@@ -1496,7 +1409,7 @@ select, .light-inputs select {
         width: 100%;
         padding: 0.3em;
         border: 1px solid #333333;
-}
+}*/
 
 .footer-text {
     outline: none;
@@ -1672,132 +1585,7 @@ select, .light-inputs select {
             }
 }
 
-@media all and (max-width: 768px) {
-}
 
-/* ==========================================================================
-   07. Highlight Slider
-   ========================================================================== */
-.highlight-slider-wrapper {
-    margin-top: 72px;
-}
-
-    .highlight-slider-wrapper p.lead {
-        margin-bottom: 36px;
-    }
-
-.highlight-slider .item {
-    text-align: center;
-}
-
-    .highlight-slider .item .icon {
-        display: inline-block;
-        width: 100px;
-        height: 100px;
-        line-height: 100px;
-        background: #fff;
-        border-radius: 50%;
-        position: relative;
-    }
-
-        .highlight-slider .item .icon:hover {
-            opacity: 1;
-            box-shadow: 0 12px 22px rgba(0,0,0,.35);
-        }
-
-        .highlight-slider .item .icon img {
-            display: inline-block;
-            width: auto;
-        }
-
-        .highlight-slider .item .icon .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 100%;
-            height: 100%;
-            color: #fff;
-            font-size: 12px;
-            line-height: 100px;
-            letter-spacing: 1.2px;
-            background: #00b0ff;
-            border-radius: 50%;
-            opacity: 0;
-            -webkit-transition: .25s;
-            -ms-transition: .25s;
-            -moz-transition: .25s;
-            -o-transition: .25s;
-            transition: .25s;
-        }
-
-        .highlight-slider .item .icon:hover .overlay {
-            opacity: 1;
-        }
-
-.highlight-slider.owl-theme .owl-nav {
-    margin: 0;
-}
-
-    .highlight-slider.owl-theme .owl-nav [class*='owl-'] {
-        margin: 0;
-        padding: 0;
-        border-radius: 50%;
-        display: inline-block;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        background: #fff;
-        color: #49a0d5;
-        font-size: 30px;
-        letter-spacing: 0;
-        position: absolute;
-        top: 25px;
-        -webkit-transition: .25s;
-        -ms-transition: .25s;
-        -moz-transition: .25s;
-        -o-transition: .25s;
-        transition: .25s;
-    }
-
-        .highlight-slider.owl-theme .owl-nav [class*='owl-']:hover {
-            box-shadow: 0 12px 22px rgba(0,0,0,.35);
-            background: #00b0ff;
-            color: #fff;
-            opacity: 1;
-        }
-
-        .highlight-slider.owl-theme .owl-nav [class*='owl-'] i {
-            line-height: inherit;
-        }
-
-    .highlight-slider.owl-theme .owl-nav .owl-prev {
-        left: -72px;
-    }
-
-    .highlight-slider.owl-theme .owl-nav .owl-next {
-        right: -72px;
-    }
-
-@media all and (max-width: 1200px) {
-    .highlight-slider.owl-theme .owl-nav {
-        margin-top: 24px;
-    }
-
-        .highlight-slider.owl-theme .owl-nav [class*='owl-'] {
-            position: relative;
-            top: 0;
-            margin: 0 12px;
-        }
-
-        .highlight-slider.owl-theme .owl-nav .owl-prev {
-            left: 0;
-        }
-
-        .highlight-slider.owl-theme .owl-nav .owl-next {
-            right: 0;
-        }
-}
 
 /* ==========================================================================
    08. Categories
@@ -1901,248 +1689,11 @@ select, .light-inputs select {
     }
 }
 
-/* ==========================================================================
-   14. Login / Signup
-   ========================================================================== */
-.login-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(23,36,52,.9);
-    z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    -webkit-transition: .5s;
-    -ms-transition: .5s;
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
-    -webkit-transition-delay: .5s;
-    -ms-transition-delay: .5s;
-    -moz-transition-delay: .5s;
-    -o-transition-delay: .5s;
-    transition-delay: .5s;
-}
-
-    .login-wrapper.open {
-        opacity: 1;
-        visibility: visible;
-        -webkit-transition-delay: 0s;
-        -ms-transition-delay: 0s;
-        -moz-transition-delay: 0s;
-        -o-transition-delay: 0s;
-        transition-delay: 0s;
-    }
-
-.login {
-    background: rgba(23,36,52,.5);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 30px;
-    -webkit-transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-    -moz-transform: translate(-50%,-50%);
-    -o-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
-    width: 430px;
-    color: #fff;
-    opacity: 0;
-    -webkit-transition: .5s;
-    -ms-transition: .5s;
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
-    -webkit-transition-delay: 0s;
-    -ms-transition-delay: 0s;
-    -moz-transition-delay: 0s;
-    -o-transition-delay: 0s;
-    transition-delay: 0s;
-}
-
-.login-wrapper.open .login {
-    opacity: 1;
-    -webkit-transition-delay: .5s;
-    -ms-transition-delay: .5s;
-    -moz-transition-delay: .5s;
-    -o-transition-delay: .5s;
-    transition-delay: .5s;
-}
-
-.login .form-group {
-    margin-bottom: 30px;
-}
-
-.login .checkbox {
-    margin: 0;
-    float: left;
-}
-
-    .login .checkbox label {
-        font-size: 14px;
-        line-height: 28px;
-        letter-spacing: .7px;
-        color: #fff;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 400;
-    }
-
-.login .lost-password {
-    float: right;
-}
-
-.login .button-wrapper {
-    text-align: center;
-    margin-top: 45px;
-    margin-bottom: 28px;
-}
-
-    .login .button-wrapper .button {
-        width: 200px;
-    }
-
-.login p {
-    margin-bottom: 40px;
-}
-
-.login .social {
-    font-size: 0;
-}
-
-    .login .social p {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
-    .login .social a {
-        display: inline-block;
-        margin: 0 15px;
-    }
-
-.signup-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(23,36,52,.9);
-    z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    -webkit-transition: .5s;
-    -ms-transition: .5s;
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
-    -webkit-transition-delay: .5s;
-    -ms-transition-delay: .5s;
-    -moz-transition-delay: .5s;
-    -o-transition-delay: .5s;
-    transition-delay: .5s;
-}
-
-    .signup-wrapper.open {
-        opacity: 1;
-        visibility: visible;
-        -webkit-transition-delay: 0s;
-        -ms-transition-delay: 0s;
-        -moz-transition-delay: 0s;
-        -o-transition-delay: 0s;
-        transition-delay: 0s;
-    }
-
-.signup {
-    background: rgba(23,36,52,.5);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 30px;
-    -webkit-transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-    -moz-transform: translate(-50%,-50%);
-    -o-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
-    width: 430px;
-    color: #fff;
-    opacity: 0;
-    -webkit-transition: .5s;
-    -ms-transition: .5s;
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
-    -webkit-transition-delay: 0s;
-    -ms-transition-delay: 0s;
-    -moz-transition-delay: 0s;
-    -o-transition-delay: 0s;
-    transition-delay: 0s;
-}
-
-.signup-wrapper.open .signup {
-    opacity: 1;
-    -webkit-transition-delay: .5s;
-    -ms-transition-delay: .5s;
-    -moz-transition-delay: .5s;
-    -o-transition-delay: .5s;
-    transition-delay: .5s;
-}
-
-.signup .form-group {
-    margin-bottom: 30px;
-}
-
-.signup .checkbox {
-    margin: 0;
-    float: left;
-}
-
-    .signup .checkbox label {
-        font-size: 14px;
-        line-height: 28px;
-        letter-spacing: .7px;
-        color: #fff;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 400;
-    }
-
-.signup .lost-password {
-    float: right;
-}
-
-.signup .button-wrapper {
-    text-align: center;
-    margin-top: 45px;
-    margin-bottom: 28px;
-}
-
-    .signup .button-wrapper .button {
-        width: 200px;
-    }
-
-.signup p {
-    margin-bottom: 40px;
-}
-
-.signup .social {
-    font-size: 0;
-}
-
-    .signup .social p {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
-    .signup .social a {
-        display: inline-block;
-        margin: 0 15px;
-    }
-
 
 /* ==========================================================================
    31. Shop Page
    ========================================================================== */
-.shop-sidebar {
+/*.shop-sidebar {
     background: #fff;
     padding: 50px 30px;
 }
@@ -2423,5 +1974,5 @@ select, .light-inputs select {
     .shop-sidebar .sidebar-widget:first-of-type {
         margin-top: 0;
     }
-}
+}*/
 
