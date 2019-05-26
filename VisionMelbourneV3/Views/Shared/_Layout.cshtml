@@ -15,24 +15,28 @@
 
     <script type="text/javascript">
         function showPosition() {
+            //get the user's current network location
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
+                    //create an ajax request to the Home controller's SendSms method with user's location
                     $.ajax({
                         url: '/Home/SendSms',
                         data: { 'userLat': position.coords.latitude, 'userLon': position.coords.longitude },
                         type: "post",
                         cache: false,
                         success: function (data) {
-                            $("div[id$=dvProgress]").fadeOut("slow");
+                            //on success alert the user
                             alert("Your current location was sent to emergency contact number ", "success", { position: "top-center" });
                             document.body.style.cursor = 'default';
                         },
                         error: function () {
+                            //else alert the error message 
                             $.alert("Error! Could not send SMS to this number.");
                         }
                     });
                 });
             } else {
+                //alert the user if the geolocation failed
                 alert("Sorry, your browser does not support HTML5 geolocation.");
             }
         }
@@ -47,23 +51,24 @@
 
     @*zoom function script*@
     <script>
+        //flag to identify zoom button clicks
         var flag = true;
         function openZoom() {
             document.body.style.cursor = 'zoom-in';
             $(document).on('mouseover', '.frame', function () {
-
+                //on mouse over a div element, get the current dimensions
                 var element = {
                     width: $(this).width(),
                     height: $(this).height()
                 };
-
+                //get the current mouse location
                 var mouse = {
                     x: event.pageX,
                     y: event.pageY
                 };
-
+                //get the current offset position
                 var offset = $(this).offset();
-
+                //set the origin position and transformation positions for the element
                 var origin = {
                     x: (offset.left + (element.width / 2)),
                     y: (offset.top + (element.height / 2))
@@ -73,24 +78,24 @@
                     left: (origin.x - mouse.x) / 2,
                     down: (origin.y - mouse.y) / 2
                 };
-
+                
                 var transform = ("scale(1.5,1.5) translateX(" + trans.left + "px) translateY(" + trans.down + "px)");
-
+                //transform the div element to new dimensions
                 $(this).children(".zoom").css("transform", transform);
 
             });
-
+            //on mouse leave, revert the transform function
             $(document).on('mouseleave', '.frame', function () {
                 $(this).children(".zoom").css("transform", "none");
             });
         };
-
+        //on close zoom button clicked, revert the properties of mouse to default
         function closeZoom() {
             document.body.style.cursor = 'default';
             $(document).off('mouseover', '.frame');
             $(document).off('mouseleave', '.frame');
         }
-
+        //function to toggle between zoom on and off
         function hightlightBtn() {
             if (flag) {
                 flag = false;
@@ -104,22 +109,24 @@
             }
 
         };
-
+        //function to listen to window scroll to move the buttons to current view
         window.onscroll = function () {
             var oDiv1 = document.getElementById('div1');
             var oDiv2 = document.getElementById('div2');
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //call the start move function to set the new positions for the buttons
             startMove(parseInt((document.documentElement.clientHeight - oDiv1.offsetHeight) / 2 + scrollTop));
             startMove(parseInt((document.documentElement.clientHeight - oDiv1.offsetHeight) / 2 - oDiv2.offsetHeight + scrollTop));
         };
 
         var timer = null;
-
+        //animate the motion of the buttons
         function startMove(target) {
             var oDiv1 = document.getElementById('div1');
             var oDiv2 = document.getElementById('div2');
-
+            //clear the timer
             clearInterval(timer);
+            //create a new timer function to animate the motion to new position
             timer = setInterval(function () {
                 var speed = (target - oDiv1.offsetTop) / 6;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);

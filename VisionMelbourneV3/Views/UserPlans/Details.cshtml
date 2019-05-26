@@ -404,20 +404,32 @@
 </script>
 <script>
     $(document).ready(function () {
+        //jquery request to the Home controller's GetWeather method
         $.get("@Url.Action("GetWeather", "Home")", function (response) {
+            //get the output div element to display the weather image
             var weatherimg = document.getElementById("weatherimg");
             for (i = 1; i < 40; i++)
             {
+                //The weather forecast from the openweather api contains time interval of 3 hours
+                //The user selected date needs to be evaluated to find the interval in which it
+                //lies to get the forecast for that hour.
+                // get the left limit of the time
                 var calendar_left = response.list[i - 1].dt_txt;
+                //get the right limit of the time
                 var calendar_right = response.list[i].dt_txt;
                 var cur_date = "@weatherDate";
                 var cur_time = " @fulltime";
+                //format the user selected date
                 var cur_time_detail = cur_date + cur_time;
+                //convert the date time to UTC time format
                 var utc_time = convertToUtcDate(cur_time_detail);
                 weatherimg.innerHTML = "";
+                //get the response from openweather api
                 var weather = response.list[i - 1].weather[0].main;
+                //compare the user selected UTC time with the left and right limits of the time
                 var result1 = utc_time.localeCompare(calendar_left);
                 var result2 = utc_time.localeCompare(calendar_right);
+                //compare the UTC compare results and display the correponding weather details
                 if (((result1 == 1) || (result1 == 0)) && (result2 == -1)) {
                     switch (weather.toLowerCase()) {
                         case ("rain"):
@@ -458,44 +470,46 @@
         });
     });
 
+    //function to convert user date to UTC format
     function convertToUtcDate(date) {
         var newDate = new Date(date);
         var year = newDate.getUTCFullYear().toString();
+        //converting the local month to UTC month and compare the user selected month by adding the prefix
         if (newDate.getUTCMonth() < 9) {
             var month = "0" + (newDate.getUTCMonth() + 1).toString();
         }
         else {
             var month = (newDate.getUTCMonth() + 1).toString();
         }
-
+        //convert the local date to UTC date and compare the user selected date by adding the prefix
         if (newDate.getUTCDate() < 10) {
             var day = "0" + newDate.getUTCDate().toString();
         }
         else {
             var day = newDate.getUTCDate().toString();
         }
-
+        //convert the local hours to UTC hours and compare the user selected hours by adding the prefix
         if (newDate.getUTCHours() < 10) {
             var hour = "0" + newDate.getUTCHours().toString();
         }
         else {
             var hour = newDate.getUTCHours().toString();
         }
-
+        //convert the local minutes to UTC minutes and compare the user selected minutes by adding the prefix
         if (newDate.getUTCMinutes() < 10) {
             var minute = "0" + newDate.getUTCMinutes().toString();
         }
         else {
             var minute = newDate.getUTCMinutes().toString();
         }
-
+        //convert the local minutes to UTC seconds and compare the user selected seconds by adding the suffix
         if (newDate.getUTCSeconds() == 0) {
             var second = newDate.getUTCSeconds().toString() + "0";
         }
         else {
             var second = newDate.getUTCSeconds().toString();
         }
-
+        //return the date in UTC format
         var utc_time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
         return (utc_time);
     };
