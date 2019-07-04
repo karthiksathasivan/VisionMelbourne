@@ -55,8 +55,8 @@ namespace VisionMelbourneV3.Controllers
             var userName = userResult.UserName;
             var emergencyPhone = userResult.EmergencyContact;
             //Initialise the twilio client object
-            var accountSid = "AC4d7cb0f1f4bee0c12254985debdb902a";
-            var authToken = "046d5885c25abf215401ec970d58de6e";
+            var accountSid = "{YOUR_ID}";
+            var authToken = "{YOUR_TOKEN}";
             TwilioClient.Init(accountSid, authToken);
             var to = new PhoneNumber(emergencyPhone);
             var from = new PhoneNumber("+61429594296");
